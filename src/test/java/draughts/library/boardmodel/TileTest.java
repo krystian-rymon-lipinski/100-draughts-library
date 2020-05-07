@@ -1,0 +1,164 @@
+package draughts.library.boardmodel;
+
+
+import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import static org.mockito.Mockito.*;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
+
+@RunWith(MockitoJUnitRunner.class)
+public class TileTest {
+	
+	Tile testObj;
+	
+	@Before
+	public void setUp() {
+		Tile tile = new Tile(10);
+		testObj = spy(tile);
+	}
+	
+	@Test
+	public void getRow_test() {
+		testObj.setIndex(1);
+		assertEquals(1, testObj.getRow());
+		
+		testObj.setIndex(4);
+		assertEquals(1, testObj.getRow());
+		
+		testObj.setIndex(6);
+		assertEquals(2, testObj.getRow());
+
+		testObj.setIndex(21);
+		assertEquals(5, testObj.getRow());
+
+		testObj.setIndex(26);
+		assertEquals(6, testObj.getRow());
+
+		testObj.setIndex(33);
+		assertEquals(7, testObj.getRow());
+
+		testObj.setIndex(41);
+		assertEquals(9, testObj.getRow());
+
+		testObj.setIndex(44);
+		assertEquals(9, testObj.getRow());
+
+		testObj.setIndex(49);
+		assertEquals(10, testObj.getRow());
+
+		testObj.setIndex(50);
+		assertEquals(10, testObj.getRow());
+	}
+	
+	@Test
+	public void isRowEven_test() {
+		testObj.setIndex(1);
+		assertFalse(testObj.isRowEven());
+		
+		testObj.setIndex(5);
+		assertFalse(testObj.isRowEven());
+
+		testObj.setIndex(6);
+		assertTrue(testObj.isRowEven());
+
+		testObj.setIndex(19);
+		assertTrue(testObj.isRowEven());
+
+		testObj.setIndex(21);
+		assertFalse(testObj.isRowEven());
+
+		testObj.setIndex(34);
+		assertFalse(testObj.isRowEven());
+
+		testObj.setIndex(45);
+		assertFalse(testObj.isRowEven());
+
+		testObj.setIndex(46);
+		assertTrue(testObj.isRowEven());
+
+		testObj.setIndex(48);
+		assertTrue(testObj.isRowEven());
+
+		testObj.setIndex(50);
+		assertTrue(testObj.isRowEven());
+	}
+	
+	@Test
+	public void getColumn_test() {
+		testObj.setIndex(1);
+		assertEquals(2, testObj.getColumn());
+		
+		testObj.setIndex(5);
+		assertEquals(10, testObj.getColumn());
+		
+		testObj.setIndex(6);
+		assertEquals(1, testObj.getColumn());
+
+		testObj.setIndex(21);
+		assertEquals(2, testObj.getColumn());
+
+		testObj.setIndex(26);
+		assertEquals(1, testObj.getColumn());
+
+		testObj.setIndex(35);
+		assertEquals(10, testObj.getColumn());
+
+		testObj.setIndex(41);
+		assertEquals(2, testObj.getColumn());
+
+		testObj.setIndex(44);
+		assertEquals(8, testObj.getColumn());
+
+		testObj.setIndex(49);
+		assertEquals(7, testObj.getColumn());
+
+		testObj.setIndex(50);
+		assertEquals(9, testObj.getColumn());
+	}
+	
+	
+	
+	@Test
+	public void isTileMostLeftInRow_test() {
+				
+		testObj.setIndex(1);
+		assertTrue(testObj.isTileMostLeftInRow());
+		
+		testObj.setIndex(12);
+		assertFalse(testObj.isTileMostLeftInRow());
+		
+		testObj.setIndex(20);
+		assertFalse(testObj.isTileMostLeftInRow());
+		
+		testObj.setIndex(31);
+		assertTrue(testObj.isTileMostLeftInRow());
+		
+		testObj.setIndex(49);
+		assertFalse(testObj.isTileMostLeftInRow());
+	}
+	
+	@Test
+	public void isTileMostRightInRow_test() {
+		
+		testObj.setIndex(1);
+		assertFalse(testObj.isTileMostRightInRow());
+		
+		testObj.setIndex(9);
+		assertFalse(testObj.isTileMostRightInRow());
+		
+		testObj.setIndex(20);
+		assertTrue(testObj.isTileMostRightInRow());
+		
+		testObj.setIndex(31);
+		assertFalse(testObj.isTileMostRightInRow());
+		
+		testObj.setIndex(50);
+		assertTrue(testObj.isTileMostRightInRow());
+	}
+
+}
