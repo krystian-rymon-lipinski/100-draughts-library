@@ -160,5 +160,20 @@ public class TileTest {
 		testObj.setIndex(50);
 		assertTrue(testObj.isTileMostRightInRow());
 	}
+	
+	@Test 
+	public void calculateIndex_test() {
+		assertEquals(0, Tile.calculateIndex(1, 1));
+		assertEquals(4, Tile.calculateIndex(1, 8));
+		assertEquals(9, Tile.calculateIndex(2, 7));
+		assertEquals(13, Tile.calculateIndex(3, 6));
+		assertEquals(0, Tile.calculateIndex(5, 3));
+		assertEquals(25, Tile.calculateIndex(5, 10));
+		assertEquals(0, Tile.calculateIndex(6, 10));
+		assertEquals(42, Tile.calculateIndex(9, 4));
+		assertEquals(0, Tile.calculateIndex(10, 2));
+		assertEquals(50, Tile.calculateIndex(10, 9));
+	
+	}
 
 }
