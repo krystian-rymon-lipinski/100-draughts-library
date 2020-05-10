@@ -88,5 +88,23 @@ public class BoardManagerTest {
 		assertEquals(31, testObj.findPieceByIndex(31).getPosition());
 		assertEquals(50, testObj.findPieceByIndex(50).getPosition());
 	}
+	
+	@Test
+	public void makeMove_test() {
+		testObj.makeMove(31, 27);
+		
+		assertNull(testObj.findPieceByIndex(31));
+		assertEquals(27, testObj.findPieceByIndex(27).getPosition());
+		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(27).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(31).getState());
+		
+		testObj.makeMove(20, 25);
+		
+		assertNull(testObj.findPieceByIndex(20));
+		assertEquals(25, testObj.findPieceByIndex(25).getPosition());
+		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(25).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(20).getState());
+		
+	}
 
 }
