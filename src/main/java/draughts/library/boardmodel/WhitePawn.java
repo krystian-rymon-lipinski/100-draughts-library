@@ -6,8 +6,8 @@ public class WhitePawn extends Pawn {
 		super(position);
 	}
 	
-	public void move(Tile src, Tile dst) {
-		super.move(src,  dst);
+	public void move(Tile dst) {
+		super.move(dst);
 		dst.setState(Tile.State.WHITE_PAWN);
 	}
 

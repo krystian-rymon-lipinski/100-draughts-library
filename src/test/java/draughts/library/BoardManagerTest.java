@@ -106,5 +106,24 @@ public class BoardManagerTest {
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(20).getState());
 		
 	}
+	
+	@Test
+	public void makeMove_withTakenPawn_test() {
+		assertEquals(20, testObj.getWhitePieces().size());
+		assertEquals(20, testObj.getBlackPieces().size());
+		testObj.makeMove(35, 30);
+		testObj.makeMove(19, 24);
+		
+		testObj.makeMove(30, 19, 24);
+		assertNull(testObj.findPieceByIndex(24));
+		assertEquals(19, testObj.getBlackPieces().size());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(24).getState());
+		
+		testObj.makeMove(13, 24, 19);
+		assertNull(testObj.findPieceByIndex(19));
+		assertEquals(19, testObj.getWhitePieces().size());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(19).getState());
+		
+	}
 
 }

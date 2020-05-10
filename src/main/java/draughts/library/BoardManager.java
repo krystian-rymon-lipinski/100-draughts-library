@@ -7,6 +7,7 @@ import draughts.library.boardmodel.Board;
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.boardmodel.WhitePawn;
+import draughts.library.boardmodel.WhiteQueen;
 
 public class BoardManager {
 	
@@ -62,11 +63,26 @@ public class BoardManager {
 	}
 	
 	public void makeMove(int source, int destination) {
-		Piece piece = findPieceByIndex(source);
 		Tile src = findTileByIndex(source);
-		Tile dst = findTileByIndex(destination);
-		piece.move(src, dst);
+		src.setState(Tile.State.EMPTY);
 		
+		Piece movedPiece = findPieceByIndex(source);
+		Tile dst = findTileByIndex(destination);
+		movedPiece.move(dst);
+		
+	}
+	
+	public void makeMove(int source, int destination, int taken) {
+		makeMove(source, destination);
+		
+		Tile takenTile = findTileByIndex(taken);
+		takenTile.setState(Tile.State.EMPTY);
+		
+		Piece takenPiece = findPieceByIndex(taken);
+		if(isTakenPieceWhite(takenPiece))
+			whitePieces.remove(takenPiece);
+		else 
+			blackPieces.remove(takenPiece);
 	}
 	
 	public Tile findTileByIndex(int tileIndex) {
@@ -92,7 +108,10 @@ public class BoardManager {
 		
 		return null;
 		
-		
+	}
+	
+	public boolean isTakenPieceWhite(Piece takenPiece) {
+		return (takenPiece instanceof WhitePawn || takenPiece instanceof WhiteQueen) ? true : false;
 	}
 
 }
