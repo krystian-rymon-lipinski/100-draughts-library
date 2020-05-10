@@ -15,5 +15,14 @@ public abstract class Piece {
 	public void setPosition(int position) {
 		this.position = position;
 	}
+	
+	public void move(Tile dst) {
+		position = dst.getIndex();
+	}
+	
+	public void take(Tile src, Tile dst, Tile taken) {
+		move(dst);
+		taken.setState(Tile.State.EMPTY);
+	}
 
 }
