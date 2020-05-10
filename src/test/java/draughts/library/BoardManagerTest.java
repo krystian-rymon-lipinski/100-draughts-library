@@ -1,6 +1,8 @@
 package draughts.library;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import draughts.library.boardmodel.BlackPawn;
+import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.boardmodel.WhitePawn;
 
@@ -59,6 +62,31 @@ public class BoardManagerTest {
 		assertEquals(1, blackPiece1.getPosition());
 		assertEquals(14, blackPiece2.getPosition());
 		assertEquals(20, blackPiece3.getPosition());
+	}
+	
+	@Test
+	public void findTileByIndex_test() {
+		
+		assertEquals(Tile.class, testObj.findTileByIndex(1).getClass());
+		
+		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(1).getState());
+		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(20).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(21).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(30).getState());
+		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(31).getState());
+		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(50).getState());
+	}
+	
+	@Test 
+	public void findPieceByIndex_test() {
+		assertTrue(testObj.findPieceByIndex(2) instanceof Piece);
+		
+		assertEquals(1, testObj.findPieceByIndex(1).getPosition());
+		assertEquals(20, testObj.findPieceByIndex(20).getPosition());
+		assertNull(testObj.findPieceByIndex(21));
+		assertNull(testObj.findPieceByIndex(30));
+		assertEquals(31, testObj.findPieceByIndex(31).getPosition());
+		assertEquals(50, testObj.findPieceByIndex(50).getPosition());
 	}
 
 }
