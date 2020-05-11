@@ -110,6 +110,22 @@ public class BoardManager {
 		
 	}
 	
+	public ArrayList<Move> findMoves(boolean isWhiteToMove) {
+		ArrayList<Piece> pieces;
+		if (isWhiteToMove) pieces = whitePieces;
+		else pieces = blackPieces;
+		
+		for(Piece piece : pieces) {
+			Tile currentPosition = findTileByIndex(piece.getPosition());
+			piece.findMoves(board, currentPosition);
+		}
+		
+		
+		
+		
+		return null;
+	}
+	
 	public boolean isTakenPieceWhite(Piece takenPiece) {
 		return (takenPiece instanceof WhitePawn || takenPiece instanceof WhiteQueen) ? true : false;
 	}

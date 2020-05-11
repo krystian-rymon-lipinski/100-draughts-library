@@ -1,5 +1,9 @@
 package draughts.library.boardmodel;
 
+import java.util.ArrayList;
+
+import draughts.library.Move;
+
 public abstract class Piece {
 	
 	private int position;
@@ -19,6 +23,10 @@ public abstract class Piece {
 	public void hop(Tile dst) {
 		position = dst.getIndex();
 	}
+	
+	public abstract ArrayList<Move> findMoves(Tile[][] board, Tile currentPosition);
+	
+	public abstract ArrayList<Move> findTakes(Tile[][] board, Tile currentPosition);
 	
 
 }

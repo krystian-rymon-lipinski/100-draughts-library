@@ -62,4 +62,8 @@ public class Move {
 		pawnsTaken.add(taken);
 	}
 	
+	
+	public String toString() {
+		return hops.toString();
+	}
 }

@@ -127,19 +127,19 @@ public class TileTest {
 	public void isTileMostLeftInRow_test() {
 				
 		testObj.setIndex(1);
+		assertFalse(testObj.isTileMostLeftInRow());
+		
+		testObj.setIndex(15);
+		assertFalse(testObj.isTileMostLeftInRow());
+		
+		testObj.setIndex(16);
 		assertTrue(testObj.isTileMostLeftInRow());
-		
-		testObj.setIndex(12);
-		assertFalse(testObj.isTileMostLeftInRow());
-		
-		testObj.setIndex(20);
-		assertFalse(testObj.isTileMostLeftInRow());
 		
 		testObj.setIndex(31);
-		assertTrue(testObj.isTileMostLeftInRow());
-		
-		testObj.setIndex(49);
 		assertFalse(testObj.isTileMostLeftInRow());
+		
+		testObj.setIndex(46);
+		assertTrue(testObj.isTileMostLeftInRow());
 	}
 	
 	@Test
@@ -148,16 +148,16 @@ public class TileTest {
 		testObj.setIndex(1);
 		assertFalse(testObj.isTileMostRightInRow());
 		
-		testObj.setIndex(9);
-		assertFalse(testObj.isTileMostRightInRow());
-		
-		testObj.setIndex(20);
+		testObj.setIndex(5);
 		assertTrue(testObj.isTileMostRightInRow());
 		
-		testObj.setIndex(31);
+		testObj.setIndex(20);
 		assertFalse(testObj.isTileMostRightInRow());
 		
-		testObj.setIndex(50);
+		testObj.setIndex(26);
+		assertFalse(testObj.isTileMostRightInRow());
+		
+		testObj.setIndex(45);
 		assertTrue(testObj.isTileMostRightInRow());
 	}
 	
