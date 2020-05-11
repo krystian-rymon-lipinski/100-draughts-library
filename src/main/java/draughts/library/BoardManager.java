@@ -62,18 +62,18 @@ public class BoardManager {
 		}
 	}
 	
-	public void makeMove(int source, int destination) {
+	public void makeHop(int source, int destination) {
 		Tile src = findTileByIndex(source);
 		src.setState(Tile.State.EMPTY);
 		
 		Piece movedPiece = findPieceByIndex(source);
 		Tile dst = findTileByIndex(destination);
-		movedPiece.move(dst);
+		movedPiece.hop(dst);
 		
 	}
 	
-	public void makeMove(int source, int destination, int taken) {
-		makeMove(source, destination);
+	public void makeHop(int source, int destination, int taken) {
+		makeHop(source, destination);
 		
 		Tile takenTile = findTileByIndex(taken);
 		takenTile.setState(Tile.State.EMPTY);

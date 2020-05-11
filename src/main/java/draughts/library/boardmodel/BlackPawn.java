@@ -6,8 +6,8 @@ public class BlackPawn extends Pawn {
 		super(position);
 	}
 	
-	public void move(Tile dst) {
-		super.move(dst);
+	public void hop(Tile dst) {
+		super.hop(dst);
 		dst.setState(Tile.State.BLACK_PAWN);
 	}
 

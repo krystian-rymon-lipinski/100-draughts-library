@@ -6,8 +6,8 @@ public class WhiteQueen extends Queen {
 		super(position);
 	}
 	
-	public void move(Tile dst) {
-		super.move(dst);
+	public void hop(Tile dst) {
+		super.hop(dst);
 		dst.setState(Tile.State.WHITE_QUEEN);
 	}
 
