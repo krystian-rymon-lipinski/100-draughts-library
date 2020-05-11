@@ -14,16 +14,24 @@ public class BlackPawn extends Pawn {
 	}
 	
 	public Move findLeftMove(Tile[][] board, int row, int column) {
-		if(board[row-1+1][column-1-1].getState() == Tile.State.EMPTY)
+		Tile possibleDestination = board[row-1+1][column-1-1];
+		
+		if(possibleDestination.getState() == Tile.State.EMPTY)
 			return new Move(getPosition(), Tile.calculateIndex(row+1, column-1));
 		else return null;
 			
 	}
 	
 	public Move findRightMove(Tile[][] board, int row, int column) {	
-		if(board[row-1+1][column-1+1].getState() == Tile.State.EMPTY)
+		Tile target = board[row-1+1][column-1+1];
+		
+		if(target.getState() == Tile.State.EMPTY)
 			return new Move(getPosition(), Tile.calculateIndex(row+1, column+1));
 		else return null;
+	}
+	
+	public boolean isTileTakenByOppositeColor(Tile.State state) {
+		return (state == Tile.State.WHITE_PAWN || state == Tile.State.WHITE_QUEEN) ? true : false;
 	}
 
 }

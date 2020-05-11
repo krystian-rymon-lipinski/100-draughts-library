@@ -128,66 +128,9 @@ public class BoardManagerTest {
 		
 	}
 	
-	public ArrayList<Move> findMovesForPiece(int piecePosition) {
-		Piece piece = testObj.findPieceByIndex(piecePosition);
-		Tile currentTile = testObj.findTileByIndex(piecePosition);
-		return piece.findMoves(testObj.getBoard(), currentTile);
-	}
 	
-	@Test
-	public void findMoves_forWhitePawn_test() {
-		ArrayList<Move> moves = findMovesForPiece(33);
-		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(33).getState());
-		
-		assertEquals(2, moves.size());
-		System.out.println(moves.get(0));
-		assertTrue(moves.get(0).getDestination() == 28 || 
-				   moves.get(0).getDestination() == 29);
-		assertTrue(moves.get(1).getDestination() == 28 || 
-				   moves.get(1).getDestination() == 29);
-	}
 	
-	@Test
-	public void findMoves_forBlackPawn_test() {
-		ArrayList<Move> moves = findMovesForPiece(18);
-		
-		assertEquals(2, moves.size());
-		assertTrue(moves.get(0).getDestination() == 22 || 
-				   moves.get(0).getDestination() == 22);
-		assertTrue(moves.get(1).getDestination() == 23 || 
-				   moves.get(1).getDestination() == 23);
-	}
 	
-	@Test
-	public void findMoves_forMostLeftPawn_test() {
-		ArrayList<Move> moves = findMovesForPiece(16);
-		
-		assertEquals(1, moves.size());
-		assertEquals(21, moves.get(0).getDestination());
-	}
-	
-	@Test
-	public void findMoves_forMostRightPawn_test() {
-		ArrayList<Move> moves = findMovesForPiece(35);
-		
-		assertEquals(1, moves.size());
-		assertEquals(30, moves.get(0).getDestination());
-	}
-	
-	@Test
-	public void findTakes_withSingleHop_forPawn_test() {
-		
-	}
-	
-	@Test
-	public void findMoves_forQueen_test() {
-		
-	}
-	
-	@Test
-	public void findMoves_forAllPawns_test() {
-		
-	}
 	
 
 }
