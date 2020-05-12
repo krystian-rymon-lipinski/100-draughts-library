@@ -10,7 +10,7 @@ public class MoveManager {
 	
 	public MoveManager() {
 		boardManager = new BoardManager();
-		boardManager.prepareBoard();
+		//boardManager.createStartingPosition();
 		moves = new ArrayList<>();
 		hopsMadeInMove = 0;
 	}
@@ -28,14 +28,12 @@ public class MoveManager {
 	}
 		
 	public void makeHop(Move move) {
-		
-		int destination = move.getHops().get(hopsMadeInMove);
-		
+			
 		if(!move.isTake())
 			boardManager.makeHop(move.getSource(hopsMadeInMove), move.getDestination(hopsMadeInMove));
 		else
 			boardManager.makeHop(move.getSource(hopsMadeInMove), move.getDestination(hopsMadeInMove),
-								 move.getPawnsTaken().get(hopsMadeInMove));
+								 move.getTakenPawn(hopsMadeInMove));
 		hopsMadeInMove++;
 		
 		if(hopsMadeInMove == move.getHops().size())

@@ -24,12 +24,11 @@ public class BoardManagerTest {
 	@Before
 	public void setUp() {
 		testObj = new BoardManager();
-		testObj.prepareBoard();
 	}
 	
 	@Test
 	public void prepareTiles_test() {
-		testObj.prepareTiles();
+		testObj.createStartingPosition();
 		
 		assertEquals(Tile.State.BLACK_PAWN, testObj.getBoard()[0][1].getState());
 		assertEquals(Tile.State.BLACK_PAWN, testObj.getBoard()[3][2].getState());
@@ -46,7 +45,7 @@ public class BoardManagerTest {
 	
 	@Test
 	public void preparePieces_test() {
-		testObj.preparePieces();
+		testObj.createStartingPosition();
 		
 		assertEquals(20, testObj.getWhitePieces().size());
 		assertEquals(20, testObj.getBlackPieces().size());
@@ -68,7 +67,8 @@ public class BoardManagerTest {
 	
 	@Test
 	public void findTileByIndex_test() {
-		
+		testObj.createStartingPosition();
+
 		assertEquals(Tile.class, testObj.findTileByIndex(1).getClass());
 		
 		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(1).getState());
@@ -81,6 +81,8 @@ public class BoardManagerTest {
 	
 	@Test 
 	public void findPieceByIndex_test() {
+		testObj.createStartingPosition();
+
 		assertTrue(testObj.findPieceByIndex(2) instanceof Piece);
 		
 		assertEquals(1, testObj.findPieceByIndex(1).getPosition());
@@ -93,6 +95,8 @@ public class BoardManagerTest {
 	
 	@Test
 	public void makeHop_test() {
+		testObj.createStartingPosition();
+
 		testObj.makeHop(31, 27);
 		
 		assertNull(testObj.findPieceByIndex(31));
@@ -111,6 +115,8 @@ public class BoardManagerTest {
 	
 	@Test
 	public void makeHop_withTakenPawn_test() {
+		testObj.createStartingPosition();
+
 		assertEquals(20, testObj.getWhitePieces().size());
 		assertEquals(20, testObj.getBlackPieces().size());
 		testObj.makeHop(35, 30);
@@ -126,6 +132,55 @@ public class BoardManagerTest {
 		assertEquals(19, testObj.getWhitePieces().size());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(19).getState());
 		
+	}
+	
+	//Position creator
+	
+	@Test
+	public void createEmptyBoard_test() {
+		testObj.createEmptyBoard();
+		
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(1).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(12).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(21).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(15).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(32).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(50).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(48).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(17).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(36).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(24).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(41).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(2).getState());
+
+	} 
+	
+	@Test
+	public void addWhitePieces_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(12);
+		testObj.addWhitePawn(33);
+		testObj.addWhiteQueen(41);
+		
+		assertEquals(3, testObj.getWhitePieces().size());
+		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(12).getState());
+		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(33).getState());
+		assertEquals(Tile.State.WHITE_QUEEN, testObj.findTileByIndex(41).getState());
+	}
+	
+	@Test
+	public void addBlackPieces_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addBlackPawn(21);
+		testObj.addBlackPawn(1);
+		testObj.addBlackQueen(50);
+		
+		assertEquals(3, testObj.getBlackPieces().size());
+		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(21).getState());
+		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(1).getState());
+		assertEquals(Tile.State.BLACK_QUEEN, testObj.findTileByIndex(50).getState());
 	}
 	
 	

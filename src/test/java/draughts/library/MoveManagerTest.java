@@ -78,7 +78,7 @@ public class MoveManagerTest {
 		
 		testObj.makeHop(whiteMove1);
 		testObj.makeHop(blackMove1);
-		testObj.makeHop(whiteMove2);
+		testObj.makeHop(whiteMove2); 
 		
 		testObj.makeHop(blackMove2);
 		assertEquals(1, testObj.getHopsMadeInMove());
