@@ -24,6 +24,7 @@ public class MoveManagerTest {
 	public void setUp() {
 		testObj = new MoveManager();
 		boardManager = testObj.getBoardManager();
+		boardManager.createEmptyBoard();
 	}
 	
 	@Test
@@ -44,6 +45,7 @@ public class MoveManagerTest {
 	
 	@Test
 	public void moveWithSingleHop_test() {
+		boardManager.addWhitePawn(31);
 		Move whiteMove = new Move(31, 26);
 		
 		assertEquals(0, testObj.getHopsMadeInMove());
@@ -55,6 +57,7 @@ public class MoveManagerTest {
 		assertEquals(26, boardManager.findPieceByIndex(26).getPosition());
 		assertEquals(0, testObj.getHopsMadeInMove());
 		
+		boardManager.addBlackPawn(20);
 		Move blackMove = new Move(20, 24);
 		
 		assertEquals(0, testObj.getHopsMadeInMove());
@@ -70,50 +73,47 @@ public class MoveManagerTest {
 	
 	@Test
 	public void moveWithMultipleHops_test() {
-		Move whiteMove1 = new Move(35, 30);
-		Move blackMove1 = new Move(20, 25);
-		Move whiteMove2 = new Move(34, 29);
-		Move blackMove2 = new Move(25, 34, 30);
-		blackMove2.addHop(23, 29);
+		boardManager.addWhitePawn(26);
+		boardManager.addWhitePawn(19);
+		boardManager.addBlackPawn(21);
+		boardManager.addBlackPawn(12);
+		boardManager.addBlackPawn(2);
 		
-		testObj.makeHop(whiteMove1);
-		testObj.makeHop(blackMove1);
-		testObj.makeHop(whiteMove2); 
+		assertEquals(3, boardManager.getBlackPieces().size());
+		assertEquals(2, boardManager.getWhitePieces().size());
 		
-		testObj.makeHop(blackMove2);
+		Move whiteMove = new Move(26, 17, 21);
+		whiteMove.addHop(8, 12);
+		
+		testObj.makeHop(whiteMove);
 		assertEquals(1, testObj.getHopsMadeInMove());
-		testObj.makeHop(blackMove2);
+		testObj.makeHop(whiteMove);
 		assertEquals(0, testObj.getHopsMadeInMove());
 		
-		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(25).getState());
-		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(30).getState());
-		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(34).getState());
-		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(29).getState());
-		assertEquals(Tile.State.BLACK_PAWN, boardManager.findTileByIndex(23).getState());
+		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(26).getState());
+		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(21).getState());
+		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(17).getState());
+		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(12).getState());
+		assertEquals(Tile.State.WHITE_PAWN, boardManager.findTileByIndex(8).getState());
 		
-		assertEquals(18, boardManager.getWhitePieces().size());
+		assertEquals(1, boardManager.getBlackPieces().size());
 
 		
-		Move whiteMove3 = new Move(33, 28);
-		Move blackMove3 = new Move(19, 24);
-		Move whiteMove4 = new Move(28, 19, 23);
-		whiteMove4.addHop(30, 24);
+		Move blackMove = new Move(2, 13, 8);
+		blackMove.addHop(24, 19);
 		
-		testObj.makeHop(whiteMove3);
-		testObj.makeHop(blackMove3);
-		
-		testObj.makeHop(whiteMove4);
+		testObj.makeHop(blackMove);
 		assertEquals(1, testObj.getHopsMadeInMove());
-		testObj.makeHop(whiteMove4);
+		testObj.makeHop(blackMove);
 		assertEquals(0, testObj.getHopsMadeInMove());
-		
-		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(28).getState());
-		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(23).getState());
+
+		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(2).getState());
+		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(8).getState());
+		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(13).getState());
 		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(19).getState());
-		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(24).getState());
-		assertEquals(Tile.State.WHITE_PAWN, boardManager.findTileByIndex(30).getState());
+		assertEquals(Tile.State.BLACK_PAWN, boardManager.findTileByIndex(24).getState());
 		
-		assertEquals(18, boardManager.getBlackPieces().size());
+		assertEquals(0, boardManager.getWhitePieces().size());
 		
 	}
 	
@@ -125,6 +125,7 @@ public class MoveManagerTest {
 	
 	@Test
 	public void findMoves_forWhitePawn_test() {
+		boardManager.addWhitePawn(33);
 		ArrayList<Move> moves = findMovesForPiece(33);
 		assertEquals(Tile.State.WHITE_PAWN, testObj.getBoardManager().findTileByIndex(33).getState());
 		
@@ -138,6 +139,7 @@ public class MoveManagerTest {
 	
 	@Test
 	public void findMoves_forBlackPawn_test() {
+		boardManager.addBlackPawn(18);
 		ArrayList<Move> moves = findMovesForPiece(18);
 		
 		assertEquals(2, moves.size());
@@ -149,6 +151,7 @@ public class MoveManagerTest {
 	
 	@Test
 	public void findMoves_forMostLeftPawn_test() {
+		boardManager.addBlackPawn(16);
 		ArrayList<Move> moves = findMovesForPiece(16);
 		
 		assertEquals(1, moves.size());
@@ -157,6 +160,7 @@ public class MoveManagerTest {
 	
 	@Test
 	public void findMoves_forMostRightPawn_test() {
+		boardManager.addWhitePawn(35);
 		ArrayList<Move> moves = findMovesForPiece(35);
 		
 		assertEquals(1, moves.size());
