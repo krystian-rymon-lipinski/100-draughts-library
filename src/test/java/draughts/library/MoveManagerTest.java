@@ -299,13 +299,156 @@ public class MoveManagerTest {
 		assertEquals(4, blackMoves.size());
 	}	
 	
+	@Test
+	public void findUpLeftMoves_forQueen_test() {
+		boardManager.addWhiteQueen(32);
+		boardManager.addWhitePawn(28);
+		boardManager.addWhitePawn(38);
+		boardManager.addWhitePawn(37);
+		ArrayList<Move> whiteMoves = findMovesForPiece(32);
+		
+		assertEquals(3, whiteMoves.size());
+		assertEquals(32, whiteMoves.get(0).getSource(0));
+		assertEquals(32, whiteMoves.get(2).getSource(0));
+		assertEquals(27, whiteMoves.get(0).getDestination(0));
+		assertEquals(21, whiteMoves.get(1).getDestination(0));
+		assertEquals(16, whiteMoves.get(2).getDestination(0));
+		
+		
+		boardManager.addBlackQueen(12);
+		boardManager.addBlackPawn(8);
+		boardManager.addBlackPawn(18);
+		boardManager.addBlackPawn(17);
+		ArrayList<Move> blackMoves = findMovesForPiece(12);
+		
+		assertEquals(2, blackMoves.size());
+		assertEquals(12, blackMoves.get(0).getSource(0));
+		assertEquals(12, blackMoves.get(1).getSource(0));
+		assertEquals(7, blackMoves.get(0).getDestination(0));
+		assertEquals(1, blackMoves.get(1).getDestination(0));
+	}
 	
-	/*
+	@Test
+	public void findUpRightMoves_forQueen_test() {
+		boardManager.addWhiteQueen(32);
+		boardManager.addWhitePawn(27);
+		boardManager.addWhitePawn(38);
+		boardManager.addWhitePawn(37);
+		ArrayList<Move> whiteMoves = findMovesForPiece(32);
+		
+		assertEquals(6, whiteMoves.size());
+		assertEquals(32, whiteMoves.get(0).getSource(0));
+		assertEquals(32, whiteMoves.get(5).getSource(0));
+		assertEquals(28, whiteMoves.get(0).getDestination(0));
+		assertEquals(23, whiteMoves.get(1).getDestination(0));
+		assertEquals(19, whiteMoves.get(2).getDestination(0));
+		assertEquals(14, whiteMoves.get(3).getDestination(0));
+		assertEquals(10, whiteMoves.get(4).getDestination(0));
+		assertEquals(5, whiteMoves.get(5).getDestination(0));
+		
+		
+		boardManager.addBlackQueen(12);
+		boardManager.addBlackPawn(7);
+		boardManager.addBlackPawn(18);
+		boardManager.addBlackPawn(17);
+		ArrayList<Move> blackMoves = findMovesForPiece(12);
+		
+		assertEquals(2, blackMoves.size());
+		assertEquals(12, blackMoves.get(0).getSource(0));
+		assertEquals(12, blackMoves.get(1).getSource(0));
+		assertEquals(8, blackMoves.get(0).getDestination(0));
+		assertEquals(3, blackMoves.get(1).getDestination(0));
+	}
+	
+	@Test
+	public void findDownLeftMoves_forQueen_test() {
+		boardManager.addWhiteQueen(32);
+		boardManager.addWhitePawn(27);
+		boardManager.addWhitePawn(38);
+		boardManager.addWhitePawn(28);
+		ArrayList<Move> whiteMoves = findMovesForPiece(32);
+		
+		assertEquals(3, whiteMoves.size());
+		assertEquals(32, whiteMoves.get(0).getSource(0));
+		assertEquals(32, whiteMoves.get(2).getSource(0));
+		assertEquals(37, whiteMoves.get(0).getDestination(0));
+		assertEquals(41, whiteMoves.get(1).getDestination(0));
+		assertEquals(46, whiteMoves.get(2).getDestination(0));
+		
+		
+		boardManager.addBlackQueen(12);
+		boardManager.addBlackPawn(7);
+		boardManager.addBlackPawn(18);
+		boardManager.addBlackPawn(8);
+		ArrayList<Move> blackMoves = findMovesForPiece(12);
+		
+		assertEquals(3, blackMoves.size());
+		assertEquals(12, blackMoves.get(0).getSource(0));
+		assertEquals(12, blackMoves.get(2).getSource(0));
+		assertEquals(17, blackMoves.get(0).getDestination(0));
+		assertEquals(21, blackMoves.get(1).getDestination(0));
+		assertEquals(26, blackMoves.get(2).getDestination(0));
+	}
+	
+	@Test
+	public void findDownRightMoves_forQueen_test() {
+		boardManager.addWhiteQueen(32);
+		boardManager.addWhitePawn(27);
+		boardManager.addWhitePawn(37);
+		boardManager.addWhitePawn(28);
+		ArrayList<Move> whiteMoves = findMovesForPiece(32);
+		
+		assertEquals(3, whiteMoves.size());
+		assertEquals(32, whiteMoves.get(0).getSource(0));
+		assertEquals(32, whiteMoves.get(2).getSource(0));
+		assertEquals(38, whiteMoves.get(0).getDestination(0));
+		assertEquals(43, whiteMoves.get(1).getDestination(0));
+		assertEquals(49, whiteMoves.get(2).getDestination(0));
+		
+		
+		boardManager.addBlackQueen(12);
+		boardManager.addBlackPawn(7);
+		boardManager.addBlackPawn(17);
+		boardManager.addBlackPawn(8);
+		ArrayList<Move> blackMoves = findMovesForPiece(12);
+		
+		assertEquals(6, blackMoves.size());
+		assertEquals(12, blackMoves.get(0).getSource(0));
+		assertEquals(12, blackMoves.get(5).getSource(0));
+		assertEquals(18, blackMoves.get(0).getDestination(0));
+		assertEquals(23, blackMoves.get(1).getDestination(0));
+		assertEquals(29, blackMoves.get(2).getDestination(0));
+		assertEquals(34, blackMoves.get(3).getDestination(0));
+		assertEquals(40, blackMoves.get(4).getDestination(0));
+		assertEquals(45, blackMoves.get(5).getDestination(0));
+
+	}
+	
 	@Test
 	public void findMoves_forQueen_test() {
 		boardManager.addWhiteQueen(28);
-		ArrayList<Move> moves = findMovesForPiece(28);
+		boardManager.addWhitePawn(11);
+		boardManager.addBlackPawn(5);
+		boardManager.addBlackQueen(32);
+		boardManager.addWhiteQueen(50);
+		ArrayList<Move> whiteMoves = findMovesForPiece(28);
+		
+		assertEquals(9, whiteMoves.size());
+		
+		boardManager.addBlackQueen(30);
+		boardManager.addWhitePawn(13);
+		boardManager.addBlackPawn(25);
+		boardManager.addBlackQueen(35);
+		boardManager.addWhiteQueen(48);
+		
+		ArrayList<Move> blackMoves = findMovesForPiece(30);
+		
+		assertEquals(5, blackMoves.size());
+		
+		
+		
+		
 		
 	}
-*/
+
 }

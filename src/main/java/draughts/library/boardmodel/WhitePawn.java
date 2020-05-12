@@ -15,10 +15,10 @@ public class WhitePawn extends Pawn {
 	
 	
 	public Move findLeftMove(Tile[][] board, int row, int column) {
-		Tile possibleDestination = board[row-1-1][column-1-1];
+		Tile target = board[row-1-1][column-1-1];
 		
-		if(possibleDestination.getState() == Tile.State.EMPTY)
-			return new Move(getPosition(), Tile.calculateIndex(row-1, column-1));
+		if(target.getState() == Tile.State.EMPTY)
+			return new Move(getPosition(), target.getIndex());
 		else return null;
 			
 	}
@@ -27,7 +27,7 @@ public class WhitePawn extends Pawn {
 		Tile target = board[row-1-1][column-1+1];
 		
 		if(target.getState() == Tile.State.EMPTY)
-			return new Move(getPosition(), Tile.calculateIndex(row-1, column+1));
+			return new Move(getPosition(), target.getIndex());
 		else return null;
 	}
 	

@@ -31,27 +31,7 @@ public abstract class Pawn extends Piece {
 	
 	public abstract Move findRightMove(Tile[][] board, int row, int column); 
 	
-	public ArrayList<Move> findTakes(Tile[][] board, Tile currentPosition) {
-		int row = currentPosition.getRow();
-		int column = currentPosition.getColumn();
-		ArrayList<Move> moves = new ArrayList<>();
-		Move move = null;
-		
-		if(column > 2 && row > 2) move = findUpLeftTake(board, row, column);
-		if(move != null) moves.add(move);
-		move = null;
-		if(column < 9 && row > 2) move = findUpRightTake(board, row, column);
-		if(move != null) moves.add(move);
-		move = null;
-		if(column > 2 && row < 9) move = findDownLeftTake(board, row, column);
-		if(move != null) moves.add(move);
-		move = null;
-		if(column < 9 && row < 9) move = findDownRightTake(board, row, column);
-		if(move != null) moves.add(move);
-		move = null;
-		
-		return moves;
-	}
+	
 	
 	public Move findUpLeftTake(Tile[][] board, int row, int column) {
 		Tile target = board[row-1-2][column-1-2];
