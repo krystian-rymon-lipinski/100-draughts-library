@@ -24,6 +24,10 @@ public abstract class Piece {
 		position = dst.getIndex();
 	}
 	
+	public abstract boolean isTileOccupiedBySameColor(Tile tile);
+	
+	public abstract boolean isTileOccupiedByOppositeColor(Tile tile);
+	
 	public abstract ArrayList<Move> findMoves(Tile[][] board, Tile currentPosition);
 	/*
 	public ArrayList<Move> findTakes(Tile[][] board, Tile currentPosition) {
@@ -48,6 +52,10 @@ public abstract class Piece {
 		return moves;
 	}
 	
+	*/
+	
+	public abstract ArrayList<Move> findTakes(Tile[][] board, Tile currentPosition);
+	
 	public abstract ArrayList<Move> findUpLeftTakes(Tile board[][], int row, int column);
 	
 	public abstract ArrayList<Move> findUpRightTakes(Tile board[][], int row, int column);
@@ -56,5 +64,4 @@ public abstract class Piece {
 	
 	public abstract ArrayList<Move> findDownRightTakes(Tile board[][], int row, int column);
 	
-*/
 }
