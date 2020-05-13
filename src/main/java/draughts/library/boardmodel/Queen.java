@@ -10,53 +10,20 @@ public abstract class Queen extends Piece {
 		super(position);
 	}
 	
-	public ArrayList<Move> findMoves(Tile[][] board, Tile currentPosition) {
+	public ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn) {
 		
-		int row = currentPosition.getRow();
-		int column = currentPosition.getColumn();
 		ArrayList<Move> moves = new ArrayList<>();
-		
-		ArrayList<Move> upLeftMoves = new ArrayList<>();
-		ArrayList<Move> upRightMoves = new ArrayList<>();
-		ArrayList<Move> downLeftMoves = new ArrayList<>();
-		ArrayList<Move> downRightMoves = new ArrayList<>();
-		
-		if(row>1 && column>1) upLeftMoves = findUpLeftMoves(board, row, column);
-		if(row>1 && column<10) upRightMoves = findUpRightMoves(board, row, column);
-		if(row<10 && column>1) downLeftMoves = findDownLeftMoves(board, row, column);
-		if(row<10 && column<10) downRightMoves = findDownRightMoves(board, row, column);
-		
-		if(upLeftMoves.size() > 0) moves.addAll(upLeftMoves);
-		if(upRightMoves.size() > 0) moves.addAll(upRightMoves);
-		if(downLeftMoves.size() > 0) moves.addAll(downLeftMoves);
-		if(downRightMoves.size() > 0) moves.addAll(downRightMoves);
-		
+				
+		if(currentRow>1 && currentColumn>1) 
+			addMovesIfAny(moves, findUpLeftMoves(board, currentRow, currentColumn));
+		if(currentRow>1 && currentColumn<10) 
+			addMovesIfAny(moves, findUpRightMoves(board, currentRow, currentColumn));
+		if(currentRow<10 && currentColumn>1) 
+			addMovesIfAny(moves, findDownLeftMoves(board, currentRow, currentColumn));
+		if(currentRow<10 && currentColumn<10)
+			addMovesIfAny(moves, findDownRightMoves(board, currentRow, currentColumn));
 		
 		return moves;
-	}
-	
-	public ArrayList<Move> findTakes(Tile[][] board, Tile currentPosition) {
-		int row = currentPosition.getRow();
-		int column = currentPosition.getColumn();
-		ArrayList<Move> moves = new ArrayList<>();
-		
-		ArrayList<Move> upLeftTakes = new ArrayList<>();
-		ArrayList<Move> upRightTakes = new ArrayList<>();
-		ArrayList<Move> downLeftTakes = new ArrayList<>();
-		ArrayList<Move> downRightTakes = new ArrayList<>();
-		
-		if(row>2 && column>2) upLeftTakes = findUpLeftTakes(board, row, column);
-		if(row>2 && column<9) upRightTakes = findUpRightTakes(board, row, column);
-		if(row<9 && column>2) downLeftTakes = findDownLeftTakes(board, row, column);
-		if(row<9 && column<9) downRightTakes = findDownRightTakes(board, row, column);
-
-		if(upLeftTakes.size() > 0) moves.addAll(upLeftTakes);
-		if(upRightTakes.size() > 0) moves.addAll(upRightTakes);
-		if(downLeftTakes.size() > 0) moves.addAll(downLeftTakes);
-		if(downRightTakes.size() > 0) moves.addAll(downRightTakes);
-		
-		return moves;
-		
 	}
 	
 	//////////////////////////////////////////////////////

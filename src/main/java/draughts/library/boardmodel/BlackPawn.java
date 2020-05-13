@@ -30,10 +30,6 @@ public class BlackPawn extends Pawn {
 		else return null;
 	}
 	
-	public boolean isTileTakenByOppositeColor(Tile.State state) {
-		return (state == Tile.State.WHITE_PAWN || state == Tile.State.WHITE_QUEEN) ? true : false;
-	}
-	
 	public boolean isTileOccupiedBySameColor(Tile tile) {
 		return (tile.getState() == Tile.State.BLACK_PAWN || 
 				tile.getState() == Tile.State.BLACK_QUEEN ? true : false);

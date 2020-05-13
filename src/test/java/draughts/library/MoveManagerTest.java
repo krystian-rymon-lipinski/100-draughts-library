@@ -120,13 +120,15 @@ public class MoveManagerTest {
 	public ArrayList<Move> findMovesForPiece(int piecePosition) {
 		Piece piece = testObj.getBoardManager().findPieceByIndex(piecePosition);
 		Tile currentTile = testObj.getBoardManager().findTileByIndex(piecePosition);
-		return piece.findMoves(testObj.getBoardManager().getBoard(), currentTile);
+		return piece.findMoves(testObj.getBoardManager().getBoard(), 
+							   currentTile.getRow(), currentTile.getColumn());
 	}
 	
 	public ArrayList<Move> findTakesForPiece(int piecePosition) {
 		Piece piece = testObj.getBoardManager().findPieceByIndex(piecePosition);
 		Tile currentTile = testObj.getBoardManager().findTileByIndex(piecePosition);
-		return piece.findTakes(testObj.getBoardManager().getBoard(), currentTile);
+		return piece.findTakes(testObj.getBoardManager().getBoard(), 
+							   currentTile.getRow(), currentTile.getColumn());
 	}
 	
 	@Test(expected = NullPointerException.class)

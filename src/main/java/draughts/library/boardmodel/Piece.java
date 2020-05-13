@@ -11,6 +11,10 @@ public abstract class Piece {
 	public Piece(int position) {
 		this.setPosition(position);
 	}
+	
+	public abstract boolean isTileOccupiedBySameColor(Tile tile);
+	
+	public abstract boolean isTileOccupiedByOppositeColor(Tile tile);
 
 	public int getPosition() {
 		return position;
@@ -24,38 +28,34 @@ public abstract class Piece {
 		position = dst.getIndex();
 	}
 	
-	public abstract boolean isTileOccupiedBySameColor(Tile tile);
+	public void addMovesIfAny(ArrayList<Move> mainList, ArrayList<Move> candidateList) {
+		if(candidateList != null && candidateList.size() > 0)
+			mainList.addAll(candidateList);
+	}
 	
-	public abstract boolean isTileOccupiedByOppositeColor(Tile tile);
+	public void addMoveIfNotNull(ArrayList<Move> mainList, Move candidateMove) {
+		if(candidateMove != null)
+			mainList.add(candidateMove);
+	}
 	
-	public abstract ArrayList<Move> findMoves(Tile[][] board, Tile currentPosition);
-	/*
-	public ArrayList<Move> findTakes(Tile[][] board, Tile currentPosition) {
-		int row = currentPosition.getRow();
-		int column = currentPosition.getColumn();
-		ArrayList<Move> moves = new ArrayList<>();
-		Move move = null;
+	public abstract ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn);
+	
+	public ArrayList<Move> findTakes(Tile[][] board, int currentRow, int currentColumn) {
 		
-		if(column > 2 && row > 2) move = findUpLeftTakes(board, row, column);
-		if(move != null) moves.add(move);
-		move = null;
-		if(column < 9 && row > 2) move = findUpRightTakes(board, row, column);
-		if(move != null) moves.add(move);
-		move = null;
-		if(column > 2 && row < 9) move = findDownLeftTakes(board, row, column);
-		if(move != null) moves.add(move);
-		move = null;
-		if(column < 9 && row < 9) move = findDownRightTakes(board, row, column);
-		if(move != null) moves.add(move);
-		move = null;
+		ArrayList<Move> moves = new ArrayList<>();
+		
+		if(currentColumn > 2 && currentRow > 2) 
+			addMovesIfAny(moves, findUpLeftTakes(board, currentRow, currentColumn));
+		if(currentColumn < 9 && currentRow > 2) 
+			addMovesIfAny(moves, findUpRightTakes(board, currentRow, currentColumn));
+		if(currentColumn > 2 && currentRow < 9) 
+			addMovesIfAny(moves, findDownLeftTakes(board, currentRow, currentColumn));
+		if(currentColumn < 9 && currentRow < 9) 
+			addMovesIfAny(moves, findDownRightTakes(board, currentRow, currentColumn));
 		
 		return moves;
 	}
-	
-	*/
-	
-	public abstract ArrayList<Move> findTakes(Tile[][] board, Tile currentPosition);
-	
+		
 	public abstract ArrayList<Move> findUpLeftTakes(Tile board[][], int row, int column);
 	
 	public abstract ArrayList<Move> findUpRightTakes(Tile board[][], int row, int column);
