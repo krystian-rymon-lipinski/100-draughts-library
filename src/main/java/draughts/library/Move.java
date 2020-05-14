@@ -25,14 +25,15 @@ public class Move {
 	}
 	
 	
-	public int getSource() {
-		return source;
+	public int getSource(int hopsMadeInMove) {
+		if(hopsMadeInMove == 0) return source;
+		else return hops.get(hopsMadeInMove-1);
 	}
 	public void setSource(int source) {
 		this.source = source;
 	}
-	public int getDestination() {
-		return destination;
+	public int getDestination(int hopsMadeInMove) {
+		return hops.get(hopsMadeInMove);
 	}
 	public void setDestination(int destination) {
 		this.destination = destination;
@@ -50,7 +51,13 @@ public class Move {
 		this.pawnsTaken = pawnsTaken;
 	}
 	
-
+	public boolean isTake() {
+		return (pawnsTaken.size() != 0) ? true : false;
+	}
+	
+	public int getTakenPawn(int hopsMadeInMove) {
+		return pawnsTaken.get(hopsMadeInMove);
+	}
 
 	public void addHop(int destination) {
 		this.destination = destination;
@@ -62,4 +69,8 @@ public class Move {
 		pawnsTaken.add(taken);
 	}
 	
+	
+	public String toString() {
+		return hops.toString();
+	}
 }

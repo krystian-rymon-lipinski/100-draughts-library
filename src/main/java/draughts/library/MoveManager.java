@@ -10,7 +10,7 @@ public class MoveManager {
 	
 	public MoveManager() {
 		boardManager = new BoardManager();
-		boardManager.prepareBoard();
+		//boardManager.createStartingPosition();
 		moves = new ArrayList<>();
 		hopsMadeInMove = 0;
 	}
@@ -28,19 +28,12 @@ public class MoveManager {
 	}
 		
 	public void makeHop(Move move) {
-		int source = 0;
-		if(hopsMadeInMove == 0) 
-			source = move.getSource();
-		else 
-			source = move.getHops().get(hopsMadeInMove-1);
-		
-		int destination = move.getHops().get(hopsMadeInMove);
-		
-		if(move.getPawnsTaken().size() == 0)
-			boardManager.makeHop(source, destination);
+			
+		if(!move.isTake())
+			boardManager.makeHop(move.getSource(hopsMadeInMove), move.getDestination(hopsMadeInMove));
 		else
-			boardManager.makeHop(source,  destination, 
-								 move.getPawnsTaken().get(hopsMadeInMove));
+			boardManager.makeHop(move.getSource(hopsMadeInMove), move.getDestination(hopsMadeInMove),
+								 move.getTakenPawn(hopsMadeInMove));
 		hopsMadeInMove++;
 		
 		if(hopsMadeInMove == move.getHops().size())
@@ -51,8 +44,12 @@ public class MoveManager {
 		hopsMadeInMove = 0;
 	}
 	
-	public void findMoveByHop(int source, int destination) {
-		
+	public ArrayList<Move> findMoveByHop(int source, int destination) {
+		return null;
+	}
+	
+	public ArrayList<Move> findAllPossibleMoves(boolean isWhiteToMove) {
+		return boardManager.findMoves(isWhiteToMove);
 	}
 
 }

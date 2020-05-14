@@ -44,11 +44,11 @@ public class Tile {
 	}
 	
 	public boolean isTileMostLeftInRow() {
-		return index % (Board.TILES_IN_ROW/2) == 1 ? true : false;
+		return (index % (Board.TILES_IN_ROW/2) == 1 && isRowEven()) ? true : false;
 	}
 	
 	public boolean isTileMostRightInRow() {
-		return index % (Board.TILES_IN_ROW/2) == 0 ? true : false;
+		return (index % (Board.TILES_IN_ROW/2) == 0 && !isRowEven()) ? true : false;
 	}
 	
 	public static int calculateIndex(int row, int column) {

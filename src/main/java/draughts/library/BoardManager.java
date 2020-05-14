@@ -3,6 +3,7 @@ package draughts.library;
 import java.util.ArrayList;
 
 import draughts.library.boardmodel.BlackPawn;
+import draughts.library.boardmodel.BlackQueen;
 import draughts.library.boardmodel.Board;
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
@@ -15,13 +16,15 @@ public class BoardManager {
 	private ArrayList<Piece> whitePieces;
 	private ArrayList<Piece> blackPieces;
 	
-	
-	
-	public void prepareBoard() {
+	public BoardManager() {
 		board = new Tile[Board.NUMBER_OF_ROWS][Board.TILES_IN_ROW];
-		
-		prepareTiles();
-		preparePieces();
+		whitePieces = new ArrayList<>();
+		blackPieces = new ArrayList<>();
+	}
+	
+	public void createStartingPosition() {
+		createEmptyBoard();
+		createPiecesForStartingPosition();
 	}
 	
 	public Tile[][] getBoard() {
@@ -36,30 +39,43 @@ public class BoardManager {
 		return blackPieces;
 	}
 	
-	public void prepareTiles() {
+	public void createPiecesForStartingPosition() {
+		
+		for(int i=0; i<20; i++) {
+			addWhitePawn(30+i+1); //start positions for white pieces are 31 through 50
+			addBlackPawn(i+1); //start positions for black pieces are 1 through 20
+		}
+	}
+	
+	public void createEmptyBoard() {
+		
 		for(int i=0; i<board.length; i++) {
 			for(int j=0; j<board[0].length; j++) {
 				board[i][j] = new Tile(i+1, j+1);
-				if(board[i][j].getIndex() >= 1 && board[i][j].getIndex() <= 20)
-					board[i][j].setState(Tile.State.BLACK_PAWN);
-				else if(board[i][j].getIndex() >= 21 && board[i][j].getIndex() <= 30)
-					board[i][j].setState(Tile.State.EMPTY);
-				else if(board[i][j].getIndex() >= 31 && board[i][j].getIndex() <= 50)
-					board[i][j].setState(Tile.State.WHITE_PAWN);
-				else 
-					board[i][j].setState(Tile.State.WHITE_TILE);
+				if(board[i][j].getIndex() > 0) board[i][j].setState(Tile.State.EMPTY);
+				else board[i][j].setState(Tile.State.WHITE_TILE);
 			}
 		}
 	}
 	
-	public void preparePieces() {
-		whitePieces = new ArrayList<>();
-		blackPieces = new ArrayList<>();
-		
-		for(int i=0; i<20; i++) {
-			blackPieces.add(new BlackPawn(i+1)); //start positions for black pieces are 1 through 20
-			whitePieces.add(new WhitePawn(30+i+1)); //start positions for white pieces are 31 through 50
-		}
+	public void addWhitePawn(int position) {
+		whitePieces.add(new WhitePawn(position));
+		findTileByIndex(position).setState(Tile.State.WHITE_PAWN);
+	}
+	
+	public void addBlackPawn(int position) {
+		blackPieces.add(new BlackPawn(position));
+		findTileByIndex(position).setState(Tile.State.BLACK_PAWN);
+	}
+	
+	public void addWhiteQueen(int position) {
+		whitePieces.add(new WhiteQueen(position));
+		findTileByIndex(position).setState(Tile.State.WHITE_QUEEN);
+	}
+	
+	public void addBlackQueen(int position) {
+		blackPieces.add(new BlackQueen(position));
+		findTileByIndex(position).setState(Tile.State.BLACK_QUEEN);
 	}
 	
 	public void makeHop(int source, int destination) {
@@ -68,7 +84,11 @@ public class BoardManager {
 		
 		Piece movedPiece = findPieceByIndex(source);
 		Tile dst = findTileByIndex(destination);
-		movedPiece.hop(dst);
+		try {
+			movedPiece.hop(dst);
+		} catch (NullPointerException err) {
+			System.out.println("No piece in selected tile!");
+		}
 		
 	}
 	
@@ -110,8 +130,22 @@ public class BoardManager {
 		
 	}
 	
+	public ArrayList<Move> findMoves(boolean isWhiteToMove) {
+		ArrayList<Piece> pieces;
+		if (isWhiteToMove) pieces = whitePieces;
+		else pieces = blackPieces;
+		
+		for(Piece piece : pieces) {
+			Tile currentPosition = findTileByIndex(piece.getPosition());
+			piece.findMoves(board, currentPosition.getRow(), currentPosition.getColumn());
+		}
+			
+		return null;
+	}
+	
 	public boolean isTakenPieceWhite(Piece takenPiece) {
 		return (takenPiece instanceof WhitePawn || takenPiece instanceof WhiteQueen) ? true : false;
-	}
+	}	
+	
 
 }
