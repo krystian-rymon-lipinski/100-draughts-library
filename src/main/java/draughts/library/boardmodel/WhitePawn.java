@@ -1,5 +1,7 @@
 package draughts.library.boardmodel;
 
+import java.util.ArrayList;
+
 import draughts.library.Move;
 
 public class WhitePawn extends Pawn {
@@ -12,6 +14,8 @@ public class WhitePawn extends Pawn {
 		super.hop(dst);
 		dst.setState(Tile.State.WHITE_PAWN);
 	}
+	
+
 	
 	
 	public Move findLeftMove(Tile[][] board, int row, int column) {
