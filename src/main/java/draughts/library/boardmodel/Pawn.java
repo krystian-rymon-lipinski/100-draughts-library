@@ -10,18 +10,14 @@ public abstract class Pawn extends Piece {
 		super(position);
 	}
 	
-	public abstract Move findLeftMove(Tile[][] board, int row, int column);
 	
-	public abstract Move findRightMove(Tile[][] board, int row, int column);
-	
-	public ArrayList<Move> findMoves(Tile[][] board, int row, int column) {
-	
-		ArrayList<Move> moves = new ArrayList<Move>();
-	
-		if(column > 1)
-			addMoveIfNotNull(moves, findLeftMove(board, row, column));
-		if(column < 10) 
-			addMoveIfNotNull(moves, findRightMove(board, row, column));
+	public ArrayList<Move> findMovesInDirection(MoveDirection moveDirection, Tile[][] board, int currentRow, int currentColumn) {
+		
+		ArrayList<Move> moves = new ArrayList<>();
+		Tile target = findTarget(moveDirection, board, currentRow, currentColumn, 1);
+		
+		if(target.getState() == Tile.State.EMPTY)
+			moves.add(new Move(getPosition(), target.getIndex()));
 		return moves;
 	}
 	

@@ -15,25 +15,17 @@ public class WhitePawn extends Pawn {
 		dst.setState(Tile.State.WHITE_PAWN);
 	}
 	
-
-	
-	
-	public Move findLeftMove(Tile[][] board, int row, int column) {
-		Tile target = board[row-1-1][column-1-1];
+	public ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn) {
 		
-		if(target.getState() == Tile.State.EMPTY)
-			return new Move(getPosition(), target.getIndex());
-		else return null;
-			
+		ArrayList<Move> moves = new ArrayList<>();
+				
+		if(currentRow>1 && currentColumn>1) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));
+		if(currentRow>1 && currentColumn<10) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board, currentRow, currentColumn));
+		return moves;
 	}
 	
-	public Move findRightMove(Tile[][] board, int row, int column) {	
-		Tile target = board[row-1-1][column-1+1];
-		
-		if(target.getState() == Tile.State.EMPTY)
-			return new Move(getPosition(), target.getIndex());
-		else return null;
-	}
 	
 	public boolean isTileOccupiedBySameColor(Tile tile) {
 		return (tile.getState() == Tile.State.WHITE_PAWN || 

@@ -1,5 +1,7 @@
 package draughts.library.boardmodel;
 
+import java.util.ArrayList;
+
 import draughts.library.Move;
 
 public class BlackPawn extends Pawn {
@@ -12,22 +14,16 @@ public class BlackPawn extends Pawn {
 		super.hop(dst);
 		dst.setState(Tile.State.BLACK_PAWN);
 	}
-	
-	public Move findLeftMove(Tile[][] board, int row, int column) {
-		Tile possibleDestination = board[row-1+1][column-1-1];
+
+	public ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn) {
 		
-		if(possibleDestination.getState() == Tile.State.EMPTY)
-			return new Move(getPosition(), Tile.calculateIndex(row+1, column-1));
-		else return null;
-			
-	}
-	
-	public Move findRightMove(Tile[][] board, int row, int column) {	
-		Tile target = board[row-1+1][column-1+1];
-		
-		if(target.getState() == Tile.State.EMPTY)
-			return new Move(getPosition(), Tile.calculateIndex(row+1, column+1));
-		else return null;
+		ArrayList<Move> moves = new ArrayList<>();
+				
+		if(currentRow>1 && currentColumn>1) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
+		if(currentRow>1 && currentColumn<10) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board, currentRow, currentColumn));
+		return moves;
 	}
 	
 	public boolean isTileOccupiedBySameColor(Tile tile) {
