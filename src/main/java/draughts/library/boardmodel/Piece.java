@@ -15,6 +15,16 @@ public abstract class Piece {
 	public abstract boolean isTileOccupiedBySameColor(Tile tile);
 	
 	public abstract boolean isTileOccupiedByOppositeColor(Tile tile);
+	
+	public abstract ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn);
+	
+	public abstract ArrayList<Move> findUpLeftTakes(Tile board[][], int row, int column);
+	
+	public abstract ArrayList<Move> findUpRightTakes(Tile board[][], int row, int column);
+	
+	public abstract ArrayList<Move> findDownLeftTakes(Tile board[][], int row, int column);
+	
+	public abstract ArrayList<Move> findDownRightTakes(Tile board[][], int row, int column);
 
 	public int getPosition() {
 		return position;
@@ -37,9 +47,7 @@ public abstract class Piece {
 		if(candidateMove != null)
 			mainList.add(candidateMove);
 	}
-	
-	public abstract ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn);
-	
+		
 	public ArrayList<Move> findTakes(Tile[][] board, int currentRow, int currentColumn) {
 		
 		ArrayList<Move> moves = new ArrayList<>();
@@ -56,12 +64,6 @@ public abstract class Piece {
 		return moves;
 	}
 		
-	public abstract ArrayList<Move> findUpLeftTakes(Tile board[][], int row, int column);
 	
-	public abstract ArrayList<Move> findUpRightTakes(Tile board[][], int row, int column);
-	
-	public abstract ArrayList<Move> findDownLeftTakes(Tile board[][], int row, int column);
-	
-	public abstract ArrayList<Move> findDownRightTakes(Tile board[][], int row, int column);
 	
 }

@@ -15,99 +15,108 @@ public abstract class Queen extends Piece {
 		ArrayList<Move> moves = new ArrayList<>();
 				
 		if(currentRow>1 && currentColumn>1) 
-			addMovesIfAny(moves, findUpLeftMoves(board, currentRow, currentColumn));
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));
 		if(currentRow>1 && currentColumn<10) 
-			addMovesIfAny(moves, findUpRightMoves(board, currentRow, currentColumn));
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board, currentRow, currentColumn));
 		if(currentRow<10 && currentColumn>1) 
-			addMovesIfAny(moves, findDownLeftMoves(board, currentRow, currentColumn));
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
 		if(currentRow<10 && currentColumn<10)
-			addMovesIfAny(moves, findDownRightMoves(board, currentRow, currentColumn));
-		
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board, currentRow, currentColumn));
+
 		return moves;
 	}
 	
-	//////////////////////////////////////////////////////
-	//Moves
-	
-	public ArrayList<Move> findUpLeftMoves(Tile[][] board, int row, int column) {
-		ArrayList<Move> upLeftMoves = new ArrayList<>();
-		int moveToCheck = 1;
+	public ArrayList<Move> findMovesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
+		ArrayList<Move> moves = new ArrayList<>();
+		int distanceInTiles = 1;
 		
-		while(row-moveToCheck > 0 && column-moveToCheck > 0) {
-			Tile target = board[row-1-moveToCheck][column-1-moveToCheck];
+		while(isMovePossible(moveDirection, row, column, distanceInTiles)) {
+			Tile target = findTarget(moveDirection, board, row, column, distanceInTiles);
+
 			if(target.getState() == Tile.State.EMPTY) {
-				upLeftMoves.add(new Move(getPosition(), target.getIndex()));
-				moveToCheck++; 
-			} else break;
-		}
-		
-		return upLeftMoves;	
-	}
-	
-	public ArrayList<Move> findUpRightMoves(Tile[][] board, int row, int column) {
-		ArrayList<Move> upRightMoves = new ArrayList<>();
-		int moveToCheck = 1;
-		
-		while(row-moveToCheck > 0 && column+moveToCheck < 11) {
-			Tile target = board[row-1-moveToCheck][column-1+moveToCheck];
-			if(target.getState() == Tile.State.EMPTY) {
-				upRightMoves.add(new Move(getPosition(), target.getIndex()));
-				moveToCheck++;
-			} else break;
-		}
-		
-		return upRightMoves;
-	}
-	
-	public ArrayList<Move> findDownLeftMoves(Tile[][] board, int row, int column) {
-		ArrayList<Move> downLeftMoves = new ArrayList<>();
-		int moveToCheck = 1;
-		
-		while(row+moveToCheck < 11 && column-moveToCheck > 0) {
-			Tile target = board[row-1+moveToCheck][column-1-moveToCheck];
-			if(target.getState() == Tile.State.EMPTY) {
-				downLeftMoves.add(new Move(getPosition(), target.getIndex()));
-				moveToCheck++;
-			} else break;
-		}
-		
-		return downLeftMoves;
-	}
-	
-	public ArrayList<Move> findDownRightMoves(Tile[][] board, int row, int column) {
-		ArrayList<Move> downRightMoves = new ArrayList<>();
-		int moveToCheck = 1;
-		
-		while(row+moveToCheck < 11 && column+moveToCheck < 11) {
-			Tile target = board[row-1+moveToCheck][column-1+moveToCheck];
-			if(target.getState() == Tile.State.EMPTY) {
-				downRightMoves.add(new Move(getPosition(), target.getIndex()));
-				moveToCheck++;
+				moves.add(new Move(getPosition(), target.getIndex()));
+				distanceInTiles++;
 			} else break;
 			
 		}
 		
-		return downRightMoves;
+		return moves;
 	}
 	
 	//////////////////////////////////////////////////////////////
 	//Takes
 	
+	public enum MoveDirection {
+		
+		UP_LEFT,
+		UP_RIGHT,
+		DOWN_LEFT,
+		DOWN_RIGHT;
+	}
 	
-	public ArrayList<Move> findUpLeftTakes(Tile[][] board, int row, int column) {
-		ArrayList<Move> upLeftMoves = new ArrayList<>();
-		int moveToCheck = 1;
+	public boolean isMovePossible(MoveDirection moveDirection, int row, int column, int distanceInTiles) {
+		switch(moveDirection) {
+		case UP_LEFT:
+			return (row-distanceInTiles > 0 && column-distanceInTiles > 0);
+		case UP_RIGHT:
+			return (row-distanceInTiles > 0 && column+distanceInTiles < 11);
+		case DOWN_LEFT:
+			return (row+distanceInTiles < 11 && column-distanceInTiles > 0);
+		case DOWN_RIGHT:
+			return (row+distanceInTiles < 11 && column+distanceInTiles < 11);
+		default:
+			break;
+		}
+		return false;
+	}
+	
+	public Tile findTarget(MoveDirection moveDirection, Tile[][] board, int row, int column, int distanceInTiles) {
+		
+		switch(moveDirection) {
+			case UP_LEFT:
+				return board[row-1-distanceInTiles][column-1-distanceInTiles];
+			case UP_RIGHT:
+				return board[row-1-distanceInTiles][column-1+distanceInTiles];
+			case DOWN_LEFT:
+				return board[row-1+distanceInTiles][column-1-distanceInTiles];
+			case DOWN_RIGHT:
+				return board[row-1+distanceInTiles][column-1+distanceInTiles];
+			default:
+				break;
+		}
+		return null;
+	}
+	
+	public ArrayList<Move> findTakes(Tile[][] board, int currentRow, int currentColumn) {
+		
+		ArrayList<Move> moves = new ArrayList<>();
+		
+		if(currentColumn > 2 && currentRow > 2) 
+			addMovesIfAny(moves, findTakesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));
+		if(currentColumn < 9 && currentRow > 2) 
+			addMovesIfAny(moves, findTakesInDirection(MoveDirection.UP_RIGHT, board, currentRow, currentColumn));
+		if(currentColumn > 2 && currentRow < 9) 
+			addMovesIfAny(moves, findTakesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
+		if(currentColumn < 9 && currentRow < 9) 
+			addMovesIfAny(moves, findTakesInDirection(MoveDirection.DOWN_RIGHT, board, currentRow, currentColumn));
+		
+		return moves;
+	}
+	
+	public ArrayList<Move> findTakesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
+		ArrayList<Move> moves = new ArrayList<>();
+		int distanceInTiles = 1;
 		int foundPawnToTake = 0;
-				
-		while(row-moveToCheck > 0 && column-moveToCheck > 0) {
-			Tile target = board[row-1-moveToCheck][column-1-moveToCheck];
-					
+		
+		while(isMovePossible(moveDirection, row, column, distanceInTiles)) {
+			Tile target = findTarget(moveDirection, board, row, column, distanceInTiles);
+			
 			if(target.getState() == Tile.State.EMPTY) {
 				if(foundPawnToTake == 0) 
-					moveToCheck++; 
+					distanceInTiles++; 
 				else {
-					upLeftMoves.add(new Move(getPosition(), target.getIndex(), foundPawnToTake));
-					moveToCheck++;
+					moves.add(new Move(getPosition(), target.getIndex(), foundPawnToTake));
+					distanceInTiles++;
 				}			
 			} 
 			else if(isTileOccupiedBySameColor(target)) {
@@ -116,104 +125,13 @@ public abstract class Queen extends Piece {
 			else if(isTileOccupiedByOppositeColor(target)){
 				if(foundPawnToTake == 0) {
 					foundPawnToTake = target.getIndex();
-					moveToCheck++;
-				}
-				else break;
-			}
-		}
-		return upLeftMoves;	
-	}
-	
-	public ArrayList<Move> findUpRightTakes(Tile[][] board, int row, int column) {
-		ArrayList<Move> upRightMoves = new ArrayList<>();
-		int moveToCheck = 1;
-		int foundPawnToTake = 0;
-		
-		while(row-moveToCheck > 0 && column+moveToCheck < 11) {
-			Tile target = board[row-1-moveToCheck][column-1+moveToCheck];
-			
-			if(target.getState() == Tile.State.EMPTY) {
-				if(foundPawnToTake == 0) 
-					moveToCheck++; 
-				else {
-					upRightMoves.add(new Move(getPosition(), target.getIndex(), foundPawnToTake));
-					moveToCheck++;
-				}			
-			} 
-			else if(isTileOccupiedBySameColor(target))
-				break;
-			else if(isTileOccupiedByOppositeColor(target)){
-				if(foundPawnToTake == 0) {
-					foundPawnToTake = target.getIndex();
-					moveToCheck++;
+					distanceInTiles++;
 				}
 				else break;
 			}
 		}
 		
-		return upRightMoves;
+		return moves;
 	}
 	
-	public ArrayList<Move> findDownLeftTakes(Tile[][] board, int row, int column) {
-		ArrayList<Move> downLeftMoves = new ArrayList<>();
-		int moveToCheck = 1;
-		int foundPawnToTake = 0;
-		
-		while(row+moveToCheck < 11 && column-moveToCheck > 0) {
-			Tile target = board[row-1+moveToCheck][column-1-moveToCheck];
-			
-			if(target.getState() == Tile.State.EMPTY) {
-				if(foundPawnToTake == 0) 
-					moveToCheck++; 
-				else {
-					downLeftMoves.add(new Move(getPosition(), target.getIndex(), foundPawnToTake));
-					moveToCheck++;
-				}			
-			} 
-			else if(isTileOccupiedBySameColor(target))
-				break;
-			else if(isTileOccupiedByOppositeColor(target)){
-				if(foundPawnToTake == 0) {
-					foundPawnToTake = target.getIndex();
-					moveToCheck++;
-				}
-				else break;
-			}
-		}
-		
-		return downLeftMoves;
-	}
-	
-	public ArrayList<Move> findDownRightTakes(Tile[][] board, int row, int column) {
-		ArrayList<Move> downRightMoves = new ArrayList<>();
-		int moveToCheck = 1;
-		int foundPawnToTake = 0;
-		
-		while(row+moveToCheck < 11 && column+moveToCheck < 11) {
-			Tile target = board[row-1+moveToCheck][column-1+moveToCheck];
-			
-			if(target.getState() == Tile.State.EMPTY) {
-				if(foundPawnToTake == 0) 
-					moveToCheck++; 
-				else {
-					downRightMoves.add(new Move(getPosition(), target.getIndex(), foundPawnToTake));
-					moveToCheck++;
-				}			
-			} 
-			else if(isTileOccupiedBySameColor(target))
-				break;
-			else if(isTileOccupiedByOppositeColor(target)){
-				if(foundPawnToTake == 0) {
-					foundPawnToTake = target.getIndex();
-					moveToCheck++;
-				}
-				else break;
-			}
-			
-		}
-		
-		return downRightMoves;
-	}
-	
-
 }
