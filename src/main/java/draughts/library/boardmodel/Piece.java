@@ -19,7 +19,7 @@ public abstract class Piece {
 	public abstract ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn);
 	
 	public abstract ArrayList<Move> findTakesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column);
-
+	
 
 	public int getPosition() {
 		return position;
