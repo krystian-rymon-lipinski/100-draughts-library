@@ -45,6 +45,10 @@ public class MoveManager {
 			moveDone();
 	}
 	
+	public void makeHop(Move<? extends Hop> move) {
+		currentMove = move;
+	}
+	
 	public void findCurrentMove(int source, int destination) {
 		
 	}
@@ -58,8 +62,12 @@ public class MoveManager {
 		return null;
 	}
 	
-	public ArrayList<Move> findAllPossibleMoves(boolean isWhiteToMove) {
+	public ArrayList<Move<Hop>> findMovesForAllPieces(boolean isWhiteToMove) {
 		return boardManager.findMoves(isWhiteToMove);
+	}
+	
+	public ArrayList<Capture> findCapturesForAllPieces(boolean isWhiteToMove) {
+		return boardManager.findCaptures(isWhiteToMove);
 	}
 
 }

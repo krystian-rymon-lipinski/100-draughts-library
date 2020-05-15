@@ -135,25 +135,33 @@ public class BoardManager {
 		if (isWhiteToMove) pieces = whitePieces;
 		else pieces = blackPieces;
 		
+		ArrayList<Move<Hop>> allMoves = new ArrayList<>();
+		ArrayList<Move<Hop>> pieceMoves = new ArrayList<>();
+		
 		for(Piece piece : pieces) {
 			Tile currentPosition = findTileByIndex(piece.getPosition());
-			piece.findMoves(board, currentPosition.getRow(), currentPosition.getColumn());
+			pieceMoves = piece.findMoves(board, currentPosition.getRow(), currentPosition.getColumn());
+			if(pieceMoves.size() > 0) allMoves.addAll(pieceMoves);
 		}
-			
-		return null;
+		
+		return allMoves;
 	}
 	
-	public ArrayList<Move<Capture>> findCaptures(boolean isWhiteToMove) {
+	public ArrayList<Capture> findCaptures(boolean isWhiteToMove) {
 		ArrayList<Piece> pieces;
 		if (isWhiteToMove) pieces = whitePieces;
 		else pieces = blackPieces;
 		
+		ArrayList<Capture> allMoves = new ArrayList<>();
+		ArrayList<Capture> pieceMoves = new ArrayList<>();
+		
 		for(Piece piece : pieces) {
 			Tile currentPosition = findTileByIndex(piece.getPosition());
-			piece.findCaptures(board, currentPosition.getRow(), currentPosition.getColumn());
+			pieceMoves = piece.findCaptures(board, currentPosition.getRow(), currentPosition.getColumn());
+			if(pieceMoves.size() > 0) allMoves.addAll(pieceMoves);
 		}
 			
-		return null;
+		return allMoves;
 	}
 	
 	public boolean isTakenPieceWhite(Piece takenPiece) {

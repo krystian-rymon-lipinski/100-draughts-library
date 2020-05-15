@@ -3,6 +3,8 @@ package draughts.library;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +38,60 @@ public class MoveManagerTest {
 		
 		assertEquals(3, move2.getNumberOfHops());
 	}
+	
+	@Test
+	public void findHopMovesForAllPieces_test() {
+		boardManager.addWhitePawn(23);
+		boardManager.addWhitePawn(34);
+		boardManager.addWhiteQueen(40);
+		
+		ArrayList<Move<Hop>> whiteMoves = testObj.findMovesForAllPieces(true);
+		
+		assertEquals(8, whiteMoves.size());
+		
+		boardManager.addBlackPawn(31);
+		boardManager.addBlackPawn(17);
+		boardManager.addBlackQueen(3);
+		
+		ArrayList<Move<Hop>> blackMoves = testObj.findMovesForAllPieces(false);
+		
+		assertEquals(10, blackMoves.size());
+	}
+	
+	@Test
+	public void findSingleCapturesForAllPieces() {
+		boardManager.addWhitePawn(14);
+		boardManager.addBlackPawn(10);
+		boardManager.addWhiteQueen(25);
+		boardManager.addBlackPawn(20);
+		boardManager.addBlackPawn(34);
+		
+		ArrayList<Capture> whiteMoves = testObj.findCapturesForAllPieces(true);
+		
+		assertEquals(4, whiteMoves.size());
+		
+		boardManager.createEmptyBoard();
+		
+		boardManager.addBlackPawn(18);
+		boardManager.addWhitePawn(12);
+		boardManager.addWhitePawn(13);
+		boardManager.addBlackQueen(32);
+		boardManager.addWhitePawn(41);
+		boardManager.addWhitePawn(27);
+		boardManager.addWhitePawn(49);
+		
+		ArrayList<Capture> blackMoves = testObj.findCapturesForAllPieces(false);
+		
+		assertEquals(5, blackMoves.size());
+	}
+	
+	
+	
+	
+	
+	/*
+	
+	//Coœ na póŸniej
 	
 	@Test
 	public void moveWithSingleHop_test() {
@@ -109,7 +165,7 @@ public class MoveManagerTest {
 		
 	}
 	
-	
+	*/
 	
 	
 	

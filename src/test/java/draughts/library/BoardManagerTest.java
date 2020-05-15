@@ -133,9 +133,7 @@ public class BoardManagerTest {
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(19).getState());
 		
 	}
-	
-	//Position creator
-	
+		
 	@Test
 	public void createEmptyBoard_test() {
 		testObj.createEmptyBoard();
