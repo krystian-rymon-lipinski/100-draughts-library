@@ -122,12 +122,12 @@ public class BoardManagerTest {
 		testObj.makeHop(35, 30);
 		testObj.makeHop(19, 24);
 		
-		testObj.makeHop(30, 19, 24);
+		testObj.makeCapture(30, 19, 24);
 		assertNull(testObj.findPieceByIndex(24));
 		assertEquals(19, testObj.getBlackPieces().size());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(24).getState());
 		
-		testObj.makeHop(13, 24, 19);
+		testObj.makeCapture(13, 24, 19);
 		assertNull(testObj.findPieceByIndex(19));
 		assertEquals(19, testObj.getWhitePieces().size());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(19).getState());

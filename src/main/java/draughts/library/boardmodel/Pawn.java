@@ -2,6 +2,8 @@ package draughts.library.boardmodel;
 
 import java.util.ArrayList;
 
+import draughts.library.Hop;
+import draughts.library.Capture;
 import draughts.library.Move;
 
 public abstract class Pawn extends Piece {
@@ -11,26 +13,27 @@ public abstract class Pawn extends Piece {
 	}
 	
 	
-	public ArrayList<Move> findMovesInDirection(MoveDirection moveDirection, Tile[][] board, int currentRow, int currentColumn) {
+	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board, int currentRow, int currentColumn) {
 		
-		ArrayList<Move> moves = new ArrayList<>();
+		ArrayList<Move<Hop>> moves = new ArrayList<>();
 		Tile target = findTarget(moveDirection, board, currentRow, currentColumn, 1);
 		
 		if(target.getState() == Tile.State.EMPTY)
-			moves.add(new Move(getPosition(), target.getIndex()));
+			moves.add(new Move<Hop>(new Hop(getPosition(), target.getIndex())));
 		return moves;
 	}
 	
-	public ArrayList<Move> findTakesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
+	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, 
+														Tile[][] board, int row, int column) {
 		
-		ArrayList<Move> moves = new ArrayList<>();
+		ArrayList<Capture> hops = new ArrayList<>();
 		
 		Tile target = findTarget(moveDirection, board, row, column, 2);
 		Tile possibleTake = findTarget(moveDirection, board, row, column, 1);
 		
 		if(isTakePossible(target, possibleTake, row, column))
-				moves.add(new Move(getPosition(), target.getIndex(), possibleTake.getIndex()));
-		return moves;
+				hops.add(new Capture(getPosition(), target.getIndex(), possibleTake.getIndex()));
+		return hops;
 	}
 	
 	

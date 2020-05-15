@@ -5,13 +5,15 @@ import java.util.ArrayList;
 public class MoveManager {
 	
 	private BoardManager boardManager;
-	private ArrayList<Move> moves;
+	private ArrayList<Move<? extends Hop>> moves;
 	private int hopsMadeInMove;
+	private Move<? extends Hop> currentMove;
 	
 	public MoveManager() {
 		boardManager = new BoardManager();
 		//boardManager.createStartingPosition();
 		moves = new ArrayList<>();
+		currentMove = null;
 		hopsMadeInMove = 0;
 	}
 	
@@ -19,7 +21,7 @@ public class MoveManager {
 		return boardManager;
 	}
 	
-	public ArrayList<Move> getMoves() {
+	public ArrayList<Move<? extends Hop>> getMoves() {
 		return moves;
 	}
 	
@@ -27,20 +29,28 @@ public class MoveManager {
 		return hopsMadeInMove;
 	}
 		
-	public void makeHop(Move move) {
-			
-		if(!move.isTake())
-			boardManager.makeHop(move.getSource(hopsMadeInMove), move.getDestination(hopsMadeInMove));
+	public void makeHop(int source, int destination) {
+		if(currentMove == null) findCurrentMove(source, destination);
+		
+		if(!currentMove.isTake())
+			boardManager.makeHop(currentMove.getHop(hopsMadeInMove).getSource(), 
+								 currentMove.getHop(hopsMadeInMove).getDestination());
 		else
-			boardManager.makeHop(move.getSource(hopsMadeInMove), move.getDestination(hopsMadeInMove),
-								 move.getTakenPawn(hopsMadeInMove));
+			boardManager.makeCapture(currentMove.getHop(hopsMadeInMove).getSource(), 
+								 	 currentMove.getHop(hopsMadeInMove).getDestination(),
+								 	 currentMove.getHop(hopsMadeInMove).getTakenPawn());
 		hopsMadeInMove++;
 		
-		if(hopsMadeInMove == move.getHops().size())
+		if(hopsMadeInMove == currentMove.getNumberOfHops())
 			moveDone();
 	}
 	
+	public void findCurrentMove(int source, int destination) {
+		
+	}
+	
 	public void moveDone() {
+		currentMove = null;
 		hopsMadeInMove = 0;
 	}
 	

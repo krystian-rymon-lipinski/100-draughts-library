@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import draughts.library.BoardManager;
+import draughts.library.Capture;
+import draughts.library.Hop;
 import draughts.library.Move;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -19,17 +21,17 @@ public class PieceTest {
 		boardManager.createEmptyBoard();
 	}
 	
-	public ArrayList<Move> findMovesForPiece(int piecePosition) {
+	public ArrayList<Move<Hop>> findMovesForPiece(int piecePosition) {
 		Piece piece = boardManager.findPieceByIndex(piecePosition);
 		Tile currentTile = boardManager.findTileByIndex(piecePosition);
 		return piece.findMoves(boardManager.getBoard(), 
 							   currentTile.getRow(), currentTile.getColumn());
 	}
 	
-	public ArrayList<Move> findTakesForPiece(int piecePosition) {
+	public ArrayList<Capture> findTakesForPiece(int piecePosition) {
 		Piece piece = boardManager.findPieceByIndex(piecePosition);
 		Tile currentTile = boardManager.findTileByIndex(piecePosition);
-		return piece.findTakes(boardManager.getBoard(), 
+		return piece.findCaptures(boardManager.getBoard(), 
 							   currentTile.getRow(), currentTile.getColumn());
 	}
 	

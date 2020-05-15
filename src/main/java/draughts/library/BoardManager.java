@@ -92,7 +92,7 @@ public class BoardManager {
 		
 	}
 	
-	public void makeHop(int source, int destination, int taken) {
+	public void makeCapture(int source, int destination, int taken) {
 		makeHop(source, destination);
 		
 		Tile takenTile = findTileByIndex(taken);
@@ -130,7 +130,7 @@ public class BoardManager {
 		
 	}
 	
-	public ArrayList<Move> findMoves(boolean isWhiteToMove) {
+	public ArrayList<Move<Hop>> findMoves(boolean isWhiteToMove) {
 		ArrayList<Piece> pieces;
 		if (isWhiteToMove) pieces = whitePieces;
 		else pieces = blackPieces;
@@ -138,6 +138,19 @@ public class BoardManager {
 		for(Piece piece : pieces) {
 			Tile currentPosition = findTileByIndex(piece.getPosition());
 			piece.findMoves(board, currentPosition.getRow(), currentPosition.getColumn());
+		}
+			
+		return null;
+	}
+	
+	public ArrayList<Move<Capture>> findCaptures(boolean isWhiteToMove) {
+		ArrayList<Piece> pieces;
+		if (isWhiteToMove) pieces = whitePieces;
+		else pieces = blackPieces;
+		
+		for(Piece piece : pieces) {
+			Tile currentPosition = findTileByIndex(piece.getPosition());
+			piece.findCaptures(board, currentPosition.getRow(), currentPosition.getColumn());
 		}
 			
 		return null;

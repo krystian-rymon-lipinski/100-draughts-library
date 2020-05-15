@@ -2,6 +2,7 @@ package draughts.library.boardmodel;
 
 import java.util.ArrayList;
 
+import draughts.library.Hop;
 import draughts.library.Move;
 
 public class BlackPawn extends Pawn {
@@ -15,9 +16,9 @@ public class BlackPawn extends Pawn {
 		dst.setState(Tile.State.BLACK_PAWN);
 	}
 
-	public ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn) {
+	public ArrayList<Move<Hop>> findMoves(Tile[][] board, int currentRow, int currentColumn) {
 		
-		ArrayList<Move> moves = new ArrayList<>();
+		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
 		if(currentRow>1 && currentColumn>1) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
