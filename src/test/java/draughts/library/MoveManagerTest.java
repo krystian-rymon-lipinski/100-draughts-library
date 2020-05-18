@@ -1,7 +1,6 @@
 package draughts.library;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 
@@ -9,8 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import draughts.library.boardmodel.Tile;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MoveManagerTest {

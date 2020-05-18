@@ -114,7 +114,7 @@ public class BoardManagerTest {
 	}
 	
 	@Test
-	public void makeHop_withTakenPawn_test() {
+	public void makeCapture_test() {
 		testObj.createStartingPosition();
 
 		assertEquals(20, testObj.getWhitePieces().size());
@@ -130,8 +130,30 @@ public class BoardManagerTest {
 		testObj.makeCapture(13, 24, 19);
 		assertNull(testObj.findPieceByIndex(19));
 		assertEquals(19, testObj.getWhitePieces().size());
-		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(19).getState());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(19).getState());	
+	}
+	
+	@Test 
+	public void reverseHop_test() {
+		testObj.createEmptyBoard();
 		
+		testObj.addWhitePawn(33);
+		testObj.makeHop(33, 28);
+		testObj.reverseHop(33, 28);
+		
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(28).getState());
+		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(33).getState());
+		assertNull(testObj.findPieceByIndex(28));
+		assertEquals(33, testObj.findPieceByIndex(33).getPosition());
+		
+		testObj.addBlackPawn(19);
+		testObj.makeHop(19, 23);
+		testObj.reverseHop(19, 23);
+		
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(23).getState());
+		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(19).getState());
+		assertNull(testObj.findPieceByIndex(23));
+		assertEquals(19, testObj.findPieceByIndex(19).getPosition());
 	}
 		
 	@Test
@@ -181,9 +203,22 @@ public class BoardManagerTest {
 		assertEquals(Tile.State.BLACK_QUEEN, testObj.findTileByIndex(50).getState());
 	}
 	
-	
-	
-	
-	
+
+	@Test
+	public void findConsecutiveCaptures_test() {
+		testObj.addWhitePawn(24);
+		testObj.addBlackPawn(19);
+		testObj.addBlackPawn(18);
+		
+		ArrayList<Move<Capture>> whiteMoves = testObj.findConsecutiveCaptures(24);
+		
+		assertEquals(2, whiteMoves.get(0).getNumberOfHops());
+		assertEquals(24, whiteMoves.get(0).getHop(0).getSource());
+		assertEquals(13, whiteMoves.get(0).getHop(1).getSource());
+		assertEquals(13, whiteMoves.get(0).getHop(0).getDestination());
+		assertEquals(22, whiteMoves.get(0).getHop(1).getDestination());
+		assertEquals(19, whiteMoves.get(0).getHop(0).getTakenPawn());
+		assertEquals(18, whiteMoves.get(0).getHop(1).getTakenPawn());
+	}
 
 }

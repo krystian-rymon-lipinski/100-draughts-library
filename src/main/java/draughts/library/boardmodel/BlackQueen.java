@@ -11,6 +11,11 @@ public class BlackQueen extends Queen {
 		dst.setState(Tile.State.BLACK_QUEEN);
 	}
 	
+	public void reverseHop(Tile src) {
+		super.reverseHop(src);
+		src.setState(Tile.State.BLACK_QUEEN);
+	}
+	
 	public boolean isTileOccupiedBySameColor(Tile tile) {
 		return (tile.getState() == Tile.State.BLACK_PAWN || 
 				tile.getState() == Tile.State.BLACK_QUEEN ? true : false);

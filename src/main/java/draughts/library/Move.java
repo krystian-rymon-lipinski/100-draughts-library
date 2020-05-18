@@ -11,7 +11,7 @@ public class Move<T extends Hop> {
 		hops.add(hop);
 	}
 	
-	public Hop getHop(int numberOfHopInMove) {
+	public T getHop(int numberOfHopInMove) {
 		return hops.get(numberOfHopInMove);
 	}
 	

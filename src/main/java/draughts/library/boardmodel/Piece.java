@@ -35,6 +35,14 @@ public abstract class Piece {
 		position = dst.getIndex();
 	}
 	
+	public void reverseHop(Tile src) {
+		position = src.getIndex();
+	}
+	
+	public void reverseCapture(Tile src, Tile takenPawn) {
+		reverseHop(src);
+	}
+	
 	public void addMovesIfAny(ArrayList<Move<Hop>> mainList, ArrayList<Move<Hop>> candidateList) {
 		if(candidateList != null && candidateList.size() > 0)
 			mainList.addAll(candidateList);

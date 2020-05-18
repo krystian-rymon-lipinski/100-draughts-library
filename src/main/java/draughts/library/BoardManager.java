@@ -89,7 +89,19 @@ public class BoardManager {
 		} catch (NullPointerException err) {
 			System.out.println("No piece in selected tile!");
 		}
+	}
+	
+	public void reverseHop(int source, int destination) {
+		Tile dst = findTileByIndex(destination);
+		dst.setState(Tile.State.EMPTY);
 		
+		Piece movedPiece = findPieceByIndex(destination);
+		Tile src = findTileByIndex(source);
+		try {
+			movedPiece.reverseHop(src);
+		} catch(NullPointerException err) {
+			System.out.println("No piece in selected tile");
+		}
 	}
 	
 	public void makeCapture(int source, int destination, int taken) {
@@ -126,8 +138,7 @@ public class BoardManager {
 				return piece;
 		}
 		
-		return null;
-		
+		return null;		
 	}
 	
 	public ArrayList<Move<Hop>> findMoves(boolean isWhiteToMove) {
@@ -162,6 +173,34 @@ public class BoardManager {
 		}
 			
 		return allMoves;
+	}
+	
+	public ArrayList<Move<Capture>> findConsecutiveCaptures(int source) {
+		Tile tile = findTileByIndex(source);
+		Piece piece = findPieceByIndex(source);
+		
+		ArrayList<Move<Capture>> moves = new ArrayList<>();
+		ArrayList<Capture> captures = new ArrayList<>();
+
+		
+		captures = piece.findCaptures(board, tile.getRow(), tile.getColumn());
+		for(Capture capture : captures) {
+			moves.add(new Move<Capture>(capture));
+		}
+		captures.clear();
+		for(int i=0; i<moves.size(); i++) {
+			for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
+				makeCapture(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination(), moves.get(i).getHop(j).getTakenPawn());
+			}
+			Tile newSource = findTileByIndex(moves.get(i).getHop(moves.get(i).getNumberOfHops()).getDestination());
+			captures.addAll(piece.findCaptures(board, newSource.getRow(), newSource.getColumn()));
+			for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
+				reverseCapture(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination(), moves.get(i).getHop(j).getTakenPawn());
+			}
+		}
+		
+		bindCapturesIntoMoves();
+		
 	}
 	
 	public boolean isTakenPieceWhite(Piece takenPiece) {
