@@ -5,14 +5,14 @@ import java.util.ArrayList;
 public class MoveManager {
 	
 	private BoardManager boardManager;
-	private ArrayList<Move<? extends Hop>> moves;
+	private ArrayList<Move<? extends Hop>> allMoves;
 	private int hopsMadeInMove;
 	private Move<? extends Hop> currentMove;
 	
 	public MoveManager() {
 		boardManager = new BoardManager();
 		//boardManager.createStartingPosition();
-		moves = new ArrayList<>();
+		allMoves = new ArrayList<>();
 		currentMove = null;
 		hopsMadeInMove = 0;
 	}
@@ -22,7 +22,7 @@ public class MoveManager {
 	}
 	
 	public ArrayList<Move<? extends Hop>> getMoves() {
-		return moves;
+		return allMoves;
 	}
 	
 	public int getHopsMadeInMove() {
@@ -58,16 +58,11 @@ public class MoveManager {
 		hopsMadeInMove = 0;
 	}
 	
-	public ArrayList<Move> findMoveByHop(int source, int destination) {
-		return null;
-	}
-	
-	public ArrayList<Move<Hop>> findMovesForAllPieces(boolean isWhiteToMove) {
-		return boardManager.findMovesForAllPieces(isWhiteToMove);
-	}
-	
-	public ArrayList<Capture> findCapturesForAllPieces(boolean isWhiteToMove) {
-		return boardManager.findCapturesForAllPieces(isWhiteToMove);
+	public void findAllCorrectMoves(boolean isWhiteToMove) {
+		
+		allMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
+		if(allMoves.size() == 0)
+			allMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
 	}
 
 }

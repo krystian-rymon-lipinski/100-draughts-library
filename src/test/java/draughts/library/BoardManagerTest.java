@@ -359,4 +359,23 @@ public class BoardManagerTest {
 		assertEquals(3, whiteMoves.get(0).getNumberOfHops());
 		
 	}
+	
+	@Test
+	public void findMovesForAllPieces_noCaptures_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(46);
+		testObj.addWhitePawn(49);
+		testObj.addWhitePawn(43);
+		testObj.addWhiteQueen(35);
+		testObj.addBlackPawn(21);
+		testObj.addBlackPawn(16);
+		testObj.addBlackPawn(22);
+		testObj.addBlackPawn(19);
+
+		ArrayList<Move<Hop>> whiteMoves = testObj.findMovesForAllPieces(true);
+		
+		assertEquals(8, whiteMoves.size());
+		
+	}
 }
