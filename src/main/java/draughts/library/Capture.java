@@ -12,5 +12,6 @@ public class Capture extends Hop {
 	public int getTakenPawn() {
 		return takenPawn;
 	}
+	
 
 }

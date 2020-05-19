@@ -11,6 +11,13 @@ public class Move<T extends Hop> {
 		hops.add(hop);
 	}
 	
+	public Move(Move<T> move) {
+		hops = new ArrayList<>();
+		for(int i=0; i<move.getNumberOfHops(); i++) {
+			hops.add(move.getHop(i));
+		}
+	}
+	
 	public T getHop(int numberOfHopInMove) {
 		return hops.get(numberOfHopInMove);
 	}

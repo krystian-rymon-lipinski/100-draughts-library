@@ -17,5 +17,9 @@ public class Hop {
 	public int getDestination() {
 		return destination;
 	}
+	
+	public String toString() {
+		return source + " -> " + destination; 
+	}
 
 }

@@ -22,6 +22,12 @@ public class BoardManager {
 		blackPieces = new ArrayList<>();
 	}
 	
+	public BoardManager(BoardManager boardManager) {
+		this.board = boardManager.board;
+		this.whitePieces = boardManager.whitePieces;
+		this.blackPieces = boardManager.blackPieces;
+	}
+	
 	public void createStartingPosition() {
 		createEmptyBoard();
 		createPiecesForStartingPosition();
@@ -117,6 +123,7 @@ public class BoardManager {
 			blackPieces.remove(takenPiece);
 	}
 	
+	
 	public Tile findTileByIndex(int tileIndex) {
 		for (int i=0; i<board.length; i++) {
 			for(int j=0; j<board[0].length; j++) {
@@ -175,11 +182,61 @@ public class BoardManager {
 		return allMoves;
 	}
 	
-	public ArrayList<Move<Capture>> findConsecutiveCaptures(int source) {
+	public ArrayList<Move<Capture>> findLongestConsecutiveCaptures(int source) {
+		Tile tileSource = findTileByIndex(source);
+		Piece piece = findPieceByIndex(source);
+		
+		ArrayList<Capture> captures = new ArrayList<>();
+		ArrayList<Move<Capture>> moves = new ArrayList<>();
+		ArrayList<Move<Capture>> newMoves = new ArrayList<>();
+		
+		do  {
+			newMoves.clear();
+						
+			if(moves.size() == 0) { //first capture 
+				captures = piece.findCaptures(board, tileSource.getRow(), tileSource.getColumn());
+				if(captures.size() == 0) break; //no captures available for piece
+				else {
+					for(Capture capture : captures) {
+						newMoves.add(new Move<Capture>(capture));
+					}
+				}
+			}
+			else { //consecutive captures
+				for(int i=0; i<moves.size(); i++) {
+					for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
+						makeHop(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination());
+					}
+					tileSource = findTileByIndex(moves.get(i).getHop(moves.get(i).getNumberOfHops()-1).getDestination());
+					captures = piece.findCaptures(board, tileSource.getRow(), tileSource.getColumn());
+					for(Capture capture: captures) {
+						if(!pawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
+							newMoves.add(new Move<Capture>(moves.get(i)));
+							newMoves.get(newMoves.size()-1).addHop(capture);
+						}			
+					}
+					for(int j=moves.get(i).getNumberOfHops()-1; j>=0; j--) {
+						reverseHop(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination());
+					}
+				}
+			}		
+			
+			if(newMoves.size() > 0) {
+				moves.clear();
+				moves.addAll(newMoves);
+			}
+			
+		} while (newMoves.size() != 0 );
+	
+	return moves;
+	}
+	
+	public ArrayList<Move<Capture>> findConsecutiveCaptures2(int source) {
 		Tile tile = findTileByIndex(source);
 		Piece piece = findPieceByIndex(source);
 		
 		ArrayList<Move<Capture>> moves = new ArrayList<>();
+		ArrayList<Move<Capture>> newMoves = new ArrayList<>();
 		ArrayList<Capture> captures = new ArrayList<>();
 
 		
@@ -187,21 +244,40 @@ public class BoardManager {
 		for(Capture capture : captures) {
 			moves.add(new Move<Capture>(capture));
 		}
+		System.out.println("Moves: " + moves);
 		captures.clear();
 		for(int i=0; i<moves.size(); i++) {
 			for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
-				makeCapture(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination(), moves.get(i).getHop(j).getTakenPawn());
+				makeHop(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination());
+				System.out.println("Hop made: " + moves.get(i).getHop(j));
 			}
-			Tile newSource = findTileByIndex(moves.get(i).getHop(moves.get(i).getNumberOfHops()).getDestination());
-			captures.addAll(piece.findCaptures(board, newSource.getRow(), newSource.getColumn()));
-			for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
-				reverseCapture(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination(), moves.get(i).getHop(j).getTakenPawn());
+			Tile newSource = findTileByIndex(moves.get(i).getHop(moves.get(i).getNumberOfHops()-1).getDestination());
+			captures = piece.findCaptures(board, newSource.getRow(), newSource.getColumn());
+			for(Capture capture: captures) {
+				if(!pawnAlreadyTaken(moves.get(i), capture)) {
+					newMoves.add(new Move<Capture>(moves.get(i)));
+					newMoves.get(newMoves.size()-1).addHop(capture);
+					System.out.println("Good capture: " + capture);
+				}			
+			}
+			System.out.println("After " + (i+1) + " moves: " + newMoves);
+			for(int j=moves.get(i).getNumberOfHops()-1; j>=0; j--) {
+				System.out.println("Hop to reverse: " + moves.get(i).getHop(j));
+				reverseHop(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination());
 			}
 		}
 		
-		bindCapturesIntoMoves();
-		
+		return newMoves;				
 	}
+	
+	public boolean pawnAlreadyTaken(Move<Capture> move, Capture capture) {
+		for(int i=0; i<move.getNumberOfHops(); i++) {
+			if(move.getHop(i).getTakenPawn() == capture.getTakenPawn())
+				return true;
+		}
+		return false;
+	}
+	
 	
 	public boolean isTakenPieceWhite(Piece takenPiece) {
 		return (takenPiece instanceof WhitePawn || takenPiece instanceof WhiteQueen) ? true : false;
