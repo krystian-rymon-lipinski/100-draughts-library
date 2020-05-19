@@ -114,7 +114,7 @@ public class BoardManagerTest {
 	}
 	
 	@Test
-	public void makeHop_withTakenPawn_test() {
+	public void makeCapture_test() {
 		testObj.createStartingPosition();
 
 		assertEquals(20, testObj.getWhitePieces().size());
@@ -122,20 +122,41 @@ public class BoardManagerTest {
 		testObj.makeHop(35, 30);
 		testObj.makeHop(19, 24);
 		
-		testObj.makeHop(30, 19, 24);
+		testObj.makeCapture(30, 19, 24);
 		assertNull(testObj.findPieceByIndex(24));
 		assertEquals(19, testObj.getBlackPieces().size());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(24).getState());
 		
-		testObj.makeHop(13, 24, 19);
+		testObj.makeCapture(13, 24, 19);
 		assertNull(testObj.findPieceByIndex(19));
 		assertEquals(19, testObj.getWhitePieces().size());
-		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(19).getState());
-		
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(19).getState());	
 	}
 	
-	//Position creator
-	
+	@Test 
+	public void reverseHop_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(33);
+		testObj.makeHop(33, 28);
+		testObj.reverseHop(33, 28);
+		
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(28).getState());
+		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(33).getState());
+		assertNull(testObj.findPieceByIndex(28));
+		assertEquals(33, testObj.findPieceByIndex(33).getPosition());
+		
+		testObj.addBlackPawn(19);
+		testObj.makeHop(19, 23);
+		testObj.reverseHop(19, 23);
+		
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(23).getState());
+		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(19).getState());
+		assertNull(testObj.findPieceByIndex(23));
+		assertEquals(19, testObj.findPieceByIndex(19).getPosition());
+	}
+
+		
 	@Test
 	public void createEmptyBoard_test() {
 		testObj.createEmptyBoard();
@@ -183,9 +204,178 @@ public class BoardManagerTest {
 		assertEquals(Tile.State.BLACK_QUEEN, testObj.findTileByIndex(50).getState());
 	}
 	
-	
-	
-	
-	
 
+	@Test
+	public void findLongestConsecutiveCapturesForPiece_twoLevels_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(24);
+		testObj.addBlackPawn(19);
+		testObj.addBlackPawn(18);
+		
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(24);
+		
+		assertEquals(1, whiteMoves.size());
+		assertEquals(2, whiteMoves.get(0).getNumberOfHops());
+		assertEquals(24, whiteMoves.get(0).getHop(0).getSource());
+		assertEquals(13, whiteMoves.get(0).getHop(1).getSource());
+		assertEquals(13, whiteMoves.get(0).getHop(0).getDestination());
+		assertEquals(22, whiteMoves.get(0).getHop(1).getDestination());
+		assertEquals(19, whiteMoves.get(0).getHop(0).getTakenPawn());
+		assertEquals(18, whiteMoves.get(0).getHop(1).getTakenPawn());
+		
+		assertEquals(24, testObj.findPieceByIndex(24).getPosition());
+		
+	}
+	
+	@Test
+	public void findLongestConsecutiveCapturesForPiece_twoLevels_inTwoDirections_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(28);
+		testObj.addBlackPawn(22);
+		testObj.addBlackPawn(11);
+		testObj.addBlackPawn(33);
+		testObj.addBlackPawn(44);
+		
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(28);
+		
+		assertEquals(2, whiteMoves.size());
+		assertEquals(2, whiteMoves.get(0).getNumberOfHops());
+		assertEquals(2, whiteMoves.get(1).getNumberOfHops());
+
+	}
+
+	@Test
+	public void findLongestConsecutiveCapturesForPiece_twoLevels_withSameRoot_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhiteQueen(50);
+		testObj.addBlackPawn(39);
+		testObj.addBlackQueen(14);
+		testObj.addBlackPawn(32);
+		
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(50);
+		
+		assertEquals(5, whiteMoves.size());
+		assertEquals(2, whiteMoves.get(0).getNumberOfHops());
+		assertEquals(2, whiteMoves.get(4).getNumberOfHops());
+
+	}
+	
+	@Test
+	public void findLongestConsecutiveCapturesForPiece_threeLevels_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhiteQueen(48);
+		testObj.addBlackPawn(37);
+		testObj.addBlackQueen(22);
+		testObj.addBlackPawn(7);
+		
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(48);
+		
+		assertEquals(1, whiteMoves.size());
+		assertEquals(3, whiteMoves.get(0).getNumberOfHops());
+	}
+	
+	@Test
+	public void findLongestConsecutiveCapturesForPiece_threeLevels_withMultipleBranches_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addBlackQueen(3);
+		testObj.addWhitePawn(11);
+		testObj.addWhitePawn(12);
+		testObj.addWhiteQueen(19);
+		testObj.addWhitePawn(22);
+		testObj.addWhitePawn(33);
+		testObj.addWhiteQueen(41);
+		
+		ArrayList<Move<Capture>> blackMoves = testObj.findLongestConsecutiveCaptures(3);
+		
+		assertEquals(7, blackMoves.size());
+		assertEquals(3, blackMoves.get(0).getNumberOfHops());
+		assertEquals(3, blackMoves.get(6).getNumberOfHops());
+	}
+	
+	@Test
+	public void findLongestConsecutiveCapturesForPiece_fourLevels_inCircle_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addBlackQueen(4);
+		testObj.addWhitePawn(22);
+		testObj.addWhitePawn(23);
+		testObj.addWhiteQueen(32);
+		testObj.addWhitePawn(33);
+		
+		ArrayList<Move<Capture>> blackMoves = testObj.findLongestConsecutiveCaptures(4);
+		
+		assertEquals(4, blackMoves.size());
+		assertEquals(4, blackMoves.get(0).getNumberOfHops());
+		assertEquals(4, blackMoves.get(3).getNumberOfHops());
+	}
+	
+	@Test
+	public void findLongestConsecutiveCapturesForPiece_ultimate_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhiteQueen(50);
+		testObj.addBlackPawn(8);
+		testObj.addBlackPawn(9);
+		testObj.addBlackPawn(10);
+		testObj.addBlackPawn(11);
+		testObj.addBlackPawn(19);
+		testObj.addBlackPawn(20);
+		testObj.addBlackPawn(28);
+		testObj.addBlackPawn(30);
+		testObj.addBlackPawn(41);
+
+		
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(50);
+		
+		assertEquals(1, whiteMoves.size());
+		assertEquals(7, whiteMoves.get(0).getNumberOfHops());
+	}
+	
+	@Test
+	public void findLongestConsecutiveCapturesForAllPieces_ultimate_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(46);
+		testObj.addWhitePawn(49);
+		testObj.addWhitePawn(43);
+		testObj.addBlackPawn(44);
+		testObj.addBlackPawn(41);
+		testObj.addBlackPawn(38);
+		testObj.addBlackPawn(31);
+		testObj.addBlackPawn(34);
+		testObj.addBlackPawn(28);
+		testObj.addBlackPawn(24);
+		testObj.addBlackPawn(18);
+		testObj.addBlackPawn(19);
+		
+		ArrayList<Move<Capture>> whiteMoves = testObj.findCapturesForAllPieces(true);
+		
+		assertEquals(3, whiteMoves.size());
+		assertEquals(3, whiteMoves.get(0).getNumberOfHops());
+		
+	}
+	
+	@Test
+	public void findMovesForAllPieces_noCaptures_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(46);
+		testObj.addWhitePawn(49);
+		testObj.addWhitePawn(43);
+		testObj.addWhiteQueen(35);
+		testObj.addBlackPawn(21);
+		testObj.addBlackPawn(16);
+		testObj.addBlackPawn(22);
+		testObj.addBlackPawn(19);
+
+		ArrayList<Move<Hop>> whiteMoves = testObj.findMovesForAllPieces(true);
+		
+		assertEquals(8, whiteMoves.size());
+		
+	}
 }

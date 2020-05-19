@@ -2,6 +2,7 @@ package draughts.library.boardmodel;
 
 import java.util.ArrayList;
 
+import draughts.library.Hop;
 import draughts.library.Move;
 
 public class WhitePawn extends Pawn {
@@ -15,9 +16,14 @@ public class WhitePawn extends Pawn {
 		dst.setState(Tile.State.WHITE_PAWN);
 	}
 	
-	public ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn) {
+	public void reverseHop(Tile src) {
+		super.reverseHop(src);
+		src.setState(Tile.State.WHITE_PAWN);
+	}
+	
+	public ArrayList<Move<Hop>> findMoves(Tile[][] board, int currentRow, int currentColumn) {
 		
-		ArrayList<Move> moves = new ArrayList<>();
+		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
 		if(currentRow>1 && currentColumn>1) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));

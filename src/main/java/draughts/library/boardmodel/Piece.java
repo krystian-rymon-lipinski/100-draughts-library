@@ -2,6 +2,8 @@ package draughts.library.boardmodel;
 
 import java.util.ArrayList;
 
+import draughts.library.Hop;
+import draughts.library.Capture;
 import draughts.library.Move;
 
 public abstract class Piece {
@@ -16,10 +18,10 @@ public abstract class Piece {
 	
 	public abstract boolean isTileOccupiedByOppositeColor(Tile tile);
 	
-	public abstract ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn);
+	public abstract ArrayList<Move<Hop>> findMoves(Tile[][] board, int currentRow, int currentColumn);
 	
-	public abstract ArrayList<Move> findTakesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column);
-
+	public abstract ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column);
+	
 
 	public int getPosition() {
 		return position;
@@ -33,28 +35,41 @@ public abstract class Piece {
 		position = dst.getIndex();
 	}
 	
-	public void addMovesIfAny(ArrayList<Move> mainList, ArrayList<Move> candidateList) {
+	public void reverseHop(Tile src) {
+		position = src.getIndex();
+	}
+	
+	public void reverseCapture(Tile src, Tile takenPawn) {
+		reverseHop(src);
+	}
+	
+	public void addMovesIfAny(ArrayList<Move<Hop>> mainList, ArrayList<Move<Hop>> candidateList) {
 		if(candidateList != null && candidateList.size() > 0)
 			mainList.addAll(candidateList);
 	}
 	
-	public void addMoveIfNotNull(ArrayList<Move> mainList, Move candidateMove) {
+	public void addMoveIfNotNull(ArrayList<Move<Hop>> mainList, Move<Hop> candidateMove) {
 		if(candidateMove != null)
 			mainList.add(candidateMove);
 	}
+	
+	public void addHopsIfAny(ArrayList<Capture> mainList, ArrayList<Capture> candidateList) {
+		if(candidateList != null && candidateList.size() > 0)
+			mainList.addAll(candidateList);
+	}
 			
-	public ArrayList<Move> findTakes(Tile[][] board, int currentRow, int currentColumn) {
+	public ArrayList<Capture> findCaptures(Tile[][] board, int currentRow, int currentColumn) {
 		
-		ArrayList<Move> moves = new ArrayList<>();
+		ArrayList<Capture> moves = new ArrayList<>();
 		
 		if(currentColumn > 2 && currentRow > 2) 
-			addMovesIfAny(moves, findTakesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));
+			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));
 		if(currentColumn < 9 && currentRow > 2) 
-			addMovesIfAny(moves, findTakesInDirection(MoveDirection.UP_RIGHT, board, currentRow, currentColumn));
+			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.UP_RIGHT, board, currentRow, currentColumn));
 		if(currentColumn > 2 && currentRow < 9) 
-			addMovesIfAny(moves, findTakesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
+			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
 		if(currentColumn < 9 && currentRow < 9) 
-			addMovesIfAny(moves, findTakesInDirection(MoveDirection.DOWN_RIGHT, board, currentRow, currentColumn));		
+			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_RIGHT, board, currentRow, currentColumn));		
 		
 		return moves;
 	}

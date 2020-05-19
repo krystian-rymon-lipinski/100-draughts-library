@@ -5,13 +5,15 @@ import java.util.ArrayList;
 public class MoveManager {
 	
 	private BoardManager boardManager;
-	private ArrayList<Move> moves;
+	private ArrayList<Move<? extends Hop>> allMoves;
 	private int hopsMadeInMove;
+	private Move<? extends Hop> currentMove;
 	
 	public MoveManager() {
 		boardManager = new BoardManager();
 		//boardManager.createStartingPosition();
-		moves = new ArrayList<>();
+		allMoves = new ArrayList<>();
+		currentMove = null;
 		hopsMadeInMove = 0;
 	}
 	
@@ -19,37 +21,48 @@ public class MoveManager {
 		return boardManager;
 	}
 	
-	public ArrayList<Move> getMoves() {
-		return moves;
+	public ArrayList<Move<? extends Hop>> getMoves() {
+		return allMoves;
 	}
 	
 	public int getHopsMadeInMove() {
 		return hopsMadeInMove;
 	}
 		
-	public void makeHop(Move move) {
-			
-		if(!move.isTake())
-			boardManager.makeHop(move.getSource(hopsMadeInMove), move.getDestination(hopsMadeInMove));
+	public void makeHop(int source, int destination) {
+		if(currentMove == null) findCurrentMove(source, destination);
+		
+		if(!currentMove.isTake())
+			boardManager.makeHop(currentMove.getHop(hopsMadeInMove).getSource(), 
+								 currentMove.getHop(hopsMadeInMove).getDestination());
 		else
-			boardManager.makeHop(move.getSource(hopsMadeInMove), move.getDestination(hopsMadeInMove),
-								 move.getTakenPawn(hopsMadeInMove));
+			boardManager.makeCapture(currentMove.getHop(hopsMadeInMove).getSource(), 
+								 	 currentMove.getHop(hopsMadeInMove).getDestination(),
+								 	 currentMove.getHop(hopsMadeInMove).getTakenPawn());
 		hopsMadeInMove++;
 		
-		if(hopsMadeInMove == move.getHops().size())
+		if(hopsMadeInMove == currentMove.getNumberOfHops())
 			moveDone();
 	}
 	
+	public void makeHop(Move<? extends Hop> move) {
+		currentMove = move;
+	}
+	
+	public void findCurrentMove(int source, int destination) {
+		
+	}
+	
 	public void moveDone() {
+		currentMove = null;
 		hopsMadeInMove = 0;
 	}
 	
-	public ArrayList<Move> findMoveByHop(int source, int destination) {
-		return null;
-	}
-	
-	public ArrayList<Move> findAllPossibleMoves(boolean isWhiteToMove) {
-		return boardManager.findMoves(isWhiteToMove);
+	public void findAllCorrectMoves(boolean isWhiteToMove) {
+		
+		allMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
+		if(allMoves.size() == 0)
+			allMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
 	}
 
 }

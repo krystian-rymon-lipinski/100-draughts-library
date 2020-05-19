@@ -2,6 +2,8 @@ package draughts.library.boardmodel;
 
 import java.util.ArrayList;
 
+import draughts.library.Hop;
+import draughts.library.Capture;
 import draughts.library.Move;
 
 public abstract class Queen extends Piece {
@@ -10,9 +12,9 @@ public abstract class Queen extends Piece {
 		super(position);
 	}
 	
-	public ArrayList<Move> findMoves(Tile[][] board, int currentRow, int currentColumn) {
+	public ArrayList<Move<Hop>> findMoves(Tile[][] board, int currentRow, int currentColumn) {
 		
-		ArrayList<Move> moves = new ArrayList<>();
+		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
 		if(currentRow>1 && currentColumn>1) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));
@@ -26,15 +28,15 @@ public abstract class Queen extends Piece {
 		return moves;
 	}
 	
-	public ArrayList<Move> findMovesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
-		ArrayList<Move> moves = new ArrayList<>();
+	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
+		ArrayList<Move<Hop>> moves = new ArrayList<>();
 		int distanceInTiles = 1;
 		
 		while(isMovePossible(moveDirection, row, column, distanceInTiles)) {
 			Tile target = findTarget(moveDirection, board, row, column, distanceInTiles);
 
 			if(target.getState() == Tile.State.EMPTY) {
-				moves.add(new Move(getPosition(), target.getIndex()));
+				moves.add(new Move<Hop>(new Hop(getPosition(), target.getIndex())));
 				distanceInTiles++;
 			} else break;
 			
@@ -59,8 +61,8 @@ public abstract class Queen extends Piece {
 		return false;
 	}
 	
-	public ArrayList<Move> findTakesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
-		ArrayList<Move> moves = new ArrayList<>();
+	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
+		ArrayList<Capture> moves = new ArrayList<>();
 		int distanceInTiles = 1;
 		int foundPawnToTake = 0;
 		
@@ -71,7 +73,7 @@ public abstract class Queen extends Piece {
 				if(foundPawnToTake == 0) 
 					distanceInTiles++; 
 				else {
-					moves.add(new Move(getPosition(), target.getIndex(), foundPawnToTake));
+					moves.add(new Capture(getPosition(), target.getIndex(), foundPawnToTake));
 					distanceInTiles++;
 				}			
 			} 

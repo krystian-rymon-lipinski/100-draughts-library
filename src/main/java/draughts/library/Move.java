@@ -2,74 +2,40 @@ package draughts.library;
 
 import java.util.ArrayList;
 
-public class Move {
+public class Move<T extends Hop> {
 	
-	private int source;
-	private int destination;
-	private ArrayList<Integer> hops;
-	private ArrayList<Integer> pawnsTaken;
+	private ArrayList<T> hops;
 	
-	public Move(int source, int destination) {
-		this.source = source;
-		this.destination = destination;
-		
+	public Move(T hop) {
 		hops = new ArrayList<>();
-		hops.add(destination);
-		
-		pawnsTaken = new ArrayList<>();
+		hops.add(hop);
 	}
 	
-	public Move(int source, int destination, int taken) {
-		this(source, destination);
-		pawnsTaken.add(taken);
+	public Move(Move<T> move) {
+		hops = new ArrayList<>();
+		for(int i=0; i<move.getNumberOfHops(); i++) {
+			hops.add(move.getHop(i));
+		}
 	}
 	
+	public T getHop(int numberOfHopInMove) {
+		return hops.get(numberOfHopInMove);
+	}
 	
-	public int getSource(int hopsMadeInMove) {
-		if(hopsMadeInMove == 0) return source;
-		else return hops.get(hopsMadeInMove-1);
+	public void addHop(T hop) {
+		hops.add(hop);
 	}
-	public void setSource(int source) {
-		this.source = source;
-	}
-	public int getDestination(int hopsMadeInMove) {
-		return hops.get(hopsMadeInMove);
-	}
-	public void setDestination(int destination) {
-		this.destination = destination;
-	}
-	public ArrayList<Integer> getHops() {
-		return hops;
-	}
-	public void setHops(ArrayList<Integer> hops) {
-		this.hops = hops;
-	}
-	public ArrayList<Integer> getPawnsTaken() {
-		return pawnsTaken;
-	}
-	public void setPawnsTaken(ArrayList<Integer> pawnsTaken) {
-		this.pawnsTaken = pawnsTaken;
+	
+	public int getNumberOfHops() {
+		return hops.size();
 	}
 	
 	public boolean isTake() {
-		return (pawnsTaken.size() != 0) ? true : false;
-	}
-	
-	public int getTakenPawn(int hopsMadeInMove) {
-		return pawnsTaken.get(hopsMadeInMove);
+		if(hops.get(0) instanceof Hop) return false;
+		else return true;
+		
 	}
 
-	public void addHop(int destination) {
-		this.destination = destination;
-		hops.add(destination);
-	} 
-	
-	public void addHop(int destination, int taken) {
-		addHop(destination);
-		pawnsTaken.add(taken);
-	}
-	
-	
 	public String toString() {
 		return hops.toString();
 	}
