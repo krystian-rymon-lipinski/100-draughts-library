@@ -148,7 +148,7 @@ public class BoardManager {
 		return null;		
 	}
 	
-	public ArrayList<Move<Hop>> findMoves(boolean isWhiteToMove) {
+	public ArrayList<Move<Hop>> findMovesForAllPieces(boolean isWhiteToMove) {
 		ArrayList<Piece> pieces;
 		if (isWhiteToMove) pieces = whitePieces;
 		else pieces = blackPieces;
@@ -165,18 +165,25 @@ public class BoardManager {
 		return allMoves;
 	}
 	
-	public ArrayList<Capture> findCaptures(boolean isWhiteToMove) {
+	public ArrayList<Move<Capture>> findCapturesForAllPieces(boolean isWhiteToMove) {
 		ArrayList<Piece> pieces;
 		if (isWhiteToMove) pieces = whitePieces;
 		else pieces = blackPieces;
 		
-		ArrayList<Capture> allMoves = new ArrayList<>();
-		ArrayList<Capture> pieceMoves = new ArrayList<>();
+		ArrayList<Move<Capture>> allMoves = new ArrayList<>();
+		ArrayList<Move<Capture>> pieceMoves = new ArrayList<>();
+		int longestConsecutiveCapture = 1;
 		
 		for(Piece piece : pieces) {
-			Tile currentPosition = findTileByIndex(piece.getPosition());
-			pieceMoves = piece.findCaptures(board, currentPosition.getRow(), currentPosition.getColumn());
-			if(pieceMoves.size() > 0) allMoves.addAll(pieceMoves);
+			pieceMoves = findLongestConsecutiveCaptures(piece.getPosition());
+			if(pieceMoves.size() > 0)
+				if(pieceMoves.get(0).getNumberOfHops() > longestConsecutiveCapture) {
+					allMoves.clear();
+					allMoves.addAll(pieceMoves);
+					longestConsecutiveCapture = pieceMoves.get(0).getNumberOfHops();
+				}
+				else if(pieceMoves.get(0).getNumberOfHops() == longestConsecutiveCapture)
+					allMoves.addAll(pieceMoves);
 		}
 			
 		return allMoves;

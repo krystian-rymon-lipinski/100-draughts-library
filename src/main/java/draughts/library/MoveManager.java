@@ -63,11 +63,11 @@ public class MoveManager {
 	}
 	
 	public ArrayList<Move<Hop>> findMovesForAllPieces(boolean isWhiteToMove) {
-		return boardManager.findMoves(isWhiteToMove);
+		return boardManager.findMovesForAllPieces(isWhiteToMove);
 	}
 	
 	public ArrayList<Capture> findCapturesForAllPieces(boolean isWhiteToMove) {
-		return boardManager.findCaptures(isWhiteToMove);
+		return boardManager.findCapturesForAllPieces(isWhiteToMove);
 	}
 
 }

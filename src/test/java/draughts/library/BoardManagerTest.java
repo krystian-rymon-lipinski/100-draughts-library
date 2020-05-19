@@ -335,4 +335,28 @@ public class BoardManagerTest {
 		assertEquals(1, whiteMoves.size());
 		assertEquals(7, whiteMoves.get(0).getNumberOfHops());
 	}
+	
+	@Test
+	public void findLongestConsecutiveCapturesForAllPieces_ultimate_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(46);
+		testObj.addWhitePawn(49);
+		testObj.addWhitePawn(43);
+		testObj.addBlackPawn(44);
+		testObj.addBlackPawn(41);
+		testObj.addBlackPawn(38);
+		testObj.addBlackPawn(31);
+		testObj.addBlackPawn(34);
+		testObj.addBlackPawn(28);
+		testObj.addBlackPawn(24);
+		testObj.addBlackPawn(18);
+		testObj.addBlackPawn(19);
+		
+		ArrayList<Move<Capture>> whiteMoves = testObj.findCapturesForAllPieces(true);
+		
+		assertEquals(3, whiteMoves.size());
+		assertEquals(3, whiteMoves.get(0).getNumberOfHops());
+		
+	}
 }
