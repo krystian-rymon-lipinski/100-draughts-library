@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import draughts.library.boardmodel.Piece;
 import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
+import draughts.library.exceptions.WrongColorFoundInRequestedTileException;
 
 public class GameEngine {
 	
@@ -28,11 +29,12 @@ public class GameEngine {
 	}
 	
 	public void tileClicked(int position) throws NoPieceFoundInRequestedTileException, 
+												 WrongColorFoundInRequestedTileException,
 												 NoCorrectMovesForSelectedPieceException {
 		if(!pieceAlreadyMarked) {
 			Piece markedPiece = boardManager.findColorPieceByIndex(position, isWhiteToMove);
-			if(!isPieceProperColor) 
-				throw new WrongColorFoundInRequestedTileException();
+			if(!isPieceProperColor(markedPiece)) 
+				throw new WrongColorFoundInRequestedTileException("No piece of your color on chosen tile!");
 			addPossibleHopDestinations(position);
 			pieceAlreadyMarked = true;
 		}
