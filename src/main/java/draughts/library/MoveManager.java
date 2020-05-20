@@ -49,8 +49,13 @@ public class MoveManager {
 		currentMove = move;
 	}
 	
-	public void findCurrentMove(int source, int destination) {
-		
+	public ArrayList<Integer> doesChosenPawnHaveMoves(int position) {
+		ArrayList<Integer> possibleHopDestinations = new ArrayList<Integer>();
+		for(Move<? extends Hop> move : allMoves) {
+			if(position == move.getHop(hopsMadeInMove).getSource())
+				possibleHopDestinations.add(move.getHop(hopsMadeInMove).getDestination());
+		}
+		return possibleHopDestinations;
 	}
 	
 	public void moveDone() {
