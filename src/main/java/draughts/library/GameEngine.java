@@ -30,7 +30,8 @@ public class GameEngine {
 	
 	public void tileClicked(int position) throws NoPieceFoundInRequestedTileException, 
 												 WrongColorFoundInRequestedTileException,
-												 NoCorrectMovesForSelectedPieceException {
+												 NoCorrectMovesForSelectedPieceException, 
+												 WrongMoveException {
 		if(!pieceAlreadyMarked) {
 			Piece markedPiece = boardManager.findColorPieceByIndex(position, isWhiteToMove);
 			if(!isPieceProperColor(markedPiece)) 
