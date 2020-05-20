@@ -6,7 +6,7 @@ import draughts.library.BoardManager;
 import draughts.library.Capture;
 import draughts.library.Hop;
 import draughts.library.Move;
-import draughts.library.NoPieceFoundInRequestedTileException;
+import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 
 public class PieceTest {
 	

@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.exceptions;
 
 public class NoPieceFoundInRequestedTileException extends Exception {
 	

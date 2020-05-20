@@ -9,6 +9,7 @@ import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.boardmodel.WhitePawn;
 import draughts.library.boardmodel.WhiteQueen;
+import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 
 public class BoardManager {
 	
@@ -155,6 +156,19 @@ public class BoardManager {
 		throw new NoPieceFoundInRequestedTileException("No piece found in tile: " + tileIndex);		
 	}
 	
+	public Piece findColorPieceByIndex(int tileIndex, boolean isWhiteToMove) throws NoPieceFoundInRequestedTileException {
+		ArrayList<Piece> pieces = new ArrayList<>();
+		if(isWhiteToMove) pieces.addAll(whitePieces);
+		else pieces.addAll(blackPieces);
+		
+		for(Piece piece : pieces) {
+			if(piece.getPosition() == tileIndex)
+				return piece;
+		}
+		
+		throw new NoPieceFoundInRequestedTileException("Tile " + tileIndex + " is not occupied by your piece!");	
+	}
+	
 	public ArrayList<Move<Hop>> findMovesForAllPieces(boolean isWhiteToMove) {
 		ArrayList<Piece> pieces;
 		if (isWhiteToMove) pieces = whitePieces;
@@ -182,7 +196,7 @@ public class BoardManager {
 		int longestConsecutiveCapture = 1;
 		
 		for(Piece piece : pieces) {
-			pieceMoves = findLongestConsecutiveCaptures(piece.getPosition());
+			pieceMoves = findLongestConsecutiveCaptures(piece);
 			if(pieceMoves.size() > 0)
 				if(pieceMoves.get(0).getNumberOfHops() > longestConsecutiveCapture) {
 					allMoves.clear();
@@ -196,15 +210,8 @@ public class BoardManager {
 		return allMoves;
 	}
 	
-	public ArrayList<Move<Capture>> findLongestConsecutiveCaptures(int source) {
-		Tile tileSource = findTileByIndex(source);
-		Piece piece = null;
-		
-		try {
-			piece = findPieceByIndex(source);
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
-		}
+	public ArrayList<Move<Capture>> findLongestConsecutiveCaptures(Piece piece) {
+		Tile source = findTileByIndex(piece.getPosition());
 		
 		ArrayList<Capture> captures = new ArrayList<>();
 		ArrayList<Move<Capture>> moves = new ArrayList<>();
@@ -214,7 +221,7 @@ public class BoardManager {
 			newMoves.clear();
 						
 			if(moves.size() == 0) { //first capture 
-				captures = piece.findCaptures(board, tileSource.getRow(), tileSource.getColumn());
+				captures = piece.findCaptures(board, source.getRow(), source.getColumn());
 				if(captures.size() == 0) break; //no captures available for piece
 				else {
 					for(Capture capture : captures) {
@@ -227,8 +234,8 @@ public class BoardManager {
 					for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
 						makeHop(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination());
 					}
-					tileSource = findTileByIndex(moves.get(i).getHop(moves.get(i).getNumberOfHops()-1).getDestination());
-					captures = piece.findCaptures(board, tileSource.getRow(), tileSource.getColumn());
+					source = findTileByIndex(moves.get(i).getHop(moves.get(i).getNumberOfHops()-1).getDestination());
+					captures = piece.findCaptures(board, source.getRow(), source.getColumn());
 					for(Capture capture: captures) {
 						if(!pawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
 							newMoves.add(new Move<Capture>(moves.get(i)));

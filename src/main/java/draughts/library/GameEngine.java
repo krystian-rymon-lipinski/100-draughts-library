@@ -2,12 +2,16 @@ package draughts.library;
 
 import java.util.ArrayList;
 
+import draughts.library.boardmodel.Piece;
+import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
+import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
+
 public class GameEngine {
 	
 	private MoveManager moveManager;
 	private BoardManager boardManager;
 	private boolean isWhiteToMove;
-	private boolean pawnAlreadyMarked;
+	private boolean pieceAlreadyMarked;
 	private ArrayList<Integer> possibleHopDestinations;
 	
 	public GameEngine() {
@@ -17,29 +21,46 @@ public class GameEngine {
 	
 	public void startGame() {
 		boardManager.createStartingPosition();
-		pawnAlreadyMarked = false;
+		pieceAlreadyMarked = false;
 		possibleHopDestinations = new ArrayList<>();
 		isWhiteToMove = true;
 		moveManager.findAllCorrectMoves(isWhiteToMove);
 	}
 	
-	public void tileClicked(int position) throws NoPieceFoundInRequestedTileException {
-		if(!pawnAlreadyMarked) {
-			boardManager.findPieceByIndex(position);
-			addHopDestinations();
+	public void tileClicked(int position) throws NoPieceFoundInRequestedTileException, 
+												 NoCorrectMovesForSelectedPieceException {
+		if(!pieceAlreadyMarked) {
+			Piece markedPiece = boardManager.findColorPieceByIndex(position, isWhiteToMove);
+			if(!isPieceProperColor) 
+				throw new WrongColorFoundInRequestedTileException();
+			addPossibleHopDestinations(position);
+			pieceAlreadyMarked = true;
+		}
+		
+		else {
+			
 		}
 		
 	}
 	
-	public void addHopDestinations() {
+	public boolean isPieceProperColor(Piece piece) {
+		if(isWhiteToMove)
+			return boardManager.getWhitePieces().contains(piece);
+		else
+			return boardManager.getBlackPieces().contains(piece);
+	}
+	
+	public void addPossibleHopDestinations(int position) throws NoCorrectMovesForSelectedPieceException {
 		ArrayList<Integer> possibleHopDestinations = moveManager.doesChosenPawnHaveMoves(position);
 		if(possibleHopDestinations.size() == 0)
-			throw new NoCorrectMovesForSelectedPiece("Another piece should move");
+			throw new NoCorrectMovesForSelectedPieceException("Another piece should move");
 		else possibleHopDestinations.addAll(possibleHopDestinations);
 	}
 	
 	public void changeMove() {
 		isWhiteToMove = !isWhiteToMove;
+		pieceAlreadyMarked = false;
+		possibleHopDestinations.clear();
 	}
 
 }

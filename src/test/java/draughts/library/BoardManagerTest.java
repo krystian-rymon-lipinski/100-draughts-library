@@ -1,7 +1,6 @@
 package draughts.library;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ import draughts.library.boardmodel.BlackPawn;
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.boardmodel.WhitePawn;
+import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BoardManagerTest {
@@ -212,7 +212,8 @@ public class BoardManagerTest {
 		testObj.addBlackPawn(19);
 		testObj.addBlackPawn(18);
 		
-		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(24);
+		Piece testPiece = testObj.findPieceByIndex(24);
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(testPiece);
 		
 		assertEquals(1, whiteMoves.size());
 		assertEquals(2, whiteMoves.get(0).getNumberOfHops());
@@ -228,7 +229,7 @@ public class BoardManagerTest {
 	}
 	
 	@Test
-	public void findLongestConsecutiveCapturesForPiece_twoLevels_inTwoDirections_test() {
+	public void findLongestConsecutiveCapturesForPiece_twoLevels_inTwoDirections_test() throws NoPieceFoundInRequestedTileException {
 		testObj.createEmptyBoard();
 		
 		testObj.addWhitePawn(28);
@@ -237,7 +238,8 @@ public class BoardManagerTest {
 		testObj.addBlackPawn(33);
 		testObj.addBlackPawn(44);
 		
-		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(28);
+		Piece testPiece = testObj.findPieceByIndex(28);
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(testPiece);
 		
 		assertEquals(2, whiteMoves.size());
 		assertEquals(2, whiteMoves.get(0).getNumberOfHops());
@@ -246,7 +248,7 @@ public class BoardManagerTest {
 	}
 
 	@Test
-	public void findLongestConsecutiveCapturesForPiece_twoLevels_withSameRoot_test() {
+	public void findLongestConsecutiveCapturesForPiece_twoLevels_withSameRoot_test() throws NoPieceFoundInRequestedTileException {
 		testObj.createEmptyBoard();
 		
 		testObj.addWhiteQueen(50);
@@ -254,7 +256,8 @@ public class BoardManagerTest {
 		testObj.addBlackQueen(14);
 		testObj.addBlackPawn(32);
 		
-		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(50);
+		Piece testPiece = testObj.findPieceByIndex(50);
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(testPiece);
 		
 		assertEquals(5, whiteMoves.size());
 		assertEquals(2, whiteMoves.get(0).getNumberOfHops());
@@ -263,7 +266,7 @@ public class BoardManagerTest {
 	}
 	
 	@Test
-	public void findLongestConsecutiveCapturesForPiece_threeLevels_test() {
+	public void findLongestConsecutiveCapturesForPiece_threeLevels_test() throws NoPieceFoundInRequestedTileException {
 		testObj.createEmptyBoard();
 		
 		testObj.addWhiteQueen(48);
@@ -271,14 +274,15 @@ public class BoardManagerTest {
 		testObj.addBlackQueen(22);
 		testObj.addBlackPawn(7);
 		
-		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(48);
+		Piece testPiece = testObj.findPieceByIndex(48);
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(testPiece);
 		
 		assertEquals(1, whiteMoves.size());
 		assertEquals(3, whiteMoves.get(0).getNumberOfHops());
 	}
 	
 	@Test
-	public void findLongestConsecutiveCapturesForPiece_threeLevels_withMultipleBranches_test() {
+	public void findLongestConsecutiveCapturesForPiece_threeLevels_withMultipleBranches_test() throws NoPieceFoundInRequestedTileException {
 		testObj.createEmptyBoard();
 		
 		testObj.addBlackQueen(3);
@@ -289,7 +293,8 @@ public class BoardManagerTest {
 		testObj.addWhitePawn(33);
 		testObj.addWhiteQueen(41);
 		
-		ArrayList<Move<Capture>> blackMoves = testObj.findLongestConsecutiveCaptures(3);
+		Piece testPiece = testObj.findPieceByIndex(3);
+		ArrayList<Move<Capture>> blackMoves = testObj.findLongestConsecutiveCaptures(testPiece);
 		
 		assertEquals(7, blackMoves.size());
 		assertEquals(3, blackMoves.get(0).getNumberOfHops());
@@ -297,7 +302,7 @@ public class BoardManagerTest {
 	}
 	
 	@Test
-	public void findLongestConsecutiveCapturesForPiece_fourLevels_inCircle_test() {
+	public void findLongestConsecutiveCapturesForPiece_fourLevels_inCircle_test() throws NoPieceFoundInRequestedTileException {
 		testObj.createEmptyBoard();
 		
 		testObj.addBlackQueen(4);
@@ -306,7 +311,8 @@ public class BoardManagerTest {
 		testObj.addWhiteQueen(32);
 		testObj.addWhitePawn(33);
 		
-		ArrayList<Move<Capture>> blackMoves = testObj.findLongestConsecutiveCaptures(4);
+		Piece testPiece = testObj.findPieceByIndex(4);
+		ArrayList<Move<Capture>> blackMoves = testObj.findLongestConsecutiveCaptures(testPiece);
 		
 		assertEquals(4, blackMoves.size());
 		assertEquals(4, blackMoves.get(0).getNumberOfHops());
@@ -314,7 +320,7 @@ public class BoardManagerTest {
 	}
 	
 	@Test
-	public void findLongestConsecutiveCapturesForPiece_ultimate_test() {
+	public void findLongestConsecutiveCapturesForPiece_ultimate_test() throws NoPieceFoundInRequestedTileException {
 		testObj.createEmptyBoard();
 		
 		testObj.addWhiteQueen(50);
@@ -328,8 +334,8 @@ public class BoardManagerTest {
 		testObj.addBlackPawn(30);
 		testObj.addBlackPawn(41);
 
-		
-		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(50);
+		Piece testPiece = testObj.findPieceByIndex(50);
+		ArrayList<Move<Capture>> whiteMoves = testObj.findLongestConsecutiveCaptures(testPiece);
 		
 		assertEquals(1, whiteMoves.size());
 		assertEquals(7, whiteMoves.get(0).getNumberOfHops());
