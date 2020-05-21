@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import draughts.library.GameEngine.GameState;
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
@@ -33,6 +34,7 @@ public class GameEngineTest {
 		assertTrue(testObj.getIsWhiteToMove());
 		assertEquals(0, testObj.getMarkedPiecePosition());
 		assertEquals(9, testObj.getMoveManager().getPossibleMoves().size());
+		assertEquals(GameState.RUNNING, testObj.getGameState());
 	}
 	
 	@Test(expected = NoPieceFoundInRequestedTileException.class)
