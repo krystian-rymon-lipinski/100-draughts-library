@@ -19,7 +19,7 @@ public class MoveManager {
 		return boardManager;
 	}
 	
-	public ArrayList<Move<? extends Hop>> getMoves() {
+	public ArrayList<Move<? extends Hop>> getPossibleMoves() {
 		return possibleMoves;
 	}
 	
@@ -37,8 +37,7 @@ public class MoveManager {
 			boardManager.makeCapture(source, destination, capture.getTakenPawn());
 		}
 		
-		hopsMadeInMove++;
-		
+		hopsMadeInMove++;		
 		if(hopsMadeInMove == possibleMoves.get(0).getNumberOfHops())
 			moveDone();
 	}
@@ -69,6 +68,10 @@ public class MoveManager {
 	public void moveDone() {
 		possibleMoves.clear();
 		hopsMadeInMove = 0;
+	}
+	
+	public boolean isMoveFinished() {
+		return (hopsMadeInMove == 0) ? true : false;
 	}
 	
 	public void findAllCorrectMoves(boolean isWhiteToMove) {

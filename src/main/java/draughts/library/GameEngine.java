@@ -17,6 +17,9 @@ public class GameEngine {
 	
 	public GameEngine() {
 		moveManager = new MoveManager();
+		markedPiecePosition = 0;
+		isWhiteToMove = true;
+		possibleHopDestinations = new ArrayList<>();
 	}
 	
 	public boolean getIsWhiteToMove() {
@@ -38,10 +41,6 @@ public class GameEngine {
 	
 	public void startGame() {
 		moveManager.getBoardManager().createStartingPosition();
-
-		markedPiecePosition = 0;
-		isWhiteToMove = true;
-		possibleHopDestinations = new ArrayList<>();
 		moveManager.findAllCorrectMoves(isWhiteToMove);
 	}
 	
@@ -53,7 +52,7 @@ public class GameEngine {
 			if(isChosenTileEmpty(index)) 
 				throw new NoPieceFoundInRequestedTileException("No piece found on chosen tile!");
 				
-			else if(!isChosenTileOccupiedByProperColor(index)) 
+			else if(!isClickedTileOccupiedByProperColor(index)) 
 				throw new WrongColorFoundInRequestedTileException("No piece of your color on chosen tile!");
 			
 			else {
@@ -63,13 +62,14 @@ public class GameEngine {
 		}
 		
 		else {
-			if(isChosenTileOccupiedByProperColor(index)) {
+			if(isClickedTileOccupiedByProperColor(index)) {
 				markedPiecePosition = index;
 				addPossibleHopDestinations(index);
 			}
 			else if(isClickedTilePossibleDestination(index)) {
-				possibleHopDestinations.clear();
 				moveManager.makeHop(markedPiecePosition, index);
+				if(moveManager.isMoveFinished()) moveFinished();
+				else hopFinished(index);
 			}
 			else
 				throw new WrongMoveException("Wrong move");
@@ -85,7 +85,7 @@ public class GameEngine {
 		return false;
 	}
 	
-	public boolean isChosenTileOccupiedByProperColor(int index) {
+	public boolean isClickedTileOccupiedByProperColor(int index) {
 		Tile.State chosenTileState = moveManager.getBoardManager().findTileByIndex(index).getState();
 		if(isWhiteToMove)
 			return (chosenTileState == Tile.State.WHITE_PAWN ||
@@ -105,10 +105,19 @@ public class GameEngine {
 			throw new NoCorrectMovesForSelectedPieceException("Other pieces should move");
 	}
 	
-	public void changeMove() {
+	public void moveFinished() {
 		isWhiteToMove = !isWhiteToMove;
 		markedPiecePosition = 0;
 		possibleHopDestinations.clear();
+		moveManager.findAllCorrectMoves(isWhiteToMove);
+	}
+	
+	public void hopFinished(int destination) throws NoCorrectMovesForSelectedPieceException {
+		markedPiecePosition = destination;
+		possibleHopDestinations.clear();
+		moveManager.findAllCorrectMoves(isWhiteToMove);
+		addPossibleHopDestinations(destination);
+		
 	}
 
 }
