@@ -44,6 +44,10 @@ public class GameEngine {
 		return gameState;
 	}
 	
+	public void setGameState(GameState gameState) {
+		this.gameState = gameState;
+	}
+	
 	public void startGame() {
 		moveManager.getBoardManager().createStartingPosition();
 		moveManager.findAllCorrectMoves(isWhiteToMove);
@@ -53,7 +57,7 @@ public class GameEngine {
 												 WrongColorFoundInRequestedTileException,
 												 NoCorrectMovesForSelectedPieceException, 
 												 WrongMoveException {
-		while(gameState == GameState.RUNNING) {
+		if(gameState == GameState.RUNNING) {
 			if(markedPiecePosition == 0) { //no piece marked yet - first part of making a hop
 				if(isChosenTileEmpty(index)) 
 					throw new NoPieceFoundInRequestedTileException("No piece found on chosen tile!");
@@ -131,16 +135,17 @@ public class GameEngine {
 	
 	public void checkGameState() {
 		if(moveManager.getPossibleMoves().size() == 0) {
-			if(isWhiteToMove) System.out.println("Wygrana czarnych!");
-			else System.out.println("Wygrana bia³ych");
-		}
-		
+			if(isWhiteToMove) setGameState(GameState.WON_BY_BLACK);
+			else setGameState(GameState.WON_BY_WHITE);
+		}		
 	}
 	
 	
 	public enum GameState {
 		RUNNING,
-		FINISHED
+		WON_BY_WHITE,
+		WON_BY_BLACK,
+		DRAWN
 	}
 
 }
