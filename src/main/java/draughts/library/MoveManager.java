@@ -1,19 +1,17 @@
 package draughts.library;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MoveManager {
 	
 	private BoardManager boardManager;
-	private ArrayList<Move<? extends Hop>> allMoves;
+	private ArrayList<Move<? extends Hop>> possibleMoves;
 	private int hopsMadeInMove;
-	private Move<? extends Hop> currentMove;
 	
 	public MoveManager() {
 		boardManager = new BoardManager();
-		//boardManager.createStartingPosition();
-		allMoves = new ArrayList<>();
-		currentMove = null;
+		possibleMoves = new ArrayList<>();
 		hopsMadeInMove = 0;
 	}
 	
@@ -21,8 +19,8 @@ public class MoveManager {
 		return boardManager;
 	}
 	
-	public ArrayList<Move<? extends Hop>> getMoves() {
-		return allMoves;
+	public ArrayList<Move<? extends Hop>> getPossibleMoves() {
+		return possibleMoves;
 	}
 	
 	public int getHopsMadeInMove() {
@@ -30,39 +28,58 @@ public class MoveManager {
 	}
 		
 	public void makeHop(int source, int destination) {
-		if(currentMove == null) findCurrentMove(source, destination);
+		findMovesFromAllPossible(destination);
 		
-		if(!currentMove.isTake())
-			boardManager.makeHop(currentMove.getHop(hopsMadeInMove).getSource(), 
-								 currentMove.getHop(hopsMadeInMove).getDestination());
-		else
-			boardManager.makeCapture(currentMove.getHop(hopsMadeInMove).getSource(), 
-								 	 currentMove.getHop(hopsMadeInMove).getDestination(),
-								 	 currentMove.getHop(hopsMadeInMove).getTakenPawn());
-		hopsMadeInMove++;
+		if(!possibleMoves.get(0).isTake())
+			boardManager.makeHop(source, destination);
+		else {
+			Capture capture = (Capture) possibleMoves.get(0).getHop(hopsMadeInMove);
+			boardManager.makeCapture(source, destination, capture.getTakenPawn());
+		}
 		
-		if(hopsMadeInMove == currentMove.getNumberOfHops())
+		hopsMadeInMove++;		
+		if(hopsMadeInMove == possibleMoves.get(0).getNumberOfHops())
 			moveDone();
 	}
 	
-	public void makeHop(Move<? extends Hop> move) {
-		currentMove = move;
+	
+	public void findMovesFromAllPossible(int destination) {
+		Iterator<Move<? extends Hop>> movesIterator = possibleMoves.iterator();
+		
+		while(movesIterator.hasNext()) {
+			Move<? extends Hop> move = movesIterator.next();
+			if(move.getHop(hopsMadeInMove).getDestination() != destination) {
+				movesIterator.remove();
+				possibleMoves.remove(move);
+			}
+		}
 	}
 	
-	public void findCurrentMove(int source, int destination) {
-		
+	public ArrayList<Integer> doesChosenPawnHaveMoves(int position) {
+		ArrayList<Integer> possibleHopDestinations = new ArrayList<Integer>();
+		for(Move<? extends Hop> move : possibleMoves) {
+			if(position == move.getHop(hopsMadeInMove).getSource()) {
+				possibleHopDestinations.add(move.getHop(hopsMadeInMove).getDestination());
+			}
+		}
+		return possibleHopDestinations;
 	}
 	
 	public void moveDone() {
-		currentMove = null;
+		possibleMoves.clear();
 		hopsMadeInMove = 0;
+	}
+	
+	public boolean isMoveFinished() {
+		return (hopsMadeInMove == 0) ? true : false;
 	}
 	
 	public void findAllCorrectMoves(boolean isWhiteToMove) {
 		
-		allMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
-		if(allMoves.size() == 0)
-			allMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
+		possibleMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
+		if(possibleMoves.size() == 0)
+			possibleMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
+		
 	}
 
 }

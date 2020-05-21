@@ -2,8 +2,6 @@ package draughts.library;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +49,7 @@ public class MoveManagerTest {
 		
 		testObj.findAllCorrectMoves(true);
 		
-		assertEquals(2, testObj.getMoves().size());	
+		assertEquals(2, testObj.getPossibleMoves().size());	
 	}
 	
 	@Test
@@ -69,7 +67,7 @@ public class MoveManagerTest {
 		
 		testObj.findAllCorrectMoves(true);
 		
-		assertEquals(12, testObj.getMoves().size());
+		assertEquals(12, testObj.getPossibleMoves().size());
 	}
 	
 	
