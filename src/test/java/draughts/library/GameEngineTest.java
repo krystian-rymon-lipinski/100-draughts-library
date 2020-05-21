@@ -88,6 +88,35 @@ public class GameEngineTest {
 	}
 	
 	@Test
+	public void tileClicked_twice_changedMarkedPiece_forOneWithMoves_test() throws NoPieceFoundInRequestedTileException, 
+																	WrongColorFoundInRequestedTileException,
+																	NoCorrectMovesForSelectedPieceException, 
+																	WrongMoveException {
+		testObj.startGame();
+		testObj.tileClicked(33);
+		testObj.tileClicked(31);
+		
+		assertEquals(31, testObj.getMarkedPiecePosition());
+		assertEquals(2, testObj.getPossibleHopDestinations().size());
+		assertTrue(testObj.getPossibleHopDestinations().get(0) == 26 ||
+				   testObj.getPossibleHopDestinations().get(0) == 27);
+		assertTrue(testObj.getPossibleHopDestinations().get(1) == 26 ||
+				   testObj.getPossibleHopDestinations().get(1) == 27);
+		
+	}
+	
+	@Test(expected = NoCorrectMovesForSelectedPieceException.class)
+	public void tileClicked_twice_changedMarkedPiece_forOneWithoutMoves_test() throws NoPieceFoundInRequestedTileException, 
+																	WrongColorFoundInRequestedTileException,
+																	NoCorrectMovesForSelectedPieceException, 
+																	WrongMoveException {
+		testObj.startGame();
+		testObj.tileClicked(33);
+		testObj.tileClicked(44);
+		
+	}
+	
+	@Test
 	public void tileClicked_twice_properMoveMade_test() throws NoPieceFoundInRequestedTileException, 
 	  															WrongColorFoundInRequestedTileException,
 	  															NoCorrectMovesForSelectedPieceException, 

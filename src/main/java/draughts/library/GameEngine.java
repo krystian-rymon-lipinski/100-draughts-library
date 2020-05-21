@@ -63,10 +63,14 @@ public class GameEngine {
 		}
 		
 		else {
-			if(isChosenTileOccupiedByProperColor(index))
+			if(isChosenTileOccupiedByProperColor(index)) {
 				markedPiecePosition = index;
-			else if(isClickedTilePossibleDestination(index)) 
-				moveManager.findMovesByHopDestination(index);
+				addPossibleHopDestinations(index);
+			}
+			else if(isClickedTilePossibleDestination(index)) {
+				possibleHopDestinations.clear();
+				moveManager.makeHop(markedPiecePosition, index);
+			}
 			else
 				throw new WrongMoveException("Wrong move");
 		}
