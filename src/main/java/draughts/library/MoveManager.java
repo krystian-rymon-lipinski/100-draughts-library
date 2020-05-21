@@ -11,7 +11,6 @@ public class MoveManager {
 	
 	public MoveManager() {
 		boardManager = new BoardManager();
-		//boardManager.createStartingPosition();
 		allMoves = new ArrayList<>();
 		currentMove = null;
 		hopsMadeInMove = 0;
@@ -52,8 +51,9 @@ public class MoveManager {
 	public ArrayList<Integer> doesChosenPawnHaveMoves(int position) {
 		ArrayList<Integer> possibleHopDestinations = new ArrayList<Integer>();
 		for(Move<? extends Hop> move : allMoves) {
-			if(position == move.getHop(hopsMadeInMove).getSource())
+			if(position == move.getHop(hopsMadeInMove).getSource()) {
 				possibleHopDestinations.add(move.getHop(hopsMadeInMove).getDestination());
+			}
 		}
 		return possibleHopDestinations;
 	}
@@ -63,11 +63,16 @@ public class MoveManager {
 		hopsMadeInMove = 0;
 	}
 	
+	public void findMovesByHopDestination(int destination) {
+		
+	}
+	
 	public void findAllCorrectMoves(boolean isWhiteToMove) {
 		
 		allMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
 		if(allMoves.size() == 0)
 			allMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
+		
 	}
 
 }

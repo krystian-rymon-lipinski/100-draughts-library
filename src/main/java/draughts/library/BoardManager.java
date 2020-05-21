@@ -156,19 +156,6 @@ public class BoardManager {
 		throw new NoPieceFoundInRequestedTileException("No piece found in tile: " + tileIndex);		
 	}
 	
-	public Piece findColorPieceByIndex(int tileIndex, boolean isWhiteToMove) throws NoPieceFoundInRequestedTileException {
-		ArrayList<Piece> pieces = new ArrayList<>();
-		if(isWhiteToMove) pieces.addAll(whitePieces);
-		else pieces.addAll(blackPieces);
-		
-		for(Piece piece : pieces) {
-			if(piece.getPosition() == tileIndex)
-				return piece;
-		}
-		
-		throw new NoPieceFoundInRequestedTileException("Tile " + tileIndex + " is not occupied by your piece!");	
-	}
-	
 	public ArrayList<Move<Hop>> findMovesForAllPieces(boolean isWhiteToMove) {
 		ArrayList<Piece> pieces;
 		if (isWhiteToMove) pieces = whitePieces;
@@ -182,7 +169,6 @@ public class BoardManager {
 			pieceMoves = piece.findMoves(board, currentPosition.getRow(), currentPosition.getColumn());
 			if(pieceMoves.size() > 0) allMoves.addAll(pieceMoves);
 		}
-		
 		return allMoves;
 	}
 	

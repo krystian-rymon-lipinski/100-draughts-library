@@ -383,4 +383,13 @@ public class BoardManagerTest {
 		assertEquals(8, whiteMoves.size());
 		
 	}
+	
+	@Test
+	public void findMovesForAllPieces_forStartingPosition_test() {
+		testObj.createStartingPosition();
+		
+		ArrayList<Move<Hop>> whiteMove = testObj.findMovesForAllPieces(true);
+		
+		assertEquals(9, whiteMove.size());
+	}
 }

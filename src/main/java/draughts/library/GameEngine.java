@@ -2,67 +2,108 @@ package draughts.library;
 
 import java.util.ArrayList;
 
-import draughts.library.boardmodel.Piece;
+import draughts.library.boardmodel.Tile;
 import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 import draughts.library.exceptions.WrongColorFoundInRequestedTileException;
+import draughts.library.exceptions.WrongMoveException;
 
 public class GameEngine {
 	
 	private MoveManager moveManager;
-	private BoardManager boardManager;
 	private boolean isWhiteToMove;
-	private boolean pieceAlreadyMarked;
+	private int markedPiecePosition;
 	private ArrayList<Integer> possibleHopDestinations;
 	
 	public GameEngine() {
 		moveManager = new MoveManager();
-		boardManager = new BoardManager();
+	}
+	
+	public boolean getIsWhiteToMove() {
+		return isWhiteToMove;
+	}
+	
+	public int getMarkedPiecePosition() {
+		return markedPiecePosition;
+	}
+	
+	public MoveManager getMoveManager() {
+		return moveManager;
+	}
+	
+	
+	public ArrayList<Integer> getPossibleHopDestinations() {
+		return possibleHopDestinations;
 	}
 	
 	public void startGame() {
-		boardManager.createStartingPosition();
-		pieceAlreadyMarked = false;
-		possibleHopDestinations = new ArrayList<>();
+		moveManager.getBoardManager().createStartingPosition();
+
+		markedPiecePosition = 0;
 		isWhiteToMove = true;
+		possibleHopDestinations = new ArrayList<>();
 		moveManager.findAllCorrectMoves(isWhiteToMove);
 	}
 	
-	public void tileClicked(int position) throws NoPieceFoundInRequestedTileException, 
+	public void tileClicked(int index) throws NoPieceFoundInRequestedTileException, 
 												 WrongColorFoundInRequestedTileException,
 												 NoCorrectMovesForSelectedPieceException, 
 												 WrongMoveException {
-		if(!pieceAlreadyMarked) {
-			Piece markedPiece = boardManager.findColorPieceByIndex(position, isWhiteToMove);
-			if(!isPieceProperColor(markedPiece)) 
+		if(markedPiecePosition == 0) { //no piece marked yet - first part of making a hop
+			if(isChosenTileEmpty(index)) 
+				throw new NoPieceFoundInRequestedTileException("No piece found on chosen tile!");
+				
+			else if(!isChosenTileOccupiedByProperColor(index)) 
 				throw new WrongColorFoundInRequestedTileException("No piece of your color on chosen tile!");
-			addPossibleHopDestinations(position);
-			pieceAlreadyMarked = true;
+			
+			else {
+				markedPiecePosition = index;
+				addPossibleHopDestinations(index);
+			}
 		}
 		
 		else {
-			
+			if(isChosenTileOccupiedByProperColor(index))
+				markedPiecePosition = index;
+			else if(isClickedTilePossibleDestination(index)) 
+				moveManager.findMovesByHopDestination(index);
+			else
+				throw new WrongMoveException("Wrong move");
 		}
 		
 	}
 	
-	public boolean isPieceProperColor(Piece piece) {
+	public boolean isClickedTilePossibleDestination(int position) {
+		for(Integer possibleDestinations : possibleHopDestinations) {
+			if(position == possibleDestinations) return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean isChosenTileOccupiedByProperColor(int index) {
+		Tile.State chosenTileState = moveManager.getBoardManager().findTileByIndex(index).getState();
 		if(isWhiteToMove)
-			return boardManager.getWhitePieces().contains(piece);
+			return (chosenTileState == Tile.State.WHITE_PAWN ||
+					chosenTileState == Tile.State.WHITE_QUEEN) ? true : false;
 		else
-			return boardManager.getBlackPieces().contains(piece);
+			return (chosenTileState == Tile.State.BLACK_PAWN ||
+			chosenTileState == Tile.State.BLACK_QUEEN) ? true : false;
+	}
+	
+	public boolean isChosenTileEmpty(int index) {
+		return moveManager.getBoardManager().findTileByIndex(index).getState() == Tile.State.EMPTY ? true : false;
 	}
 	
 	public void addPossibleHopDestinations(int position) throws NoCorrectMovesForSelectedPieceException {
-		ArrayList<Integer> possibleHopDestinations = moveManager.doesChosenPawnHaveMoves(position);
+		possibleHopDestinations = moveManager.doesChosenPawnHaveMoves(position);
 		if(possibleHopDestinations.size() == 0)
-			throw new NoCorrectMovesForSelectedPieceException("Another piece should move");
-		else possibleHopDestinations.addAll(possibleHopDestinations);
+			throw new NoCorrectMovesForSelectedPieceException("Other pieces should move");
 	}
 	
 	public void changeMove() {
 		isWhiteToMove = !isWhiteToMove;
-		pieceAlreadyMarked = false;
+		markedPiecePosition = 0;
 		possibleHopDestinations.clear();
 	}
 
