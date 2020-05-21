@@ -167,6 +167,9 @@ public class GameEngineTest {
 		
 		testObj.tileClicked(33);
 		testObj.tileClicked(22);
+		
+		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(28).getState());
+		assertEquals(0, boardManager.getBlackPieces().size());
 	}
 	
 	@Test 
@@ -253,7 +256,7 @@ public class GameEngineTest {
 		testObj.tileClicked(39);
 		
 		assertEquals(0, boardManager.getBlackPieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves());
+		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
 		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
 	}
 	
@@ -298,7 +301,7 @@ public class GameEngineTest {
 		testObj.tileClicked(14);
 		
 		assertEquals(0, boardManager.getWhitePieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves());
+		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
 		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());
 	}
 	
