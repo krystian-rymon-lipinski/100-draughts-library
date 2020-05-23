@@ -24,6 +24,8 @@ public abstract class Piece {
 	
 	public abstract boolean isQueen();
 	
+	public abstract boolean isWhite();
+	
 
 	public int getPosition() {
 		return position;

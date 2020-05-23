@@ -85,6 +85,16 @@ public class BoardManager {
 		findTileByIndex(position).setState(Tile.State.BLACK_QUEEN);
 	}
 	
+	public void removeWhitePiece(Piece piece) {
+		whitePieces.remove(piece);
+		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
+	}
+	
+	public void removeBlackPiece(Piece piece) {
+		blackPieces.remove(piece);
+		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
+	}
+	
 	public void makeHop(int source, int destination) {
 		try {
 			Piece movedPiece = findPieceByIndex(source);
@@ -119,13 +129,10 @@ public class BoardManager {
 			Piece takenPiece = findPieceByIndex(taken);
 			makeHop(source, destination);
 			
-			Tile takenTile = findTileByIndex(taken);
-			takenTile.setState(Tile.State.EMPTY);
-			
 			if(isTakenPieceWhite(takenPiece))
-				whitePieces.remove(takenPiece);
+				removeWhitePiece(takenPiece);
 			else 
-				blackPieces.remove(takenPiece);
+				removeBlackPiece(takenPiece);
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
 		}		
@@ -255,13 +262,13 @@ public class BoardManager {
 	
 	
 	public boolean isTakenPieceWhite(Piece takenPiece) {
-		return (takenPiece instanceof WhitePawn || takenPiece instanceof WhiteQueen) ? true : false;
+		return takenPiece.isWhite();
 	}	
 	
 	public boolean isMovedPieceQueen(int source) {
 		try {
 			Piece piece = findPieceByIndex(source);
-			return (piece instanceof WhiteQueen || piece instanceof BlackQueen) ? true : false;
+			return piece.isQueen();
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			return false;
 		}
