@@ -29,10 +29,6 @@ public class BoardManager {
 		this.blackPieces = boardManager.blackPieces;
 	}
 	
-	public void createStartingPosition() {
-		createEmptyBoard();
-		createPiecesForStartingPosition();
-	}
 	
 	public Tile[][] getBoard() {
 		return board;
@@ -63,6 +59,11 @@ public class BoardManager {
 				else board[i][j].setState(Tile.State.WHITE_TILE);
 			}
 		}
+	}
+	
+	public void createStartingPosition() {
+		createEmptyBoard();
+		createPiecesForStartingPosition();
 	}
 	
 	public void addWhitePawn(int position) {
@@ -105,8 +106,22 @@ public class BoardManager {
 			movedPiece.hop(dst);
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
+		}	
+	}
+	
+	public void promotePawn(int destination) {
+		try {
+			Piece promotedPawn = findPieceByIndex(destination);
+			if(promotedPawn.isWhite()) {
+				removeWhitePiece(promotedPawn);
+				addWhiteQueen(destination);
+			} else {
+				removeBlackPiece(promotedPawn);
+				addBlackQueen(destination);
+			}
+		} catch(NoPieceFoundInRequestedTileException err) {
+			err.printStackTrace();
 		}
-		
 	}
 	
 	public void reverseHop(int source, int destination) {

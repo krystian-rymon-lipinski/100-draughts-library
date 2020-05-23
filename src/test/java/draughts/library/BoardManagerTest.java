@@ -392,4 +392,28 @@ public class BoardManagerTest {
 		
 		assertEquals(9, whiteMove.size());
 	}
+	
+	@Test
+	public void promotePawn_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(10);
+		testObj.addBlackPawn(45);
+		
+		testObj.makeHop(10, 5);
+		testObj.promotePawn(5);
+		
+		try {
+			assertEquals(Tile.State.WHITE_QUEEN, testObj.findTileByIndex(5).getState());
+			assertTrue(testObj.findPieceByIndex(5).isQueen());
+		} catch (NoPieceFoundInRequestedTileException ex) {}
+		
+		testObj.makeHop(45, 50);
+		testObj.promotePawn(50);
+		
+		try {
+			assertEquals(Tile.State.BLACK_QUEEN, testObj.findTileByIndex(50).getState());
+			assertTrue(testObj.findPieceByIndex(50).isQueen());
+		} catch (NoPieceFoundInRequestedTileException ex) {}
+	}
 }
