@@ -12,6 +12,10 @@ public abstract class Queen extends Piece {
 		super(position);
 	}
 	
+	public boolean isQueen() {
+		return true;
+	}
+	
 	public ArrayList<Move<Hop>> findMoves(Tile[][] board, int currentRow, int currentColumn) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();

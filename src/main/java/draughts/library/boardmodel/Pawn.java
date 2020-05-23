@@ -12,6 +12,10 @@ public abstract class Pawn extends Piece {
 		super(position);
 	}
 	
+	public boolean isQueen() {
+		return false;
+	}
+	
 	
 	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board, int currentRow, int currentColumn) {
 		

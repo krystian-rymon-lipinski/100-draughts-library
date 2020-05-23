@@ -22,6 +22,8 @@ public abstract class Piece {
 	
 	public abstract ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column);
 	
+	public abstract boolean isQueen();
+	
 
 	public int getPosition() {
 		return position;

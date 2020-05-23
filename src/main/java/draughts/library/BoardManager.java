@@ -258,5 +258,14 @@ public class BoardManager {
 		return (takenPiece instanceof WhitePawn || takenPiece instanceof WhiteQueen) ? true : false;
 	}	
 	
+	public boolean isMovedPieceQueen(int source) {
+		try {
+			Piece piece = findPieceByIndex(source);
+			return (piece instanceof WhiteQueen || piece instanceof BlackQueen) ? true : false;
+		} catch(NoPieceFoundInRequestedTileException ex) {
+			return false;
+		}
+	}
+	
 
 }

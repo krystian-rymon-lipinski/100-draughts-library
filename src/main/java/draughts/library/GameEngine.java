@@ -15,6 +15,7 @@ public class GameEngine {
 	private int markedPiecePosition;
 	private ArrayList<Integer> possibleHopDestinations;
 	private GameState gameState;
+	private int drawCounter;
 	
 	public GameEngine() {
 		moveManager = new MoveManager();
@@ -22,6 +23,7 @@ public class GameEngine {
 		isWhiteToMove = true;
 		possibleHopDestinations = new ArrayList<>();
 		gameState = GameState.RUNNING;
+		drawCounter = 0;
 	}
 	
 	public boolean getIsWhiteToMove() {
@@ -46,6 +48,10 @@ public class GameEngine {
 	
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
+	}
+	
+	public int getDrawCounter() {
+		return drawCounter;
 	}
 	
 	public void startGame() {
@@ -78,7 +84,9 @@ public class GameEngine {
 				}
 				else if(isClickedTilePossibleDestination(index)) {
 					moveManager.makeHop(markedPiecePosition, index);
-					if(moveManager.isMoveFinished()) moveFinished();
+					if(moveManager.isMoveFinished()) {
+						moveFinished();
+					}
 					else hopFinished(index);
 				}
 				else
@@ -116,7 +124,7 @@ public class GameEngine {
 	}
 	
 	public void moveFinished() {
-
+		
 		isWhiteToMove = !isWhiteToMove;
 		markedPiecePosition = 0;
 		possibleHopDestinations.clear();
@@ -138,6 +146,15 @@ public class GameEngine {
 			if(isWhiteToMove) setGameState(GameState.WON_BY_BLACK);
 			else setGameState(GameState.WON_BY_WHITE);
 		}		
+		else 
+			if(isGameDrawn()) setGameState(GameState.DRAWN);
+	}
+	
+	
+	
+	public boolean isGameDrawn() {
+		if(drawCounter >= 25) return true;
+		else return false;
 	}
 	
 	

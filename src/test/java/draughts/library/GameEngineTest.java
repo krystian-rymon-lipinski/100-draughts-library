@@ -27,6 +27,14 @@ public class GameEngineTest {
 		testObj = new GameEngine();
 	}
 	
+	public void makeMove(int source, int destination) throws NoPieceFoundInRequestedTileException, 
+														WrongColorFoundInRequestedTileException, 
+														NoCorrectMovesForSelectedPieceException, 
+														WrongMoveException {
+		testObj.tileClicked(source);
+		testObj.tileClicked(destination);
+	}
+	
 	@Test
 	public void startGame_test() {
 		testObj.startGame();
@@ -35,6 +43,7 @@ public class GameEngineTest {
 		assertEquals(0, testObj.getMarkedPiecePosition());
 		assertEquals(9, testObj.getMoveManager().getPossibleMoves().size());
 		assertEquals(GameState.RUNNING, testObj.getGameState());
+		assertEquals(0, testObj.getDrawCounter());
 	}
 	
 	@Test(expected = NoPieceFoundInRequestedTileException.class)
@@ -325,8 +334,222 @@ public class GameEngineTest {
 		
 		assertEquals(1, boardManager.getWhitePieces().size());
 		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
-		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());
+		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());	
+	}
+	
+	@Test
+	public void checkGameState_changingDrawCounterAccordingly_test() throws NoPieceFoundInRequestedTileException, 
+																			WrongColorFoundInRequestedTileException,
+																			NoCorrectMovesForSelectedPieceException, 
+																			WrongMoveException {
+		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
+		
+		boardManager.createEmptyBoard();
+		boardManager.addWhiteQueen(34);
+		boardManager.addBlackQueen(20);
+		boardManager.addWhitePawn(50);
+		boardManager.addBlackPawn(5);
+		
+		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
+		
+		testObj.tileClicked(34);
+		testObj.tileClicked(45);
+		
+		assertEquals(1, testObj.getDrawCounter());
+		
+		testObj.tileClicked(20);
+		testObj.tileClicked(3);
+		
+		assertEquals(2, testObj.getDrawCounter());
+		
+		testObj.tileClicked(50);
+		testObj.tileClicked(44);
+		
+		assertEquals(0, testObj.getDrawCounter());
+		
 		
 	}
+	
+	@Test 
+	public void changeDrawConditions_normalTo3vs1_test() throws NoPieceFoundInRequestedTileException, 
+															WrongColorFoundInRequestedTileException,
+															NoCorrectMovesForSelectedPieceException, 
+															WrongMoveException {
+		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
+		
+		boardManager.createEmptyBoard();
+		boardManager.addWhiteQueen(32);
+		boardManager.addBlackQueen(5);
+		boardManager.addBlackPawn(3);
+		boardManager.addBlackPawn(18);
+		boardManager.addBlackPawn(21);
+		
+		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
+		
+		testObj.tileClicked(32);
+		testObj.tileClicked(16);
+		
+		assertEquals(DrawArbiter.DrawConditions.THREE_VS_ONE, testObj.getDrawArbiter().getDrawConditions());
+	}
+	
+	@Test
+	public void changeDrawConditions_3v1To2v1_test() throws NoPieceFoundInRequestedTileException, 
+															WrongColorFoundInRequestedTileException,
+															NoCorrectMovesForSelectedPieceException, 
+															WrongMoveException {
+		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
+		
+		boardManager.createEmptyBoard();
+		boardManager.addBlackQueen(18);
+		boardManager.addWhiteQueen(49);
+		boardManager.addWhiteQueen(33);
+		boardManager.addWhitePawn(32);
+		
+		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
+		
+		testObj.tileClicked(33);
+		testObj.tileClicked(29);
+		testObj.tileClicked(32);
+		testObj.tileClicked(16);
+		
+		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawArbiter().getDrawConditions());
+		
+	}
+	
+	@Test
+	public void changeDrawConditions_normalTo2v1_test() throws NoPieceFoundInRequestedTileException, 
+															WrongColorFoundInRequestedTileException,
+															NoCorrectMovesForSelectedPieceException, 
+															WrongMoveException {
+		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
+		
+		boardManager.createEmptyBoard();
+		boardManager.addWhiteQueen(33);
+		boardManager.addBlackQueen(5);
+		boardManager.addBlackQueen(2);
+		boardManager.addBlackPawn(22);
+		boardManager.addBlackPawn(12);
+		
+		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
+		
+		testObj.tileClicked(33);
+		testObj.tileClicked(17);
+		testObj.tileClicked(3);
+		
+		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawArbiter().getDrawConditions());	
+		
+	}
+	
+	@Test
+	public void checkGameState_drawn_normalConditions_test() throws NoPieceFoundInRequestedTileException, 
+													WrongColorFoundInRequestedTileException,
+													NoCorrectMovesForSelectedPieceException, 
+													WrongMoveException {
+		
+		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
+				
+		boardManager.createEmptyBoard();
+		boardManager.addWhiteQueen(34);
+		boardManager.addBlackQueen(20);
+		boardManager.addWhitePawn(50);
+		boardManager.addBlackPawn(5);
+		
+		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
+
+		for(int i=0; i<12; i++) {
+			testObj.tileClicked(34);
+			testObj.tileClicked(45);
+			testObj.tileClicked(20);
+			testObj.tileClicked(3);
+			testObj.tileClicked(45);
+			testObj.tileClicked(34);
+			testObj.tileClicked(3);
+			testObj.tileClicked(20);
+		}
+		
+		testObj.tileClicked(34);
+		testObj.tileClicked(45);
+		testObj.tileClicked(20);
+		testObj.tileClicked(3);
+		
+		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
+		
+	}
+	
+	@Test
+	public void checkGameState_drawn_3vs1Conditions_test() throws NoPieceFoundInRequestedTileException, 
+																WrongColorFoundInRequestedTileException,
+																NoCorrectMovesForSelectedPieceException, 
+																WrongMoveException {
+		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
+		
+		boardManager.createEmptyBoard();
+		boardManager.addWhiteQueen(32);
+		boardManager.addBlackQueen(5);
+		boardManager.addBlackPawn(3);
+		boardManager.addBlackPawn(18);
+		boardManager.addBlackPawn(21);
+		
+		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
+		
+		testObj.tileClicked(32);
+		testObj.tileClicked(16);
+		
+		for(int i=0; i<8; i++) {
+			testObj.tileClicked(5);
+			testObj.tileClicked(46);
+			testObj.tileClicked(16);
+			testObj.tileClicked(49);
+			testObj.tileClicked(46);
+			testObj.tileClicked(5);
+			testObj.tileClicked(49);
+			testObj.tileClicked(16);
+		}
+		
+		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
+			
+	}
+	
+	@Test
+	public void checkGameState_drawn_2v1Conditions_test() throws NoPieceFoundInRequestedTileException, 
+																WrongColorFoundInRequestedTileException,
+																NoCorrectMovesForSelectedPieceException, 
+																WrongMoveException {
+		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
+		
+		boardManager.createEmptyBoard();
+		boardManager.addWhiteQueen(33);
+		boardManager.addBlackQueen(5);
+		boardManager.addBlackQueen(2);
+		boardManager.addBlackPawn(22);
+		boardManager.addBlackPawn(12);
+		
+		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
+		
+		testObj.tileClicked(33);
+		testObj.tileClicked(17);
+		testObj.tileClicked(3);
+		
+		for(int i=0; i<2; i++) {
+			testObj.tileClicked(2);
+			testObj.tileClicked(35);
+			testObj.tileClicked(3);
+			testObj.tileClicked(26);
+			testObj.tileClicked(35);
+			testObj.tileClicked(2);
+			testObj.tileClicked(26);
+			testObj.tileClicked(3);
+		}
+		
+		testObj.tileClicked(2);
+		testObj.tileClicked(35);
+		testObj.tileClicked(3);
+		testObj.tileClicked(26);
+		
+		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
+		
+	}
+	
+	
 
 }

@@ -30,7 +30,7 @@ public class MoveManager {
 	public void makeHop(int source, int destination) {
 		findMovesFromAllPossible(destination);
 		
-		if(!possibleMoves.get(0).isTake())
+		if(!possibleMoves.get(0).isCapture())
 			boardManager.makeHop(source, destination);
 		else {
 			Capture capture = (Capture) possibleMoves.get(0).getHop(hopsMadeInMove);
@@ -38,7 +38,7 @@ public class MoveManager {
 		}
 		
 		hopsMadeInMove++;		
-		if(hopsMadeInMove == possibleMoves.get(0).getNumberOfHops())
+		if(hopsMadeInMove == possibleMoves.get(0).getNumberOfHops()) 
 			moveDone();
 	}
 	
@@ -81,5 +81,9 @@ public class MoveManager {
 			possibleMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
 		
 	}
-
+	
+	public void updateDrawConditions() {
+		
+	}
+	
 }
