@@ -3,6 +3,9 @@ package draughts.library;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import draughts.library.boardmodel.Piece;
+import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
+
 public class MoveManager {
 	
 	private BoardManager boardManager;
@@ -37,9 +40,10 @@ public class MoveManager {
 			boardManager.makeCapture(source, destination, capture.getTakenPawn());
 		}
 		
-		hopsMadeInMove++;		
-		if(hopsMadeInMove == possibleMoves.get(0).getNumberOfHops()) 
+		if(++hopsMadeInMove == possibleMoves.get(0).getNumberOfHops()) {
+			checkForPawnPromotion(destination);
 			moveDone();
+		}
 	}
 	
 	
@@ -82,8 +86,18 @@ public class MoveManager {
 		
 	}
 	
-	public void updateDrawConditions() {
-		
+	public void checkForPawnPromotion(int destination) {
+		if(destination < 6 || destination > 45) {
+			Piece piece = null;
+			try {
+				piece = boardManager.findPieceByIndex(destination);
+			} catch (NoPieceFoundInRequestedTileException ex) {
+				ex.printStackTrace();
+			}
+			
+			if(!piece.isQueen()) boardManager.promotePawn(piece);
+		}
+
 	}
 	
 }

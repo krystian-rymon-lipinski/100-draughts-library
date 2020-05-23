@@ -109,18 +109,13 @@ public class BoardManager {
 		}	
 	}
 	
-	public void promotePawn(int destination) {
-		try {
-			Piece promotedPawn = findPieceByIndex(destination);
-			if(promotedPawn.isWhite()) {
-				removeWhitePiece(promotedPawn);
-				addWhiteQueen(destination);
-			} else {
-				removeBlackPiece(promotedPawn);
-				addBlackQueen(destination);
-			}
-		} catch(NoPieceFoundInRequestedTileException err) {
-			err.printStackTrace();
+	public void promotePawn(Piece promotedPawn) {
+		if(promotedPawn.isWhite()) {
+			removeWhitePiece(promotedPawn);
+			addWhiteQueen(promotedPawn.getPosition());
+		} else {
+			removeBlackPiece(promotedPawn);
+			addBlackQueen(promotedPawn.getPosition());
 		}
 	}
 	

@@ -401,19 +401,17 @@ public class BoardManagerTest {
 		testObj.addBlackPawn(45);
 		
 		testObj.makeHop(10, 5);
-		testObj.promotePawn(5);
+		testObj.promotePawn(testObj.getWhitePieces().get(0));
 		
-		try {
-			assertEquals(Tile.State.WHITE_QUEEN, testObj.findTileByIndex(5).getState());
-			assertTrue(testObj.findPieceByIndex(5).isQueen());
-		} catch (NoPieceFoundInRequestedTileException ex) {}
+		assertEquals(Tile.State.WHITE_QUEEN, testObj.findTileByIndex(5).getState());
+		assertEquals(1, testObj.getWhitePieces().size());
+		assertTrue(testObj.getWhitePieces().get(0).isQueen());
 		
 		testObj.makeHop(45, 50);
-		testObj.promotePawn(50);
+		testObj.promotePawn(testObj.getBlackPieces().get(0));
 		
-		try {
-			assertEquals(Tile.State.BLACK_QUEEN, testObj.findTileByIndex(50).getState());
-			assertTrue(testObj.findPieceByIndex(50).isQueen());
-		} catch (NoPieceFoundInRequestedTileException ex) {}
+		assertEquals(Tile.State.BLACK_QUEEN, testObj.findTileByIndex(50).getState());
+		assertEquals(1, testObj.getWhitePieces().size());
+		assertTrue(testObj.getBlackPieces().get(0).isQueen());
 	}
 }

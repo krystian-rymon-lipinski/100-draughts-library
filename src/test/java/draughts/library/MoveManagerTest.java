@@ -1,6 +1,8 @@
 package draughts.library;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +38,6 @@ public class MoveManagerTest {
 	
 	@Test
 	public void findAllCorrectMoves_whenCapturesAvailable_test() {
-		boardManager.createEmptyBoard();
 		
 		boardManager.addWhitePawn(46);
 		boardManager.addWhitePawn(49);
@@ -54,7 +55,6 @@ public class MoveManagerTest {
 	
 	@Test
 	public void findAllCorrectMoves_whenNoCaptureAvailable_test() {
-		boardManager.createEmptyBoard();
 		
 		boardManager.addWhitePawn(46);
 		boardManager.addWhitePawn(49);
@@ -70,7 +70,35 @@ public class MoveManagerTest {
 		assertEquals(12, testObj.getPossibleMoves().size());
 	}
 	
+	@Test
+	public void checkForPawnPromotion_noPromotion_test() {
+		boardManager.addWhitePawn(12);
+		testObj.findAllCorrectMoves(true);
+		testObj.makeHop(12, 7);
+		
+		assertFalse(boardManager.getWhitePieces().get(0).isQueen());
+		
+		boardManager.addBlackPawn(39);
+		testObj.findAllCorrectMoves(false);
+		testObj.makeHop(39, 44);
+		
+		assertFalse(boardManager.getBlackPieces().get(0).isQueen());
+	}
 	
-	
+	@Test
+	public void checkForPawnPromotion_promotion_test() {
+		boardManager.addWhitePawn(7);
+		testObj.findAllCorrectMoves(true);
+		testObj.makeHop(7, 1);
+		
+		assertTrue(boardManager.getWhitePieces().get(0).isQueen());
+		
+		boardManager.addBlackPawn(44);
+		testObj.findAllCorrectMoves(false);
+		testObj.makeHop(44, 50);
+		
+		assertTrue(boardManager.getBlackPieces().get(0).isQueen());
+	}
+
 
 }
