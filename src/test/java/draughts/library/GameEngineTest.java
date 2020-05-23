@@ -95,8 +95,7 @@ public class GameEngineTest {
 														  NoCorrectMovesForSelectedPieceException, 
 														  WrongMoveException {
 		testObj.startGame();
-		testObj.tileClicked(33);
-		testObj.tileClicked(26);
+		makeMove(33, 26);
 	}
 	
 	@Test
@@ -134,8 +133,7 @@ public class GameEngineTest {
 	  															NoCorrectMovesForSelectedPieceException, 
 	  															WrongMoveException {
 		testObj.startGame();
-		testObj.tileClicked(33);
-		testObj.tileClicked(28);
+		makeMove(33, 28);
 		
 		Tile whiteDestination = testObj.getMoveManager().getBoardManager().findTileByIndex(28);
 		Tile whiteSource = testObj.getMoveManager().getBoardManager().findTileByIndex(33);
@@ -149,8 +147,7 @@ public class GameEngineTest {
 		assertEquals(0, testObj.getPossibleHopDestinations().size());
 		assertEquals(0, testObj.getMarkedPiecePosition());
 		
-		testObj.tileClicked(19);
-		testObj.tileClicked(24);
+		makeMove(19, 24);
 		
 		Tile blackDestination = testObj.getMoveManager().getBoardManager().findTileByIndex(24);
 		Tile blackSource = testObj.getMoveManager().getBoardManager().findTileByIndex(19);
@@ -174,8 +171,7 @@ public class GameEngineTest {
 		
 		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
 		
-		testObj.tileClicked(33);
-		testObj.tileClicked(22);
+		makeMove(33, 22);
 		
 		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(28).getState());
 		assertEquals(0, boardManager.getBlackPieces().size());
@@ -261,8 +257,7 @@ public class GameEngineTest {
 		
 		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
 		
-		testObj.tileClicked(48);
-		testObj.tileClicked(39);
+		makeMove(48, 39);
 		
 		assertEquals(0, boardManager.getBlackPieces().size());
 		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
@@ -283,8 +278,7 @@ public class GameEngineTest {
 		
 		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
 		
-		testObj.tileClicked(41);
-		testObj.tileClicked(37);
+		makeMove(41, 37);
 		
 		assertEquals(1, boardManager.getBlackPieces().size());
 		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
@@ -306,8 +300,7 @@ public class GameEngineTest {
 		testObj.moveFinished();
 		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
 		
-		testObj.tileClicked(5);
-		testObj.tileClicked(14);
+		makeMove(5, 14);
 		
 		assertEquals(0, boardManager.getWhitePieces().size());
 		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
@@ -329,8 +322,7 @@ public class GameEngineTest {
 		testObj.moveFinished();
 		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
 	
-		testObj.tileClicked(10);
-		testObj.tileClicked(14);
+		makeMove(10, 14);
 		
 		assertEquals(1, boardManager.getWhitePieces().size());
 		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
