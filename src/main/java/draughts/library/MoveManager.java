@@ -97,7 +97,8 @@ public class MoveManager {
 			
 			if(!piece.isQueen()) boardManager.promotePawn(piece);
 		}
-
 	}
+	
+	
 	
 }

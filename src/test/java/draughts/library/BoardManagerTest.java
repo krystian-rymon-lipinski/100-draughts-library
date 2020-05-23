@@ -414,4 +414,20 @@ public class BoardManagerTest {
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertTrue(testObj.getBlackPieces().get(0).isQueen());
 	}
+	
+	@Test
+	public void checkIfBothColorsHaveQueens_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(10);
+		testObj.addBlackPawn(45);
+		
+		testObj.makeHop(10, 5);
+		testObj.promotePawn(testObj.getWhitePieces().get(0));
+		
+		testObj.makeHop(45, 50);
+		testObj.promotePawn(testObj.getBlackPieces().get(0));
+		
+		assertTrue(testObj.getBothColorsHaveQueen());
+	}
 }

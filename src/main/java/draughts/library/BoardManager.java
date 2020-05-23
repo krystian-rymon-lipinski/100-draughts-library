@@ -16,17 +16,20 @@ public class BoardManager {
 	private Tile[][] board;
 	private ArrayList<Piece> whitePieces;
 	private ArrayList<Piece> blackPieces;
+	private boolean bothColorsHaveQueen; //necessary to decide draw conditions
 	
 	public BoardManager() {
 		board = new Tile[Board.NUMBER_OF_ROWS][Board.TILES_IN_ROW];
 		whitePieces = new ArrayList<>();
 		blackPieces = new ArrayList<>();
+		this.bothColorsHaveQueen = false;
 	}
 	
 	public BoardManager(BoardManager boardManager) {
 		this.board = boardManager.board;
 		this.whitePieces = boardManager.whitePieces;
 		this.blackPieces = boardManager.blackPieces;
+		this.bothColorsHaveQueen = boardManager.bothColorsHaveQueen;
 	}
 	
 	
@@ -40,6 +43,10 @@ public class BoardManager {
 	
 	public ArrayList<Piece> getBlackPieces() {
 		return blackPieces;
+	}
+	
+	public boolean getBothColorsHaveQueen() {
+		return bothColorsHaveQueen;
 	}
 	
 	public void createPiecesForStartingPosition() {
@@ -113,10 +120,24 @@ public class BoardManager {
 		if(promotedPawn.isWhite()) {
 			removeWhitePiece(promotedPawn);
 			addWhiteQueen(promotedPawn.getPosition());
+			checkOtherColorForQueen(false);
 		} else {
 			removeBlackPiece(promotedPawn);
 			addBlackQueen(promotedPawn.getPosition());
+			checkOtherColorForQueen(true);
 		}
+		
+	}
+	
+	public void checkOtherColorForQueen(boolean isCheckingColorWhite) {
+		ArrayList<Piece> pieces;
+		
+		if (isCheckingColorWhite) pieces = whitePieces;
+		else pieces = blackPieces;
+		
+		for(Piece piece : pieces) {
+			if(piece.isQueen()) bothColorsHaveQueen = true;
+		}	
 	}
 	
 	public void reverseHop(int source, int destination) {
