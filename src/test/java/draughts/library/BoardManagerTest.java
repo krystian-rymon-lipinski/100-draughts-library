@@ -392,4 +392,44 @@ public class BoardManagerTest {
 		
 		assertEquals(9, whiteMove.size());
 	}
+	
+	@Test
+	public void promotePawn_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(10);
+		testObj.addBlackPawn(45);
+		
+		testObj.makeHop(10, 5);
+		testObj.promotePawn(testObj.getWhitePieces().get(0));
+		
+		assertEquals(Tile.State.WHITE_QUEEN, testObj.findTileByIndex(5).getState());
+		assertEquals(1, testObj.getWhitePieces().size());
+		assertTrue(testObj.getWhitePieces().get(0).isQueen());
+		
+		testObj.makeHop(45, 50);
+		testObj.promotePawn(testObj.getBlackPieces().get(0));
+		
+		assertEquals(Tile.State.BLACK_QUEEN, testObj.findTileByIndex(50).getState());
+		assertEquals(1, testObj.getWhitePieces().size());
+		assertTrue(testObj.getBlackPieces().get(0).isQueen());
+	}
+	
+	@Test
+	public void checkIfBothColorsHaveQueens_test() {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(10);
+		testObj.addBlackPawn(45);
+		
+		testObj.makeHop(10, 5);
+		testObj.promotePawn(testObj.getWhitePieces().get(0));
+		
+		assertTrue(testObj.getIsWhiteQueenOnBoard());
+		
+		testObj.makeHop(45, 50);
+		testObj.promotePawn(testObj.getBlackPieces().get(0));
+		
+		assertTrue(testObj.getIsBlackQueenOnBoard());
+	}
 }

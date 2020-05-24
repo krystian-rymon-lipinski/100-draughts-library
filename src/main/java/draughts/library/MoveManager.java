@@ -3,6 +3,9 @@ package draughts.library;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import draughts.library.boardmodel.Piece;
+import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
+
 public class MoveManager {
 	
 	private BoardManager boardManager;
@@ -30,16 +33,15 @@ public class MoveManager {
 	public void makeHop(int source, int destination) {
 		findMovesFromAllPossible(destination);
 		
-		if(!possibleMoves.get(0).isTake())
+		if(!possibleMoves.get(0).isCapture())
 			boardManager.makeHop(source, destination);
 		else {
 			Capture capture = (Capture) possibleMoves.get(0).getHop(hopsMadeInMove);
 			boardManager.makeCapture(source, destination, capture.getTakenPawn());
 		}
 		
-		hopsMadeInMove++;		
-		if(hopsMadeInMove == possibleMoves.get(0).getNumberOfHops())
-			moveDone();
+		hopsMadeInMove++;
+		
 	}
 	
 	
@@ -71,7 +73,7 @@ public class MoveManager {
 	}
 	
 	public boolean isMoveFinished() {
-		return (hopsMadeInMove == 0) ? true : false;
+		return (hopsMadeInMove == possibleMoves.get(0).getNumberOfHops()) ? true : false;
 	}
 	
 	public void findAllCorrectMoves(boolean isWhiteToMove) {
@@ -81,5 +83,20 @@ public class MoveManager {
 			possibleMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
 		
 	}
-
+	
+	public void checkForPawnPromotion(int destination) {
+		if(destination < 6 || destination > 45) {
+			Piece piece = null;
+			try {
+				piece = boardManager.findPieceByIndex(destination);
+			} catch (NoPieceFoundInRequestedTileException ex) {
+				ex.printStackTrace();
+			}
+			
+			if(!boardManager.isMovedPieceQueen(destination)) boardManager.promotePawn(piece);
+		}
+	}
+	
+	
+	
 }

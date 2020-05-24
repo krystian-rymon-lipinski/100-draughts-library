@@ -11,6 +11,10 @@ public class BlackPawn extends Pawn {
 		super(position);
 	}
 	
+	public boolean isWhite() {
+		return false;
+	}
+	
 	public void hop(Tile dst) {
 		super.hop(dst);
 		dst.setState(Tile.State.BLACK_PAWN);
@@ -25,9 +29,9 @@ public class BlackPawn extends Pawn {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
-		if(currentRow>1 && currentColumn>1) 
+		if(currentRow<10 && currentColumn>1) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
-		if(currentRow>1 && currentColumn<10) 
+		if(currentRow<10 && currentColumn<10) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board, currentRow, currentColumn));
 		return moves;
 	}

@@ -16,23 +16,25 @@ public class BoardManager {
 	private Tile[][] board;
 	private ArrayList<Piece> whitePieces;
 	private ArrayList<Piece> blackPieces;
+	private boolean isWhiteQueenOnBoard;
+	private boolean isBlackQueenOnBoard;
 	
 	public BoardManager() {
 		board = new Tile[Board.NUMBER_OF_ROWS][Board.TILES_IN_ROW];
 		whitePieces = new ArrayList<>();
 		blackPieces = new ArrayList<>();
+		this.isWhiteQueenOnBoard = false;
+		this.isBlackQueenOnBoard = false;
 	}
 	
 	public BoardManager(BoardManager boardManager) {
 		this.board = boardManager.board;
 		this.whitePieces = boardManager.whitePieces;
 		this.blackPieces = boardManager.blackPieces;
+		this.isWhiteQueenOnBoard = boardManager.isWhiteQueenOnBoard;
+		this.isBlackQueenOnBoard = boardManager.isBlackQueenOnBoard;
 	}
 	
-	public void createStartingPosition() {
-		createEmptyBoard();
-		createPiecesForStartingPosition();
-	}
 	
 	public Tile[][] getBoard() {
 		return board;
@@ -44,6 +46,22 @@ public class BoardManager {
 	
 	public ArrayList<Piece> getBlackPieces() {
 		return blackPieces;
+	}
+	
+	public boolean getIsWhiteQueenOnBoard() {
+		return isWhiteQueenOnBoard;
+	}
+	
+	public void setIsWhiteQueenOnBoard(boolean isWhiteQueenOnBoard) {
+		this.isWhiteQueenOnBoard = isWhiteQueenOnBoard;
+	}
+	
+	public boolean getIsBlackQueenOnBoard() {
+		return isBlackQueenOnBoard;
+	}
+	
+	public void setIsBlackQueenOnBoard(boolean isBlackQueenOnBoard) {
+		this.isBlackQueenOnBoard = isBlackQueenOnBoard;
 	}
 	
 	public void createPiecesForStartingPosition() {
@@ -63,6 +81,11 @@ public class BoardManager {
 				else board[i][j].setState(Tile.State.WHITE_TILE);
 			}
 		}
+	}
+	
+	public void createStartingPosition() {
+		createEmptyBoard();
+		createPiecesForStartingPosition();
 	}
 	
 	public void addWhitePawn(int position) {
@@ -85,6 +108,37 @@ public class BoardManager {
 		findTileByIndex(position).setState(Tile.State.BLACK_QUEEN);
 	}
 	
+	public void removeWhitePiece(Piece piece) {
+		boolean wasQueen = piece.isQueen();
+		
+		whitePieces.remove(piece);
+		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
+		
+		if(wasQueen) {
+			for(Piece whitePiece : whitePieces) {
+				if (whitePiece.isQueen()) return;
+			}
+			isWhiteQueenOnBoard = false;
+		}
+		
+	}
+	
+	public void removeBlackPiece(Piece piece) {
+		boolean wasQueen = piece.isQueen();
+		
+		blackPieces.remove(piece);
+		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
+		
+		if(wasQueen) {
+			for(Piece blackPiece : blackPieces) {
+				if (blackPiece.isQueen()) return;
+			}
+			isBlackQueenOnBoard = false;
+		}
+		
+		
+	}
+	
 	public void makeHop(int source, int destination) {
 		try {
 			Piece movedPiece = findPieceByIndex(source);
@@ -95,6 +149,18 @@ public class BoardManager {
 			movedPiece.hop(dst);
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
+		}	
+	}
+	
+	public void promotePawn(Piece promotedPawn) {
+		if(promotedPawn.isWhite()) {
+			removeWhitePiece(promotedPawn);
+			addWhiteQueen(promotedPawn.getPosition());
+			isWhiteQueenOnBoard = true;
+		} else {
+			removeBlackPiece(promotedPawn);
+			addBlackQueen(promotedPawn.getPosition());
+			isBlackQueenOnBoard = true;
 		}
 		
 	}
@@ -119,13 +185,10 @@ public class BoardManager {
 			Piece takenPiece = findPieceByIndex(taken);
 			makeHop(source, destination);
 			
-			Tile takenTile = findTileByIndex(taken);
-			takenTile.setState(Tile.State.EMPTY);
-			
 			if(isTakenPieceWhite(takenPiece))
-				whitePieces.remove(takenPiece);
+				removeWhitePiece(takenPiece);
 			else 
-				blackPieces.remove(takenPiece);
+				removeBlackPiece(takenPiece);
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
 		}		
@@ -255,8 +318,17 @@ public class BoardManager {
 	
 	
 	public boolean isTakenPieceWhite(Piece takenPiece) {
-		return (takenPiece instanceof WhitePawn || takenPiece instanceof WhiteQueen) ? true : false;
+		return takenPiece.isWhite();
 	}	
+	
+	public boolean isMovedPieceQueen(int source) {
+		try {
+			Piece piece = findPieceByIndex(source);
+			return piece.isQueen();
+		} catch(NoPieceFoundInRequestedTileException ex) {
+			return false;
+		}
+	}
 	
 
 }

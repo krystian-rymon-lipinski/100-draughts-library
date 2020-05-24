@@ -6,6 +6,10 @@ public class BlackQueen extends Queen {
 		super(position);
 	}
 	
+	public boolean isWhite() {
+		return false;
+	}
+	
 	public void hop(Tile dst) {
 		super.hop(dst);
 		dst.setState(Tile.State.BLACK_QUEEN);

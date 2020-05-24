@@ -30,9 +30,9 @@ public class Move<T extends Hop> {
 		return hops.size();
 	}
 	
-	public boolean isTake() {
-		if(hops.get(0) instanceof Hop) return false;
-		else return true;
+	public boolean isCapture() {
+		if(hops.get(0) instanceof Capture) return true;
+		else return false;
 		
 	}
 
