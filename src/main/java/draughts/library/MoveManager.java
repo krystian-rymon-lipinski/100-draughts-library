@@ -40,10 +40,8 @@ public class MoveManager {
 			boardManager.makeCapture(source, destination, capture.getTakenPawn());
 		}
 		
-		if(++hopsMadeInMove == possibleMoves.get(0).getNumberOfHops()) {
-			checkForPawnPromotion(destination);
-			moveDone();
-		}
+		hopsMadeInMove++;
+		
 	}
 	
 	
@@ -75,7 +73,7 @@ public class MoveManager {
 	}
 	
 	public boolean isMoveFinished() {
-		return (hopsMadeInMove == 0) ? true : false;
+		return (hopsMadeInMove == possibleMoves.get(0).getNumberOfHops()) ? true : false;
 	}
 	
 	public void findAllCorrectMoves(boolean isWhiteToMove) {
@@ -95,7 +93,7 @@ public class MoveManager {
 				ex.printStackTrace();
 			}
 			
-			if(!piece.isQueen()) boardManager.promotePawn(piece);
+			if(!boardManager.isMovedPieceQueen(destination)) boardManager.promotePawn(piece);
 		}
 	}
 	

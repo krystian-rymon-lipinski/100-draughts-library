@@ -13,11 +13,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class MoveManagerTest {
 	
 	MoveManager testObj;
+	GameEngine gameEngine;
 	BoardManager boardManager;
 	
 	@Before
 	public void setUp() {
-		testObj = new MoveManager();
+		gameEngine = new GameEngine();
+		gameEngine.setIsWhiteToMove(true);
+		testObj = gameEngine.getMoveManager();
 		boardManager = testObj.getBoardManager();
 		boardManager.createEmptyBoard();
 	}
@@ -73,14 +76,16 @@ public class MoveManagerTest {
 	@Test
 	public void checkForPawnPromotion_noPromotion_test() {
 		boardManager.addWhitePawn(12);
-		testObj.findAllCorrectMoves(true);
+		boardManager.addBlackPawn(39);
+
+		testObj.findAllCorrectMoves(gameEngine.getIsWhiteToMove());
 		testObj.makeHop(12, 7);
+		gameEngine.moveFinished(7);
 		
 		assertFalse(boardManager.getWhitePieces().get(0).isQueen());
 		
-		boardManager.addBlackPawn(39);
-		testObj.findAllCorrectMoves(false);
 		testObj.makeHop(39, 44);
+		gameEngine.moveFinished(44);
 		
 		assertFalse(boardManager.getBlackPieces().get(0).isQueen());
 	}
@@ -88,14 +93,16 @@ public class MoveManagerTest {
 	@Test
 	public void checkForPawnPromotion_promotion_test() {
 		boardManager.addWhitePawn(7);
-		testObj.findAllCorrectMoves(true);
+		boardManager.addBlackPawn(44);
+
+		testObj.findAllCorrectMoves(gameEngine.getIsWhiteToMove());
 		testObj.makeHop(7, 1);
+		gameEngine.moveFinished(1);
 		
 		assertTrue(boardManager.getWhitePieces().get(0).isQueen());
 		
-		boardManager.addBlackPawn(44);
-		testObj.findAllCorrectMoves(false);
 		testObj.makeHop(44, 50);
+		gameEngine.moveFinished(50);
 		
 		assertTrue(boardManager.getBlackPieces().get(0).isQueen());
 	}

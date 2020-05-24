@@ -16,20 +16,23 @@ public class BoardManager {
 	private Tile[][] board;
 	private ArrayList<Piece> whitePieces;
 	private ArrayList<Piece> blackPieces;
-	private boolean bothColorsHaveQueen; //necessary to decide draw conditions
+	private boolean isWhiteQueenOnBoard;
+	private boolean isBlackQueenOnBoard;
 	
 	public BoardManager() {
 		board = new Tile[Board.NUMBER_OF_ROWS][Board.TILES_IN_ROW];
 		whitePieces = new ArrayList<>();
 		blackPieces = new ArrayList<>();
-		this.bothColorsHaveQueen = false;
+		this.isWhiteQueenOnBoard = false;
+		this.isBlackQueenOnBoard = false;
 	}
 	
 	public BoardManager(BoardManager boardManager) {
 		this.board = boardManager.board;
 		this.whitePieces = boardManager.whitePieces;
 		this.blackPieces = boardManager.blackPieces;
-		this.bothColorsHaveQueen = boardManager.bothColorsHaveQueen;
+		this.isWhiteQueenOnBoard = boardManager.isWhiteQueenOnBoard;
+		this.isBlackQueenOnBoard = boardManager.isBlackQueenOnBoard;
 	}
 	
 	
@@ -45,8 +48,20 @@ public class BoardManager {
 		return blackPieces;
 	}
 	
-	public boolean getBothColorsHaveQueen() {
-		return bothColorsHaveQueen;
+	public boolean getIsWhiteQueenOnBoard() {
+		return isWhiteQueenOnBoard;
+	}
+	
+	public void setIsWhiteQueenOnBoard(boolean isWhiteQueenOnBoard) {
+		this.isWhiteQueenOnBoard = isWhiteQueenOnBoard;
+	}
+	
+	public boolean getIsBlackQueenOnBoard() {
+		return isBlackQueenOnBoard;
+	}
+	
+	public void setIsBlackQueenOnBoard(boolean isBlackQueenOnBoard) {
+		this.isBlackQueenOnBoard = isBlackQueenOnBoard;
 	}
 	
 	public void createPiecesForStartingPosition() {
@@ -94,13 +109,34 @@ public class BoardManager {
 	}
 	
 	public void removeWhitePiece(Piece piece) {
+		boolean wasQueen = piece.isQueen();
+		
 		whitePieces.remove(piece);
 		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
+		
+		if(wasQueen) {
+			for(Piece whitePiece : whitePieces) {
+				if (whitePiece.isQueen()) return;
+			}
+			isWhiteQueenOnBoard = false;
+		}
+		
 	}
 	
 	public void removeBlackPiece(Piece piece) {
+		boolean wasQueen = piece.isQueen();
+		
 		blackPieces.remove(piece);
 		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
+		
+		if(wasQueen) {
+			for(Piece blackPiece : blackPieces) {
+				if (blackPiece.isQueen()) return;
+			}
+			isBlackQueenOnBoard = false;
+		}
+		
+		
 	}
 	
 	public void makeHop(int source, int destination) {
@@ -120,24 +156,13 @@ public class BoardManager {
 		if(promotedPawn.isWhite()) {
 			removeWhitePiece(promotedPawn);
 			addWhiteQueen(promotedPawn.getPosition());
-			checkOtherColorForQueen(false);
+			isWhiteQueenOnBoard = true;
 		} else {
 			removeBlackPiece(promotedPawn);
 			addBlackQueen(promotedPawn.getPosition());
-			checkOtherColorForQueen(true);
+			isBlackQueenOnBoard = true;
 		}
 		
-	}
-	
-	public void checkOtherColorForQueen(boolean isCheckingColorWhite) {
-		ArrayList<Piece> pieces;
-		
-		if (isCheckingColorWhite) pieces = whitePieces;
-		else pieces = blackPieces;
-		
-		for(Piece piece : pieces) {
-			if(piece.isQueen()) bothColorsHaveQueen = true;
-		}	
 	}
 	
 	public void reverseHop(int source, int destination) {

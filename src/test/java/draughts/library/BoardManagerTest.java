@@ -425,9 +425,11 @@ public class BoardManagerTest {
 		testObj.makeHop(10, 5);
 		testObj.promotePawn(testObj.getWhitePieces().get(0));
 		
+		assertTrue(testObj.getIsWhiteQueenOnBoard());
+		
 		testObj.makeHop(45, 50);
 		testObj.promotePawn(testObj.getBlackPieces().get(0));
 		
-		assertTrue(testObj.getBothColorsHaveQueen());
+		assertTrue(testObj.getIsBlackQueenOnBoard());
 	}
 }
