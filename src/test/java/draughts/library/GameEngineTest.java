@@ -33,12 +33,12 @@ public class GameEngineTest {
 		testObj.setIsWhiteToMove(true);
 	}
 	
-	public void makeMove(int source, int destination) throws NoPieceFoundInRequestedTileException, 
-														WrongColorFoundInRequestedTileException, 
-														NoCorrectMovesForSelectedPieceException, 
-														WrongMoveException {
-		testObj.tileClicked(source);
-		testObj.tileClicked(destination);
+	public void makeMove(int source, int destination) {
+		try {
+			testObj.tileClicked(source);
+			testObj.tileClicked(destination);
+		} catch(Exception ex) {}
+		
 	}
 	
 	@Test
@@ -102,7 +102,8 @@ public class GameEngineTest {
 														  NoCorrectMovesForSelectedPieceException, 
 														  WrongMoveException {
 		testObj.startGame();
-		makeMove(33, 26);
+		testObj.tileClicked(33);
+		testObj.tileClicked(26);
 	}
 	
 	@Test
@@ -135,10 +136,7 @@ public class GameEngineTest {
 	}
 	
 	@Test
-	public void tileClicked_twice_properMoveMade_test() throws NoPieceFoundInRequestedTileException, 
-	  															WrongColorFoundInRequestedTileException,
-	  															NoCorrectMovesForSelectedPieceException, 
-	  															WrongMoveException {
+	public void tileClicked_twice_properMoveMade_test() throws NoPieceFoundInRequestedTileException {
 		testObj.startGame();
 		makeMove(33, 28);
 		
@@ -166,10 +164,7 @@ public class GameEngineTest {
 	}
 	
 	@Test
-	public void tileClicked_twice_properCaptureMade_test() throws NoPieceFoundInRequestedTileException, 
-																WrongColorFoundInRequestedTileException,
-																NoCorrectMovesForSelectedPieceException, 
-																WrongMoveException {
+	public void tileClicked_twice_properCaptureMade_test() {
 		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
 		
 		boardManager.createEmptyBoard();
@@ -252,10 +247,7 @@ public class GameEngineTest {
 	}
 	
 	@Test
-	public void checkGameState_whiteWon_byCapturingAllBlackPieces() throws NoPieceFoundInRequestedTileException, 
-																			WrongColorFoundInRequestedTileException,
-																			NoCorrectMovesForSelectedPieceException, 
-																			WrongMoveException {
+	public void checkGameState_whiteWon_byCapturingAllBlackPieces() {
 		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
 		
 		boardManager.createEmptyBoard();
@@ -272,10 +264,7 @@ public class GameEngineTest {
 	}
 	
 	@Test
-	public void checkGameState_whiteWon_byBlockingAllBlackPieces() throws NoPieceFoundInRequestedTileException, 
-																			WrongColorFoundInRequestedTileException,
-																			NoCorrectMovesForSelectedPieceException, 
-																			WrongMoveException {
+	public void checkGameState_whiteWon_byBlockingAllBlackPieces() {
 		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
 		
 		boardManager.createEmptyBoard();
@@ -294,10 +283,7 @@ public class GameEngineTest {
 	}
 	
 	@Test
-	public void checkGameState_blackWon_byCapturingAllWhitePieces() throws NoPieceFoundInRequestedTileException, 
-																			WrongColorFoundInRequestedTileException,
-																			NoCorrectMovesForSelectedPieceException, 
-																			WrongMoveException {
+	public void checkGameState_blackWon_byCapturingAllWhitePieces() {
 		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
 		
 		boardManager.createEmptyBoard();
@@ -315,10 +301,7 @@ public class GameEngineTest {
 	}
 	
 	@Test
-	public void checkGameState_blackWon_byBlockingAllWhitePieces() throws NoPieceFoundInRequestedTileException, 
-																			WrongColorFoundInRequestedTileException,
-																			NoCorrectMovesForSelectedPieceException, 
-																			WrongMoveException {
+	public void checkGameState_blackWon_byBlockingAllWhitePieces() {
 		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
 		
 		boardManager.createEmptyBoard();
@@ -328,7 +311,6 @@ public class GameEngineTest {
 		
 		testObj.setIsWhiteToMove(false);	
 		testObj.getMoveManager().findAllCorrectMoves(testObj.getIsWhiteToMove());
-		System.out.println(testObj.getMoveManager().getPossibleMoves());
 		makeMove(10, 14);
 		
 		assertEquals(1, boardManager.getWhitePieces().size());
@@ -338,10 +320,7 @@ public class GameEngineTest {
 	
 	
 	@Test
-	public void checkGameState_drawn_normalConditions_test() throws NoPieceFoundInRequestedTileException, 
-													WrongColorFoundInRequestedTileException,
-													NoCorrectMovesForSelectedPieceException, 
-													WrongMoveException {
+	public void checkGameState_drawn_normalConditions_test() {
 		
 		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
 				
@@ -373,10 +352,7 @@ public class GameEngineTest {
 	}
 	
 	@Test
-	public void checkGameState_drawn_3vs1Conditions_test() throws NoPieceFoundInRequestedTileException, 
-																WrongColorFoundInRequestedTileException,
-																NoCorrectMovesForSelectedPieceException, 
-																WrongMoveException {
+	public void checkGameState_drawn_3vs1Conditions_test() {
 		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
 		
 		boardManager.createEmptyBoard();
@@ -402,10 +378,7 @@ public class GameEngineTest {
 	}
 	
 	@Test
-	public void checkGameState_drawn_2v1Conditions_test() throws NoPieceFoundInRequestedTileException, 
-																WrongColorFoundInRequestedTileException,
-																NoCorrectMovesForSelectedPieceException, 
-																WrongMoveException {
+	public void checkGameState_drawn_2v1Conditions_test() {
 		BoardManager boardManager = testObj.getMoveManager().getBoardManager();
 		
 		boardManager.createEmptyBoard();
