@@ -1,14 +1,11 @@
 package draughts.library.boardmodel;
 
-
-import static org.mockito.Mockito.when;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.*;
-import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -119,46 +116,6 @@ public class TileTest {
 
 		testObj.setIndex(50);
 		assertEquals(9, testObj.getColumn());
-	}
-	
-	
-	
-	@Test
-	public void isTileMostLeftInRow_test() {
-				
-		testObj.setIndex(1);
-		assertFalse(testObj.isTileMostLeftInRow());
-		
-		testObj.setIndex(15);
-		assertFalse(testObj.isTileMostLeftInRow());
-		
-		testObj.setIndex(16);
-		assertTrue(testObj.isTileMostLeftInRow());
-		
-		testObj.setIndex(31);
-		assertFalse(testObj.isTileMostLeftInRow());
-		
-		testObj.setIndex(46);
-		assertTrue(testObj.isTileMostLeftInRow());
-	}
-	
-	@Test
-	public void isTileMostRightInRow_test() {
-		
-		testObj.setIndex(1);
-		assertFalse(testObj.isTileMostRightInRow());
-		
-		testObj.setIndex(5);
-		assertTrue(testObj.isTileMostRightInRow());
-		
-		testObj.setIndex(20);
-		assertFalse(testObj.isTileMostRightInRow());
-		
-		testObj.setIndex(26);
-		assertFalse(testObj.isTileMostRightInRow());
-		
-		testObj.setIndex(45);
-		assertTrue(testObj.isTileMostRightInRow());
 	}
 	
 	@Test 

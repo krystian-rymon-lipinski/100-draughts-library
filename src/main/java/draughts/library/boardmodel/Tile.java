@@ -42,15 +42,7 @@ public class Tile {
 		if(isRowEven()) return column;
 		else return column+1;
 	}
-	
-	public boolean isTileMostLeftInRow() {
-		return (index % (Board.TILES_IN_ROW/2) == 1 && isRowEven()) ? true : false;
-	}
-	
-	public boolean isTileMostRightInRow() {
-		return (index % (Board.TILES_IN_ROW/2) == 0 && !isRowEven()) ? true : false;
-	}
-	
+
 	public static int calculateIndex(int row, int column) {
 		if(row % 2 == 0) {
 			if(column % 2 == 0)
