@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.Mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -15,8 +14,22 @@ public class TileTest {
 	
 	@Before
 	public void setUp() {
-		Tile tile = new Tile(10);
-		testObj = spy(tile);
+		testObj = new Tile(0, 1);
+	}
+	
+	@Test 
+	public void calculateIndex_test() {
+		assertEquals(0, new Tile(1, 1).getIndex());
+		assertEquals(4, new Tile(1, 8).getIndex());
+		assertEquals(9, new Tile(2, 7).getIndex());
+		assertEquals(13, new Tile(3, 6).getIndex());
+		assertEquals(0, new Tile(5, 3).getIndex());
+		assertEquals(25, new Tile(5, 10).getIndex());
+		assertEquals(0, new Tile(6, 10).getIndex());
+		assertEquals(42, new Tile(9, 4).getIndex());
+		assertEquals(0, new Tile(10, 2).getIndex());
+		assertEquals(50, new Tile(10, 9).getIndex());
+	
 	}
 	
 	@Test
@@ -116,21 +129,6 @@ public class TileTest {
 
 		testObj.setIndex(50);
 		assertEquals(9, testObj.getColumn());
-	}
-	
-	@Test 
-	public void calculateIndex_test() {
-		assertEquals(0, Tile.calculateIndex(1, 1));
-		assertEquals(4, Tile.calculateIndex(1, 8));
-		assertEquals(9, Tile.calculateIndex(2, 7));
-		assertEquals(13, Tile.calculateIndex(3, 6));
-		assertEquals(0, Tile.calculateIndex(5, 3));
-		assertEquals(25, Tile.calculateIndex(5, 10));
-		assertEquals(0, Tile.calculateIndex(6, 10));
-		assertEquals(42, Tile.calculateIndex(9, 4));
-		assertEquals(0, Tile.calculateIndex(10, 2));
-		assertEquals(50, Tile.calculateIndex(10, 9));
-	
 	}
 
 }

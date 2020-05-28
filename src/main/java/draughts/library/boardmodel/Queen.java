@@ -49,16 +49,16 @@ public abstract class Queen extends Piece {
 		return moves;
 	}
 	
-	public boolean isMovePossible(MoveDirection moveDirection, int row, int column, int distanceInTiles) {
+	public boolean isMovePossible(MoveDirection moveDirection, int row, int column, int hopLength) {
 		switch(moveDirection) {
 		case UP_LEFT:
-			return (row-distanceInTiles > 0 && column-distanceInTiles > 0);
+			return (row-hopLength > 0 && column-hopLength > 0);
 		case UP_RIGHT:
-			return (row-distanceInTiles > 0 && column+distanceInTiles < 11);
+			return (row-hopLength > 0 && column+hopLength < 11);
 		case DOWN_LEFT:
-			return (row+distanceInTiles < 11 && column-distanceInTiles > 0);
+			return (row+hopLength < 11 && column-hopLength > 0);
 		case DOWN_RIGHT:
-			return (row+distanceInTiles < 11 && column+distanceInTiles < 11);
+			return (row+hopLength < 11 && column+hopLength < 11);
 		default:
 			break;
 		}
@@ -67,18 +67,18 @@ public abstract class Queen extends Piece {
 	
 	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
 		ArrayList<Capture> moves = new ArrayList<>();
-		int distanceInTiles = 1;
+		int hopLength = 1;
 		int foundPawnToTake = 0;
 		
-		while(isMovePossible(moveDirection, row, column, distanceInTiles)) {
-			Tile target = findTarget(moveDirection, board, row, column, distanceInTiles);
+		while(isMovePossible(moveDirection, row, column, hopLength)) {
+			Tile target = findTarget(moveDirection, board, row, column, hopLength);
 			
 			if(target.getState() == Tile.State.EMPTY) {
 				if(foundPawnToTake == 0) 
-					distanceInTiles++; 
+					hopLength++; 
 				else {
 					moves.add(new Capture(getPosition(), target.getIndex(), foundPawnToTake));
-					distanceInTiles++;
+					hopLength++;
 				}			
 			} 
 			else if(isTileOccupiedBySameColor(target)) {
@@ -87,7 +87,7 @@ public abstract class Queen extends Piece {
 			else if(isTileOccupiedByOppositeColor(target)){
 				if(foundPawnToTake == 0) {
 					foundPawnToTake = target.getIndex();
-					distanceInTiles++;
+					hopLength++;
 				}
 				else break;
 			}

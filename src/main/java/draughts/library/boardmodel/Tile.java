@@ -5,9 +5,6 @@ public class Tile {
 	private int index;
 	private State state;
 	
-	public Tile(int index) {
-		this.index = index;
-	}
 	
 	public Tile(int row, int column) {
 		this.index = calculateIndex(row, column);
@@ -43,7 +40,7 @@ public class Tile {
 		else return column+1;
 	}
 
-	public static int calculateIndex(int row, int column) {
+	private int calculateIndex(int row, int column) {
 		if(row % 2 == 0) {
 			if(column % 2 == 0)
 				return 0; //white tile in even row

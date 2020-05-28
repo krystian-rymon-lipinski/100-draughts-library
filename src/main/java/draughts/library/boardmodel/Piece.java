@@ -78,17 +78,17 @@ public abstract class Piece {
 		return moves;
 	}
 	
-	public Tile findTarget(MoveDirection moveDirection, Tile[][] board, int row, int column, int distanceInTiles) {
+	public Tile findTarget(MoveDirection moveDirection, Tile[][] board, int row, int column, int hopLength) {
 		
 		switch(moveDirection) {
 			case UP_LEFT:
-				return board[row-1-distanceInTiles][column-1-distanceInTiles];
+				return board[row-1-hopLength][column-1-hopLength];
 			case UP_RIGHT:
-				return board[row-1-distanceInTiles][column-1+distanceInTiles];
+				return board[row-1-hopLength][column-1+hopLength];
 			case DOWN_LEFT:
-				return board[row-1+distanceInTiles][column-1-distanceInTiles];
+				return board[row-1+hopLength][column-1-hopLength];
 			case DOWN_RIGHT:
-				return board[row-1+distanceInTiles][column-1+distanceInTiles];
+				return board[row-1+hopLength][column-1+hopLength];
 			default:
 				break;
 		}

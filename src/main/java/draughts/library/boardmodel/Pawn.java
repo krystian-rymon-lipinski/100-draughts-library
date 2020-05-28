@@ -35,13 +35,13 @@ public abstract class Pawn extends Piece {
 		Tile target = findTarget(moveDirection, board, row, column, 2);
 		Tile possibleTake = findTarget(moveDirection, board, row, column, 1);
 		
-		if(isTakePossible(target, possibleTake, row, column))
+		if(isTakePossible(target, possibleTake))
 				hops.add(new Capture(getPosition(), target.getIndex(), possibleTake.getIndex()));
 		return hops;
 	}
 	
 	
-	public boolean isTakePossible(Tile target, Tile possibleTake, int row, int column) {
+	public boolean isTakePossible(Tile target, Tile possibleTake) {
 		return isTileOccupiedByOppositeColor(possibleTake) && 
 				   target.getState() == Tile.State.EMPTY ? true : false;
 	}
