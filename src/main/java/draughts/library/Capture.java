@@ -1,15 +1,17 @@
 package draughts.library;
 
+import draughts.library.boardmodel.Tile;
+
 public class Capture extends Hop {
 	
-	private int takenPawn;
+	private Tile takenPawn;
 	
-	public Capture(int source, int destination, int takenPawn) {
+	public Capture(Tile source, Tile destination, Tile takenPawn) {
 		super(source, destination);
 		this.takenPawn = takenPawn;
 	}
 	
-	public int getTakenPawn() {
+	public Tile getTakenPawn() {
 		return takenPawn;
 	}
 	

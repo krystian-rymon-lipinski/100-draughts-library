@@ -23,7 +23,7 @@ public abstract class Pawn extends Piece {
 		Tile target = findTarget(moveDirection, board, currentRow, currentColumn, 1);
 		
 		if(target.getState() == Tile.State.EMPTY)
-			moves.add(new Move<Hop>(new Hop(getPosition(), target.getIndex())));
+			moves.add(new Move<Hop>(new Hop(getPosition(), target)));
 		return moves;
 	}
 	
@@ -36,7 +36,7 @@ public abstract class Pawn extends Piece {
 		Tile possibleTake = findTarget(moveDirection, board, row, column, 1);
 		
 		if(isTakePossible(target, possibleTake))
-				hops.add(new Capture(getPosition(), target.getIndex(), possibleTake.getIndex()));
+				hops.add(new Capture(getPosition(), target, possibleTake));
 		return hops;
 	}
 	

@@ -40,7 +40,7 @@ public abstract class Queen extends Piece {
 			Tile target = findTarget(moveDirection, board, row, column, distanceInTiles);
 
 			if(target.getState() == Tile.State.EMPTY) {
-				moves.add(new Move<Hop>(new Hop(getPosition(), target.getIndex())));
+				moves.add(new Move<Hop>(new Hop(getPosition(), target)));
 				distanceInTiles++;
 			} else break;
 			
@@ -68,16 +68,16 @@ public abstract class Queen extends Piece {
 	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
 		ArrayList<Capture> moves = new ArrayList<>();
 		int hopLength = 1;
-		int foundPawnToTake = 0;
+		Tile foundPawnToTake = null;
 		
 		while(isMovePossible(moveDirection, row, column, hopLength)) {
 			Tile target = findTarget(moveDirection, board, row, column, hopLength);
 			
 			if(target.getState() == Tile.State.EMPTY) {
-				if(foundPawnToTake == 0) 
+				if(foundPawnToTake == null) 
 					hopLength++; 
 				else {
-					moves.add(new Capture(getPosition(), target.getIndex(), foundPawnToTake));
+					moves.add(new Capture(getPosition(), target, foundPawnToTake));
 					hopLength++;
 				}			
 			} 
@@ -85,8 +85,8 @@ public abstract class Queen extends Piece {
 				break;
 			}
 			else if(isTileOccupiedByOppositeColor(target)){
-				if(foundPawnToTake == 0) {
-					foundPawnToTake = target.getIndex();
+				if(foundPawnToTake == null) {
+					foundPawnToTake = target;
 					hopLength++;
 				}
 				else break;
