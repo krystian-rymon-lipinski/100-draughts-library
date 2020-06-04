@@ -141,27 +141,20 @@ public class BoardManager {
 		}		
 	}
 	
-	public void makeHop(int source, int destination) {
-		try {
-			Piece movedPiece = findPieceByIndex(source);
-			Tile src = findTileByIndex(source);
-			src.setState(Tile.State.EMPTY);
-			
-			Tile dst = findTileByIndex(destination);
-			movedPiece.hop(dst);
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
-		}	
+	public void makeHop(Piece movedPiece, Tile destination) {
+		movedPiece.getPosition().setState(Tile.State.EMPTY);	
+		movedPiece.hop(destination);
+		
 	}
 	
 	public void promotePawn(Piece promotedPawn) {
 		if(promotedPawn.isWhite()) {
 			removeWhitePiece(promotedPawn);
-			addWhiteQueen(promotedPawn.getPosition());
+			addWhiteQueen(promotedPawn.getPosition().getIndex());
 			isWhiteQueenOnBoard = true;
 		} else {
 			removeBlackPiece(promotedPawn);
-			addBlackQueen(promotedPawn.getPosition());
+			addBlackQueen(promotedPawn.getPosition().getIndex());
 			isBlackQueenOnBoard = true;
 		}
 		
@@ -182,12 +175,12 @@ public class BoardManager {
 		
 	}
 	
-	public void makeCapture(int source, int destination, int taken){
+	public void makeCapture(Piece movedPiece, Tile destination, int taken){
 		try {
 			Piece takenPiece = findPieceByIndex(taken);
-			makeHop(source, destination);
+			makeHop(movedPiece, destination);
 			
-			if(isTakenPieceWhite(takenPiece))
+			if(takenPiece.isWhite())
 				removeWhitePiece(takenPiece);
 			else 
 				removeBlackPiece(takenPiece);
@@ -214,7 +207,7 @@ public class BoardManager {
 		pieces.addAll(blackPieces);
 		
 		for(Piece piece : pieces) {
-			if(piece.getPosition() == tileIndex)
+			if(piece.getPosition().getIndex() == tileIndex)
 				return piece;
 		}
 		
