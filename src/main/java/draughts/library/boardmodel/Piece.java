@@ -78,13 +78,13 @@ public abstract class Piece {
 		
 		switch(moveDirection) {
 			case UP_LEFT:
-				return board[position.getRow()-1-hopLength][position.getRow()-1-hopLength];
+				return board[position.getRow()-1-hopLength][position.getColumn()-1-hopLength];
 			case UP_RIGHT:
-				return board[position.getRow()-1-hopLength][position.getRow()-1+hopLength];
+				return board[position.getRow()-1-hopLength][position.getColumn()-1+hopLength];
 			case DOWN_LEFT:
-				return board[position.getRow()-1+hopLength][position.getRow()-1-hopLength];
+				return board[position.getRow()-1+hopLength][position.getColumn()-1-hopLength];
 			case DOWN_RIGHT:
-				return board[position.getRow()-1+hopLength][position.getRow()-1+hopLength];
+				return board[position.getRow()-1+hopLength][position.getColumn()-1+hopLength];
 			default:
 				break;
 		}

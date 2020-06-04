@@ -187,6 +187,9 @@ public class BoardManagerTest {
 		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(12).getState());
 		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(33).getState());
 		assertEquals(Tile.State.WHITE_QUEEN, testObj.findTileByIndex(41).getState());
+		assertEquals(12, testObj.getWhitePieces().get(0).getPosition().getIndex());
+		assertEquals(33, testObj.getWhitePieces().get(1).getPosition().getIndex());
+		assertEquals(41, testObj.getWhitePieces().get(2).getPosition().getIndex());
 	}
 	
 	@Test

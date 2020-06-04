@@ -29,9 +29,9 @@ public class BlackPawn extends Pawn {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
-		if(getPosition().getRow()<10 && getPosition().getRow()>1) 
+		if(getPosition().getRow()<10 && getPosition().getColumn()>1) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board));
-		if(getPosition().getRow()<10 && getPosition().getRow()<10) 
+		if(getPosition().getRow()<10 && getPosition().getColumn()<10) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board));
 		return moves;
 	}
