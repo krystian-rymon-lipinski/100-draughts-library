@@ -8,10 +8,10 @@ import draughts.library.Move;
 
 public abstract class Piece {
 	
-	private int position;
+	private Tile position;
 	
-	public Piece(int position) {
-		this.setPosition(position);
+	public Piece(Tile position) {
+		this.position = position;
 	}
 	
 	public abstract boolean isTileOccupiedBySameColor(Tile tile);
@@ -27,20 +27,20 @@ public abstract class Piece {
 	public abstract boolean isWhite();
 	
 
-	public int getPosition() {
+	public Tile getPosition() {
 		return position;
 	}
 
-	public void setPosition(int position) {
+	public void setPosition(Tile position) {
 		this.position = position;
 	}
 	
 	public void hop(Tile dst) {
-		position = dst.getIndex();
+		this.position = dst;
 	}
 	
 	public void reverseHop(Tile src) {
-		position = src.getIndex();
+		this.position = src;
 	}
 	
 	public void addMovesIfAny(ArrayList<Move<Hop>> mainList, ArrayList<Move<Hop>> candidateList) {
@@ -96,8 +96,6 @@ public abstract class Piece {
 		UP_RIGHT,
 		DOWN_LEFT,
 		DOWN_RIGHT;
-	}
-		
-	
-	
+	}	
+
 }

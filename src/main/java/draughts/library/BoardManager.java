@@ -88,31 +88,35 @@ public class BoardManager {
 		createPiecesForStartingPosition();
 	}
 	
-	public void addWhitePawn(int position) {
+	public void addWhitePawn(int index) {
+		Tile position = findTileByIndex(index);
+		position.setState(Tile.State.WHITE_PAWN);
 		whitePieces.add(new WhitePawn(position));
-		findTileByIndex(position).setState(Tile.State.WHITE_PAWN);
 	}
 	
-	public void addBlackPawn(int position) {
+	public void addBlackPawn(int index) {
+		Tile position = findTileByIndex(index);
+		position.setState(Tile.State.BLACK_PAWN);
 		blackPieces.add(new BlackPawn(position));
-		findTileByIndex(position).setState(Tile.State.BLACK_PAWN);
 	}
 	
-	public void addWhiteQueen(int position) {
+	public void addWhiteQueen(int index) {
+		Tile position = findTileByIndex(index);
+		position.setState(Tile.State.WHITE_QUEEN);
 		whitePieces.add(new WhiteQueen(position));
-		findTileByIndex(position).setState(Tile.State.WHITE_QUEEN);
 	}
 	
-	public void addBlackQueen(int position) {
+	public void addBlackQueen(int index) {
+		Tile position = findTileByIndex(index);
+		position.setState(Tile.State.BLACK_QUEEN);
 		blackPieces.add(new BlackQueen(position));
-		findTileByIndex(position).setState(Tile.State.BLACK_QUEEN);
 	}
 	
 	public void removeWhitePiece(Piece piece) {
 		boolean wasQueen = piece.isQueen();
 		
+		piece.getPosition().setState(Tile.State.EMPTY);	
 		whitePieces.remove(piece);
-		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
 		
 		if(wasQueen) {
 			for(Piece whitePiece : whitePieces) {
@@ -126,17 +130,15 @@ public class BoardManager {
 	public void removeBlackPiece(Piece piece) {
 		boolean wasQueen = piece.isQueen();
 		
+		piece.getPosition().setState(Tile.State.EMPTY);
 		blackPieces.remove(piece);
-		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
 		
 		if(wasQueen) {
 			for(Piece blackPiece : blackPieces) {
 				if (blackPiece.isQueen()) return;
 			}
 			isBlackQueenOnBoard = false;
-		}
-		
-		
+		}		
 	}
 	
 	public void makeHop(int source, int destination) {

@@ -8,7 +8,7 @@ import draughts.library.Move;
 
 public abstract class Pawn extends Piece {
 
-	public Pawn(int position) {
+	public Pawn(Tile position) {
 		super(position);
 	}
 	

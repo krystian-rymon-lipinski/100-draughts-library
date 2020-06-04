@@ -8,7 +8,7 @@ import draughts.library.Move;
 
 public abstract class Queen extends Piece {
 
-	public Queen(int position) {
+	public Queen(Tile position) {
 		super(position);
 	}
 	

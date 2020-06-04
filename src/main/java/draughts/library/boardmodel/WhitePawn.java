@@ -7,7 +7,7 @@ import draughts.library.Move;
 
 public class WhitePawn extends Pawn {
 
-	public WhitePawn(int position) {
+	public WhitePawn(Tile position) {
 		super(position);
 	}
 	
