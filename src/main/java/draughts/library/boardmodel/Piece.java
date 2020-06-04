@@ -18,9 +18,9 @@ public abstract class Piece {
 	
 	public abstract boolean isTileOccupiedByOppositeColor(Tile tile);
 	
-	public abstract ArrayList<Move<Hop>> findMoves(Tile[][] board, int currentRow, int currentColumn);
+	public abstract ArrayList<Move<Hop>> findMoves(Tile[][] board);
 	
-	public abstract ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column);
+	public abstract ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board);
 	
 	public abstract boolean isQueen();
 	
@@ -58,33 +58,33 @@ public abstract class Piece {
 			mainList.addAll(candidateList);
 	}
 			
-	public ArrayList<Capture> findCaptures(Tile[][] board, int currentRow, int currentColumn) {
+	public ArrayList<Capture> findCaptures(Tile[][] board) {
 		
 		ArrayList<Capture> moves = new ArrayList<>();
 		
-		if(currentColumn > 2 && currentRow > 2) 
-			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));
-		if(currentColumn < 9 && currentRow > 2) 
-			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.UP_RIGHT, board, currentRow, currentColumn));
-		if(currentColumn > 2 && currentRow < 9) 
-			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
-		if(currentColumn < 9 && currentRow < 9) 
-			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_RIGHT, board, currentRow, currentColumn));		
+		if(position.getColumn() > 2 && position.getRow() > 2) 
+			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.UP_LEFT, board));
+		if(position.getColumn() < 9 && position.getRow() > 2) 
+			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.UP_RIGHT, board));
+		if(position.getColumn() > 2 && position.getRow() < 9) 
+			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_LEFT, board));
+		if(position.getColumn() < 9 && position.getRow() < 9) 
+			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_RIGHT, board));		
 		
 		return moves;
 	}
 	
-	public Tile findTarget(MoveDirection moveDirection, Tile[][] board, int row, int column, int hopLength) {
+	public Tile findTarget(MoveDirection moveDirection, Tile[][] board, int hopLength) {
 		
 		switch(moveDirection) {
 			case UP_LEFT:
-				return board[row-1-hopLength][column-1-hopLength];
+				return board[position.getRow()-1-hopLength][position.getRow()-1-hopLength];
 			case UP_RIGHT:
-				return board[row-1-hopLength][column-1+hopLength];
+				return board[position.getRow()-1-hopLength][position.getRow()-1+hopLength];
 			case DOWN_LEFT:
-				return board[row-1+hopLength][column-1-hopLength];
+				return board[position.getRow()-1+hopLength][position.getRow()-1-hopLength];
 			case DOWN_RIGHT:
-				return board[row-1+hopLength][column-1+hopLength];
+				return board[position.getRow()-1+hopLength][position.getRow()-1+hopLength];
 			default:
 				break;
 		}

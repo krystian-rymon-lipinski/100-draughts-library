@@ -17,23 +17,22 @@ public abstract class Pawn extends Piece {
 	}
 	
 	
-	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board, int currentRow, int currentColumn) {
+	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
-		Tile target = findTarget(moveDirection, board, currentRow, currentColumn, 1);
+		Tile target = findTarget(moveDirection, board, 1);
 		
 		if(target.getState() == Tile.State.EMPTY)
 			moves.add(new Move<Hop>(new Hop(getPosition(), target)));
 		return moves;
 	}
 	
-	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, 
-														Tile[][] board, int row, int column) {
+	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board) {
 		
 		ArrayList<Capture> hops = new ArrayList<>();
 		
-		Tile target = findTarget(moveDirection, board, row, column, 2);
-		Tile possibleTake = findTarget(moveDirection, board, row, column, 1);
+		Tile target = findTarget(moveDirection, board, 2);
+		Tile possibleTake = findTarget(moveDirection, board, 1);
 		
 		if(isTakePossible(target, possibleTake))
 				hops.add(new Capture(getPosition(), target, possibleTake));

@@ -16,32 +16,32 @@ public abstract class Queen extends Piece {
 		return true;
 	}
 	
-	public ArrayList<Move<Hop>> findMoves(Tile[][] board, int currentRow, int currentColumn) {
+	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
-		if(currentRow>1 && currentColumn>1) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));
-		if(currentRow>1 && currentColumn<10) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board, currentRow, currentColumn));
-		if(currentRow<10 && currentColumn>1) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
-		if(currentRow<10 && currentColumn<10)
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board, currentRow, currentColumn));
+		if(getPosition().getRow()>1 && getPosition().getRow()>1) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board));
+		if(getPosition().getRow()>1 && getPosition().getRow()<10) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board));
+		if(getPosition().getRow()<10 && getPosition().getRow()>1) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board));
+		if(getPosition().getRow()<10 && getPosition().getRow()<10)
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board));
 
 		return moves;
 	}
 	
-	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
+	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board) {
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
-		int distanceInTiles = 1;
+		int hopLength = 1;
 		
-		while(isMovePossible(moveDirection, row, column, distanceInTiles)) {
-			Tile target = findTarget(moveDirection, board, row, column, distanceInTiles);
+		while(isMovePossible(moveDirection, hopLength)) {
+			Tile target = findTarget(moveDirection, board, hopLength);
 
 			if(target.getState() == Tile.State.EMPTY) {
 				moves.add(new Move<Hop>(new Hop(getPosition(), target)));
-				distanceInTiles++;
+				hopLength++;
 			} else break;
 			
 		}
@@ -49,29 +49,29 @@ public abstract class Queen extends Piece {
 		return moves;
 	}
 	
-	public boolean isMovePossible(MoveDirection moveDirection, int row, int column, int hopLength) {
+	public boolean isMovePossible(MoveDirection moveDirection, int hopLength) {
 		switch(moveDirection) {
 		case UP_LEFT:
-			return (row-hopLength > 0 && column-hopLength > 0);
+			return (getPosition().getRow()-hopLength > 0 && getPosition().getColumn()-hopLength > 0);
 		case UP_RIGHT:
-			return (row-hopLength > 0 && column+hopLength < 11);
+			return (getPosition().getRow()-hopLength > 0 && getPosition().getColumn()+hopLength < 11);
 		case DOWN_LEFT:
-			return (row+hopLength < 11 && column-hopLength > 0);
+			return (getPosition().getRow()+hopLength < 11 && getPosition().getColumn()-hopLength > 0);
 		case DOWN_RIGHT:
-			return (row+hopLength < 11 && column+hopLength < 11);
+			return (getPosition().getRow()+hopLength < 11 && getPosition().getColumn()+hopLength < 11);
 		default:
 			break;
 		}
 		return false;
 	}
 	
-	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, int row, int column) {
+	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board) {
 		ArrayList<Capture> moves = new ArrayList<>();
 		int hopLength = 1;
 		Tile foundPawnToTake = null;
 		
-		while(isMovePossible(moveDirection, row, column, hopLength)) {
-			Tile target = findTarget(moveDirection, board, row, column, hopLength);
+		while(isMovePossible(moveDirection, hopLength)) {
+			Tile target = findTarget(moveDirection, board, hopLength);
 			
 			if(target.getState() == Tile.State.EMPTY) {
 				if(foundPawnToTake == null) 
