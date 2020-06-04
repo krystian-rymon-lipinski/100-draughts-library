@@ -30,11 +30,11 @@ public class QueenTest extends PieceTest {
 		ArrayList<Move<Hop>> whiteMoves = findMovesForPiece(32);
 		
 		assertEquals(3, whiteMoves.size());
-		assertEquals(32, whiteMoves.get(0).getHop(0).getSource());
-		assertEquals(32, whiteMoves.get(2).getHop(0).getSource());
-		assertEquals(27, whiteMoves.get(0).getHop(0).getDestination());
-		assertEquals(21, whiteMoves.get(1).getHop(0).getDestination());
-		assertEquals(16, whiteMoves.get(2).getHop(0).getDestination());
+		assertEquals(32, whiteMoves.get(0).getHop(0).getSource().getIndex());
+		assertEquals(32, whiteMoves.get(2).getHop(0).getSource().getIndex());
+		assertEquals(27, whiteMoves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(21, whiteMoves.get(1).getHop(0).getDestination().getIndex());
+		assertEquals(16, whiteMoves.get(2).getHop(0).getDestination().getIndex());
 		
 		
 		boardManager.addBlackQueen(12);
@@ -44,10 +44,10 @@ public class QueenTest extends PieceTest {
 		ArrayList<Move<Hop>> blackMoves = findMovesForPiece(12);
 		
 		assertEquals(2, blackMoves.size());
-		assertEquals(12, blackMoves.get(0).getHop(0).getSource());
-		assertEquals(12, blackMoves.get(1).getHop(0).getSource());
-		assertEquals(7, blackMoves.get(0).getHop(0).getDestination());
-		assertEquals(1, blackMoves.get(1).getHop(0).getDestination());
+		assertEquals(12, blackMoves.get(0).getHop(0).getSource().getIndex());
+		assertEquals(12, blackMoves.get(1).getHop(0).getSource().getIndex());
+		assertEquals(7, blackMoves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(1, blackMoves.get(1).getHop(0).getDestination().getIndex());
 	}
 	
 	@Test
@@ -59,14 +59,14 @@ public class QueenTest extends PieceTest {
 		ArrayList<Move<Hop>> whiteMoves = findMovesForPiece(32);
 		
 		assertEquals(6, whiteMoves.size());
-		assertEquals(32, whiteMoves.get(0).getHop(0).getSource());
-		assertEquals(32, whiteMoves.get(5).getHop(0).getSource());
-		assertEquals(28, whiteMoves.get(0).getHop(0).getDestination());
-		assertEquals(23, whiteMoves.get(1).getHop(0).getDestination());
-		assertEquals(19, whiteMoves.get(2).getHop(0).getDestination());
-		assertEquals(14, whiteMoves.get(3).getHop(0).getDestination());
-		assertEquals(10, whiteMoves.get(4).getHop(0).getDestination());
-		assertEquals(5, whiteMoves.get(5).getHop(0).getDestination());
+		assertEquals(32, whiteMoves.get(0).getHop(0).getSource().getIndex());
+		assertEquals(32, whiteMoves.get(5).getHop(0).getSource().getIndex());
+		assertEquals(28, whiteMoves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(23, whiteMoves.get(1).getHop(0).getDestination().getIndex());
+		assertEquals(19, whiteMoves.get(2).getHop(0).getDestination().getIndex());
+		assertEquals(14, whiteMoves.get(3).getHop(0).getDestination().getIndex());
+		assertEquals(10, whiteMoves.get(4).getHop(0).getDestination().getIndex());
+		assertEquals(5, whiteMoves.get(5).getHop(0).getDestination().getIndex());
 		
 		
 		boardManager.addBlackQueen(12);
@@ -76,10 +76,10 @@ public class QueenTest extends PieceTest {
 		ArrayList<Move<Hop>> blackMoves = findMovesForPiece(12);
 		
 		assertEquals(2, blackMoves.size());
-		assertEquals(12, blackMoves.get(0).getHop(0).getSource());
-		assertEquals(12, blackMoves.get(1).getHop(0).getSource());
-		assertEquals(8, blackMoves.get(0).getHop(0).getDestination());
-		assertEquals(3, blackMoves.get(1).getHop(0).getDestination());
+		assertEquals(12, blackMoves.get(0).getHop(0).getSource().getIndex());
+		assertEquals(12, blackMoves.get(1).getHop(0).getSource().getIndex());
+		assertEquals(8, blackMoves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(3, blackMoves.get(1).getHop(0).getDestination().getIndex());
 	}
 	
 	@Test
@@ -91,11 +91,11 @@ public class QueenTest extends PieceTest {
 		ArrayList<Move<Hop>> whiteMoves = findMovesForPiece(32);
 		
 		assertEquals(3, whiteMoves.size());
-		assertEquals(32, whiteMoves.get(0).getHop(0).getSource());
-		assertEquals(32, whiteMoves.get(2).getHop(0).getSource());
-		assertEquals(37, whiteMoves.get(0).getHop(0).getDestination());
-		assertEquals(41, whiteMoves.get(1).getHop(0).getDestination());
-		assertEquals(46, whiteMoves.get(2).getHop(0).getDestination());
+		assertEquals(32, whiteMoves.get(0).getHop(0).getSource().getIndex());
+		assertEquals(32, whiteMoves.get(2).getHop(0).getSource().getIndex());
+		assertEquals(37, whiteMoves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(41, whiteMoves.get(1).getHop(0).getDestination().getIndex());
+		assertEquals(46, whiteMoves.get(2).getHop(0).getDestination().getIndex());
 		
 		
 		boardManager.addBlackQueen(12);
@@ -105,11 +105,11 @@ public class QueenTest extends PieceTest {
 		ArrayList<Move<Hop>> blackMoves = findMovesForPiece(12);
 		
 		assertEquals(3, blackMoves.size());
-		assertEquals(12, blackMoves.get(0).getHop(0).getSource());
-		assertEquals(12, blackMoves.get(2).getHop(0).getSource());
-		assertEquals(17, blackMoves.get(0).getHop(0).getDestination());
-		assertEquals(21, blackMoves.get(1).getHop(0).getDestination());
-		assertEquals(26, blackMoves.get(2).getHop(0).getDestination());
+		assertEquals(12, blackMoves.get(0).getHop(0).getSource().getIndex());
+		assertEquals(12, blackMoves.get(2).getHop(0).getSource().getIndex());
+		assertEquals(17, blackMoves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(21, blackMoves.get(1).getHop(0).getDestination().getIndex());
+		assertEquals(26, blackMoves.get(2).getHop(0).getDestination().getIndex());
 	}
 	
 	@Test
@@ -121,11 +121,11 @@ public class QueenTest extends PieceTest {
 		ArrayList<Move<Hop>> whiteMoves = findMovesForPiece(32);
 		
 		assertEquals(3, whiteMoves.size());
-		assertEquals(32, whiteMoves.get(0).getHop(0).getSource());
-		assertEquals(32, whiteMoves.get(2).getHop(0).getSource());
-		assertEquals(38, whiteMoves.get(0).getHop(0).getDestination());
-		assertEquals(43, whiteMoves.get(1).getHop(0).getDestination());
-		assertEquals(49, whiteMoves.get(2).getHop(0).getDestination());
+		assertEquals(32, whiteMoves.get(0).getHop(0).getSource().getIndex());
+		assertEquals(32, whiteMoves.get(2).getHop(0).getSource().getIndex());
+		assertEquals(38, whiteMoves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(43, whiteMoves.get(1).getHop(0).getDestination().getIndex());
+		assertEquals(49, whiteMoves.get(2).getHop(0).getDestination().getIndex());
 		
 		
 		boardManager.addBlackQueen(12);
@@ -135,14 +135,14 @@ public class QueenTest extends PieceTest {
 		ArrayList<Move<Hop>> blackMoves = findMovesForPiece(12);
 		
 		assertEquals(6, blackMoves.size());
-		assertEquals(12, blackMoves.get(0).getHop(0).getSource());
-		assertEquals(12, blackMoves.get(5).getHop(0).getSource());
-		assertEquals(18, blackMoves.get(0).getHop(0).getDestination());
-		assertEquals(23, blackMoves.get(1).getHop(0).getDestination());
-		assertEquals(29, blackMoves.get(2).getHop(0).getDestination());
-		assertEquals(34, blackMoves.get(3).getHop(0).getDestination());
-		assertEquals(40, blackMoves.get(4).getHop(0).getDestination());
-		assertEquals(45, blackMoves.get(5).getHop(0).getDestination());
+		assertEquals(12, blackMoves.get(0).getHop(0).getSource().getIndex());
+		assertEquals(12, blackMoves.get(5).getHop(0).getSource().getIndex());
+		assertEquals(18, blackMoves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(23, blackMoves.get(1).getHop(0).getDestination().getIndex());
+		assertEquals(29, blackMoves.get(2).getHop(0).getDestination().getIndex());
+		assertEquals(34, blackMoves.get(3).getHop(0).getDestination().getIndex());
+		assertEquals(40, blackMoves.get(4).getHop(0).getDestination().getIndex());
+		assertEquals(45, blackMoves.get(5).getHop(0).getDestination().getIndex());
 
 	}
 	
@@ -177,13 +177,13 @@ public class QueenTest extends PieceTest {
 		ArrayList<Capture> whiteMoves = findTakesForPiece(38);
 		
 		assertEquals(3, whiteMoves.size());
-		assertEquals(38, whiteMoves.get(0).getSource());
-		assertEquals(38, whiteMoves.get(2).getSource());
-		assertEquals(27, whiteMoves.get(0).getDestination());
-		assertEquals(21, whiteMoves.get(1).getDestination());
-		assertEquals(16, whiteMoves.get(2).getDestination());
-		assertEquals(32, whiteMoves.get(0).getTakenPawn());
-		assertEquals(32, whiteMoves.get(2).getTakenPawn());
+		assertEquals(38, whiteMoves.get(0).getSource().getIndex());
+		assertEquals(38, whiteMoves.get(2).getSource().getIndex());
+		assertEquals(27, whiteMoves.get(0).getDestination().getIndex());
+		assertEquals(21, whiteMoves.get(1).getDestination().getIndex());
+		assertEquals(16, whiteMoves.get(2).getDestination().getIndex());
+		assertEquals(32, whiteMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(32, whiteMoves.get(2).getTakenPawn().getIndex());
 				
 		
 		boardManager.addBlackQueen(18);
@@ -192,12 +192,12 @@ public class QueenTest extends PieceTest {
 		ArrayList<Capture> blackMoves = findTakesForPiece(18);
 		
 		assertEquals(2, blackMoves.size());
-		assertEquals(18, blackMoves.get(0).getSource());
-		assertEquals(18, blackMoves.get(1).getSource());
-		assertEquals(7, blackMoves.get(0).getDestination());
-		assertEquals(1, blackMoves.get(1).getDestination());
-		assertEquals(12, blackMoves.get(0).getTakenPawn());
-		assertEquals(12, blackMoves.get(1).getTakenPawn());
+		assertEquals(18, blackMoves.get(0).getSource().getIndex());
+		assertEquals(18, blackMoves.get(1).getSource().getIndex());
+		assertEquals(7, blackMoves.get(0).getDestination().getIndex());
+		assertEquals(1, blackMoves.get(1).getDestination().getIndex());
+		assertEquals(12, blackMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(12, blackMoves.get(1).getTakenPawn().getIndex());
 		
 	}
 
@@ -209,14 +209,14 @@ public class QueenTest extends PieceTest {
 		ArrayList<Capture> whiteMoves = findTakesForPiece(38);
 		
 		assertEquals(4, whiteMoves.size());
-		assertEquals(38, whiteMoves.get(0).getSource());
-		assertEquals(38, whiteMoves.get(3).getSource());
-		assertEquals(29, whiteMoves.get(0).getDestination());
-		assertEquals(24, whiteMoves.get(1).getDestination());
-		assertEquals(20, whiteMoves.get(2).getDestination());
-		assertEquals(15, whiteMoves.get(3).getDestination());
-		assertEquals(33, whiteMoves.get(0).getTakenPawn());
-		assertEquals(33, whiteMoves.get(3).getTakenPawn());
+		assertEquals(38, whiteMoves.get(0).getSource().getIndex());
+		assertEquals(38, whiteMoves.get(3).getSource().getIndex());
+		assertEquals(29, whiteMoves.get(0).getDestination().getIndex());
+		assertEquals(24, whiteMoves.get(1).getDestination().getIndex());
+		assertEquals(20, whiteMoves.get(2).getDestination().getIndex());
+		assertEquals(15, whiteMoves.get(3).getDestination().getIndex());
+		assertEquals(33, whiteMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(33, whiteMoves.get(3).getTakenPawn().getIndex());
 				
 		
 		boardManager.addBlackQueen(18);
@@ -225,12 +225,12 @@ public class QueenTest extends PieceTest {
 		ArrayList<Capture> blackMoves = findTakesForPiece(18);
 		
 		assertEquals(2, blackMoves.size());
-		assertEquals(18, blackMoves.get(0).getSource());
-		assertEquals(18, blackMoves.get(1).getSource());
-		assertEquals(9, blackMoves.get(0).getDestination());
-		assertEquals(4, blackMoves.get(1).getDestination());
-		assertEquals(13, blackMoves.get(0).getTakenPawn());
-		assertEquals(13, blackMoves.get(1).getTakenPawn());
+		assertEquals(18, blackMoves.get(0).getSource().getIndex());
+		assertEquals(18, blackMoves.get(1).getSource().getIndex());
+		assertEquals(9, blackMoves.get(0).getDestination().getIndex());
+		assertEquals(4, blackMoves.get(1).getDestination().getIndex());
+		assertEquals(13, blackMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(13, blackMoves.get(1).getTakenPawn().getIndex());
 		
 	}
 	
@@ -242,9 +242,9 @@ public class QueenTest extends PieceTest {
 		ArrayList<Capture> whiteMoves = findTakesForPiece(38);
 		
 		assertEquals(1, whiteMoves.size());
-		assertEquals(38, whiteMoves.get(0).getSource());
-		assertEquals(47, whiteMoves.get(0).getDestination());
-		assertEquals(42, whiteMoves.get(0).getTakenPawn());
+		assertEquals(38, whiteMoves.get(0).getSource().getIndex());
+		assertEquals(47, whiteMoves.get(0).getDestination().getIndex());
+		assertEquals(42, whiteMoves.get(0).getTakenPawn().getIndex());
 				
 		
 		boardManager.addBlackQueen(18);
@@ -253,13 +253,13 @@ public class QueenTest extends PieceTest {
 		ArrayList<Capture> blackMoves = findTakesForPiece(18);
 		
 		assertEquals(3, blackMoves.size());
-		assertEquals(18, blackMoves.get(0).getSource());
-		assertEquals(18, blackMoves.get(2).getSource());
-		assertEquals(27, blackMoves.get(0).getDestination());
-		assertEquals(31, blackMoves.get(1).getDestination());
-		assertEquals(36, blackMoves.get(2).getDestination());
-		assertEquals(22, blackMoves.get(0).getTakenPawn());
-		assertEquals(22, blackMoves.get(1).getTakenPawn());
+		assertEquals(18, blackMoves.get(0).getSource().getIndex());
+		assertEquals(18, blackMoves.get(2).getSource().getIndex());
+		assertEquals(27, blackMoves.get(0).getDestination().getIndex());
+		assertEquals(31, blackMoves.get(1).getDestination().getIndex());
+		assertEquals(36, blackMoves.get(2).getDestination().getIndex());
+		assertEquals(22, blackMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(22, blackMoves.get(1).getTakenPawn().getIndex());
 		
 	}
 	
@@ -271,9 +271,9 @@ public class QueenTest extends PieceTest {
 		ArrayList<Capture> whiteMoves = findTakesForPiece(38);
 		
 		assertEquals(1, whiteMoves.size());
-		assertEquals(38, whiteMoves.get(0).getSource());
-		assertEquals(49, whiteMoves.get(0).getDestination());
-		assertEquals(43, whiteMoves.get(0).getTakenPawn());
+		assertEquals(38, whiteMoves.get(0).getSource().getIndex());
+		assertEquals(49, whiteMoves.get(0).getDestination().getIndex());
+		assertEquals(43, whiteMoves.get(0).getTakenPawn().getIndex());
 				
 		
 		boardManager.addBlackQueen(18);
@@ -282,14 +282,14 @@ public class QueenTest extends PieceTest {
 		ArrayList<Capture> blackMoves = findTakesForPiece(18);
 		
 		assertEquals(4, blackMoves.size());
-		assertEquals(18, blackMoves.get(0).getSource());
-		assertEquals(18, blackMoves.get(3).getSource());
-		assertEquals(29, blackMoves.get(0).getDestination());
-		assertEquals(34, blackMoves.get(1).getDestination());
-		assertEquals(40, blackMoves.get(2).getDestination());
-		assertEquals(45, blackMoves.get(3).getDestination());
-		assertEquals(23, blackMoves.get(0).getTakenPawn());
-		assertEquals(23, blackMoves.get(3).getTakenPawn());
+		assertEquals(18, blackMoves.get(0).getSource().getIndex());
+		assertEquals(18, blackMoves.get(3).getSource().getIndex());
+		assertEquals(29, blackMoves.get(0).getDestination().getIndex());
+		assertEquals(34, blackMoves.get(1).getDestination().getIndex());
+		assertEquals(40, blackMoves.get(2).getDestination().getIndex());
+		assertEquals(45, blackMoves.get(3).getDestination().getIndex());
+		assertEquals(23, blackMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(23, blackMoves.get(3).getTakenPawn().getIndex());
 		
 	}
 	
