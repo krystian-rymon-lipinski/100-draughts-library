@@ -142,6 +142,7 @@ public class BoardManager {
 	}
 	
 	public void makeHop(Piece movedPiece, Tile destination) {
+		System.out.println(movedPiece.getPosition().getIndex() + "->" + destination.getIndex());
 		movedPiece.getPosition().setState(Tile.State.EMPTY);	
 		movedPiece.hop(destination);
 		
@@ -159,22 +160,7 @@ public class BoardManager {
 		}
 		
 	}
-	
-	public void reverseHop(int source, int destination) {
-		try {
-			Piece movedPiece = findPieceByIndex(destination);
-			Tile dst = findTileByIndex(destination);
-			dst.setState(Tile.State.EMPTY);
-			
-			Tile src = findTileByIndex(source);
-			movedPiece.reverseHop(src);
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
-		}
-		
-		
-	}
-	
+
 	public void makeCapture(Piece movedPiece, Tile destination, int taken){
 		try {
 			Piece takenPiece = findPieceByIndex(taken);
@@ -223,8 +209,7 @@ public class BoardManager {
 		ArrayList<Move<Hop>> pieceMoves = new ArrayList<>();
 		
 		for(Piece piece : pieces) {
-			Tile currentPosition = findTileByIndex(piece.getPosition());
-			pieceMoves = piece.findMoves(board, currentPosition.getRow(), currentPosition.getColumn());
+			pieceMoves = piece.findMoves(board);
 			if(pieceMoves.size() > 0) allMoves.addAll(pieceMoves);
 		}
 		return allMoves;
@@ -254,9 +239,7 @@ public class BoardManager {
 		return allMoves;
 	}
 	
-	public ArrayList<Move<Capture>> findLongestConsecutiveCaptures(Piece piece) {
-		Tile source = findTileByIndex(piece.getPosition());
-		
+	public ArrayList<Move<Capture>> findLongestConsecutiveCaptures(Piece piece) {		
 		ArrayList<Capture> captures = new ArrayList<>();
 		ArrayList<Move<Capture>> moves = new ArrayList<>();
 		ArrayList<Move<Capture>> newMoves = new ArrayList<>();
@@ -265,7 +248,7 @@ public class BoardManager {
 			newMoves.clear();
 						
 			if(moves.size() == 0) { //first capture 
-				captures = piece.findCaptures(board, source.getRow(), source.getColumn());
+				captures = piece.findCaptures(board);
 				if(captures.size() == 0) break; //no captures available for piece
 				else {
 					for(Capture capture : captures) {
@@ -276,10 +259,9 @@ public class BoardManager {
 			else { //consecutive captures
 				for(int i=0; i<moves.size(); i++) {
 					for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
-						makeHop(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination());
+						makeHop(piece, moves.get(i).getHop(j).getDestination());
 					}
-					source = findTileByIndex(moves.get(i).getHop(moves.get(i).getNumberOfHops()-1).getDestination());
-					captures = piece.findCaptures(board, source.getRow(), source.getColumn());
+					captures = piece.findCaptures(board);
 					for(Capture capture: captures) {
 						if(!pawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
 							newMoves.add(new Move<Capture>(moves.get(i)));
@@ -287,7 +269,7 @@ public class BoardManager {
 						}			
 					}
 					for(int j=moves.get(i).getNumberOfHops()-1; j>=0; j--) {
-						reverseHop(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination());
+						makeHop(piece, moves.get(i).getHop(j).getSource());
 					}
 				}
 			}		
@@ -296,6 +278,7 @@ public class BoardManager {
 				moves.clear();
 				moves.addAll(newMoves);
 			}
+			System.out.println(newMoves);
 			
 		} while (newMoves.size() != 0 );
 	
