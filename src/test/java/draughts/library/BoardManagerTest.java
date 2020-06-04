@@ -369,7 +369,24 @@ public class BoardManagerTest {
 		ArrayList<Move<Hop>> whiteMoves = testObj.findMovesForAllPieces(true);
 		
 		assertEquals(8, whiteMoves.size());
+	}
+	
+	@Test
+	public void findCapturesForAllPieces_test() {
+		testObj.createEmptyBoard();
 		
+		testObj.addWhitePawn(46);
+		testObj.addWhitePawn(49);
+		testObj.addWhitePawn(43);
+		testObj.addWhiteQueen(35);
+		testObj.addBlackPawn(13);
+		testObj.addBlackPawn(16);
+		testObj.addBlackPawn(22);
+		testObj.addBlackPawn(26);
+		
+		ArrayList<Move<Capture>> whiteMoves = testObj.findCapturesForAllPieces(true);
+		
+		assertEquals(2, whiteMoves.size());	
 	}
 	
 	@Test
