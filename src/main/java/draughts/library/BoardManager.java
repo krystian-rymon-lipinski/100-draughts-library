@@ -149,13 +149,13 @@ public class BoardManager {
 		
 	}
 	
-	public void promotePawn(Piece promotedPawn) {
-		if(promotedPawn.isWhite()) {
-			removeWhitePiece(promotedPawn);
-			addWhiteQueen(promotedPawn.getPosition().getIndex());
+	public void promotePawn(Piece pawnToPromote) {
+		if(pawnToPromote.isWhite()) {
+			removeWhitePiece(pawnToPromote);
+			addWhiteQueen(pawnToPromote.getPosition().getIndex());
 		} else {
-			removeBlackPiece(promotedPawn);
-			addBlackQueen(promotedPawn.getPosition().getIndex());
+			removeBlackPiece(pawnToPromote);
+			addBlackQueen(pawnToPromote.getPosition().getIndex());
 		}
 		
 	}

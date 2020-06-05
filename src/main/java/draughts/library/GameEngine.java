@@ -68,20 +68,17 @@ public class GameEngine {
 		moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
 	}
 	
-	public void finishMove() {
-		checkForPawnPromotion();
-		checkIfGameShouldEnd();
-		changePlayer();
-		
-	}
+	
 	
 	//methods for making move all hops at once
 	
 	public void isMadeMoveCorrect(int source, int destination, ArrayList<Integer> taken) {
-		Move<? extends Hop> correctMove = moveManager.isMadeMoveCorrect(source, destination, taken);
-		if(correctMove != null) {
-			updateBoard(correctMove);
-		} 	
+		if(gameState == GameState.RUNNING) {
+			Move<? extends Hop> correctMove = moveManager.isMadeMoveCorrect(source, destination, taken);
+			if(correctMove != null) {
+				updateBoard(correctMove);
+			} 	
+		}
 	}
 	
 	public void updateBoard(Move<? extends Hop> correctMove) {
@@ -101,12 +98,37 @@ public class GameEngine {
 			}		
 		} catch(NoPieceFoundInRequestedTileException ex) {}
 		
-		finishMove(correctMove());
+		finishMove(correctMove);
+	}
+	
+	public void finishMove(Move<? extends Hop> move) {
+		checkForPawnPromotion(move);
+		changePlayer();	
+		checkIfGameShouldEnd(move);
+	}
+	
+	public void checkForPawnPromotion(Move<? extends Hop> move) {
+		if(!move.getMovingPiece().isQueen() && 
+				(move.getMoveDestination().getIndex() < 6 || move.getMoveDestination().getIndex() > 45))
+			boardManager.promotePawn(move.getMovingPiece());
+	}
+	
+	public void changePlayer() {
+		moveManager.getPossibleMoves().clear();
+		isWhiteToMove = !isWhiteToMove;
+		moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
+	}
+	
+	public void checkIfGameShouldEnd(Move<? extends Hop> move) {
+		drawArbiter.updateState((boardManager.getIsWhiteQueenOnBoard() && boardManager.getIsBlackQueenOnBoard()), 
+								 boardManager.getWhitePieces().size(), boardManager.getBlackPieces().size());
+		drawArbiter.updateCounter(move.isCapture(), move.getMovingPiece().isQueen());
+		checkGameState();
 	}
 	
 	//methods for making moves hop by hop
 	
-	/*
+	
 	public void tileClicked(int index) throws NoPieceFoundInRequestedTileException, 
 												 WrongColorFoundInRequestedTileException,
 												 NoCorrectMovesForSelectedPieceException, 
@@ -142,8 +164,6 @@ public class GameEngine {
 			}
 		}		
 	}
-	*/
-	
 	
 	public boolean isClickedTilePossibleDestination(int position) {
 		for(Integer possibleDestinations : possibleHopDestinations) {
@@ -207,6 +227,9 @@ public class GameEngine {
 		
 	}
 	
+	
+	////////////////////////// methods useful for both methods
+	
 	public void checkGameState() {
 		if(moveManager.getPossibleMoves().size() == 0) {
 			if(isWhiteToMove) setGameState(GameState.WON_BY_BLACK);
@@ -216,13 +239,10 @@ public class GameEngine {
 			if(isGameDrawn()) setGameState(GameState.DRAWN);
 	}
 	
-	
-	
 	public boolean isGameDrawn() {
 		if(drawArbiter.getDrawCounter() == 0) return true;
 		else return false;
 	}
-	
 	
 	public enum GameState {
 		RUNNING,

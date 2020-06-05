@@ -80,19 +80,5 @@ public class MoveManager {
 		
 	}
 	
-	public void checkForPawnPromotion(int destination) {
-		if(destination < 6 || destination > 45) {
-			Piece piece = null;
-			try {
-				piece = boardManager.findPieceByIndex(destination);
-			} catch (NoPieceFoundInRequestedTileException ex) {
-				ex.printStackTrace();
-			}
-			
-			if(!boardManager.isMovedPieceQueen(destination)) boardManager.promotePawn(piece);
-		}
-	}
-	
-	
 	
 }
