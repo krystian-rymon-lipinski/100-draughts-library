@@ -264,8 +264,7 @@ public class BoardManagerTest {
 		assertEquals(22, whiteMoves.get(0).getHop(1).getDestination().getIndex());
 		assertEquals(19, whiteMoves.get(0).getHop(0).getTakenPawn().getIndex());
 		assertEquals(18, whiteMoves.get(0).getHop(1).getTakenPawn().getIndex());
-		
-		assertEquals(24, testObj.findPieceByIndex(24).getPosition().getIndex());
+		assertEquals(24, whiteMoves.get(0).getMovingPiece().getPosition().getIndex());
 		
 	}
 	

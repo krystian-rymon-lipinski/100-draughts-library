@@ -1,5 +1,6 @@
 package draughts.library;
 
+import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 
 public class Capture extends Hop {
@@ -13,7 +14,6 @@ public class Capture extends Hop {
 	
 	public Tile getTakenPawn() {
 		return takenPawn;
-	}
-	
+	}	
 
 }

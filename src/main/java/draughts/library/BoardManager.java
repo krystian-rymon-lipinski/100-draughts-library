@@ -243,7 +243,7 @@ public class BoardManager {
 				if(captures.size() == 0) break; //no captures available for piece
 				else {
 					for(Capture capture : captures) {
-						newMoves.add(new Move<Capture>(capture));
+						newMoves.add(new Move<Capture>(piece, capture));
 					}
 				}
 			}
@@ -254,7 +254,7 @@ public class BoardManager {
 					}
 					captures = piece.findCaptures(board);
 					for(Capture capture: captures) {
-						if(!pawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
+						if(!isPawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
 							newMoves.add(new Move<Capture>(moves.get(i)));
 							newMoves.get(newMoves.size()-1).addHop(capture);
 						}			
@@ -276,7 +276,7 @@ public class BoardManager {
 	}
 	
 	
-	public boolean pawnAlreadyTaken(Move<Capture> move, Capture capture) {
+	public boolean isPawnAlreadyTaken(Move<Capture> move, Capture capture) {
 		for(int i=0; i<move.getNumberOfHops(); i++) {
 			if(move.getHop(i).getTakenPawn() == capture.getTakenPawn())
 				return true;

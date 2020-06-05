@@ -68,6 +68,13 @@ public class GameEngine {
 		moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
 	}
 	
+	public void finishMove() {
+		checkForPawnPromotion();
+		checkIfGameShouldEnd();
+		changePlayer();
+		
+	}
+	
 	//methods for making move all hops at once
 	
 	public void isMadeMoveCorrect(int source, int destination, ArrayList<Integer> taken) {
@@ -75,10 +82,6 @@ public class GameEngine {
 		if(correctMove != null) {
 			updateBoard(correctMove);
 		} 	
-	}
-	
-	public void findBoardObjectsByIndexes() {
-		
 	}
 	
 	public void updateBoard(Move<? extends Hop> correctMove) {
@@ -95,22 +98,13 @@ public class GameEngine {
 				else {
 					boardManager.makeHop(movedPiece, destinationTile);
 				}
-			}
-			
-			
-			if(correctMove.isCapture()) {
-				for(int i=0; i<correctMove.getNumberOfHops(); i++) {
-					takenPieces.add(boardManager.findPieceByIndex(correctMove.getMoveTakenPawns().get(i).getIndex()));
-				}
-			}
+			}		
 		} catch(NoPieceFoundInRequestedTileException ex) {}
 		
-		for(int i=0; i<correctMove.getNumberOfHops(); i++) {
-			if(correctMove.isCapture()) 
-				boardManager.makeCapture(movedPiece, destinationTile, takenPieces.get(i));
-		}
+		finishMove(correctMove());
 	}
 	
+	//methods for making moves hop by hop
 	
 	/*
 	public void tileClicked(int index) throws NoPieceFoundInRequestedTileException, 
@@ -159,7 +153,7 @@ public class GameEngine {
 	}
 	
 	public boolean isClickedTileOccupiedByProperColor(int index) {
-		Tile.State chosenTileState = moveManager.getBoardManager().findTileByIndex(index).getState();
+		Tile.State chosenTileState = boardManager.findTileByIndex(index).getState();
 		if(isWhiteToMove)
 			return (chosenTileState == Tile.State.WHITE_PAWN ||
 					chosenTileState == Tile.State.WHITE_QUEEN) ? true : false;
@@ -169,7 +163,7 @@ public class GameEngine {
 	}
 	
 	public boolean isChosenTileEmpty(int index) {
-		return moveManager.getBoardManager().findTileByIndex(index).getState() == Tile.State.EMPTY ? true : false;
+		return boardManager.findTileByIndex(index).getState() == Tile.State.EMPTY ? true : false;
 	}
 	
 	public void addPossibleHopDestinations(int position) throws NoCorrectMovesForSelectedPieceException {
@@ -190,13 +184,13 @@ public class GameEngine {
 		try {
 			moveManager.checkForPawnPromotion(destination);
 			drawArbiter.updateCounter(moveManager.getPossibleMoves().get(0).isCapture(), 
-									moveManager.getBoardManager().findPieceByIndex(destination).isQueen());
+									boardManager.findPieceByIndex(destination).isQueen());
 			} catch(Exception ex) {}
 			
-			drawArbiter.updateState((moveManager.getBoardManager().getIsWhiteQueenOnBoard() && 
-									 moveManager.getBoardManager().getIsBlackQueenOnBoard()),
-									moveManager.getBoardManager().getWhitePieces().size(),
-									moveManager.getBoardManager().getBlackPieces().size());	
+			drawArbiter.updateState((boardManager.getIsWhiteQueenOnBoard() && 
+									 boardManager.getIsBlackQueenOnBoard()),
+									 boardManager.getWhitePieces().size(),
+									 boardManager.getBlackPieces().size());	
 			moveManager.moveDone();
 	}
 	

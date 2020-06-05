@@ -90,7 +90,6 @@ public class MoveManagerTest {
 	}
 	
 	
-	
 	@Test
 	public void findAllCorrectMoves_whenCapturesAvailable_test() {	
 		boardManager.addWhitePawn(46);

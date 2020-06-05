@@ -35,6 +35,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(27, whiteMoves.get(0).getHop(0).getDestination().getIndex());
 		assertEquals(21, whiteMoves.get(1).getHop(0).getDestination().getIndex());
 		assertEquals(16, whiteMoves.get(2).getHop(0).getDestination().getIndex());
+		assertEquals(32, whiteMoves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(32, whiteMoves.get(2).getMovingPiece().getPosition().getIndex());
 		
 		
 		boardManager.addBlackQueen(12);
@@ -48,6 +50,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(12, blackMoves.get(1).getHop(0).getSource().getIndex());
 		assertEquals(7, blackMoves.get(0).getHop(0).getDestination().getIndex());
 		assertEquals(1, blackMoves.get(1).getHop(0).getDestination().getIndex());
+		assertEquals(12, blackMoves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(12, blackMoves.get(1).getMovingPiece().getPosition().getIndex());
 	}
 	
 	@Test
@@ -67,6 +71,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(14, whiteMoves.get(3).getHop(0).getDestination().getIndex());
 		assertEquals(10, whiteMoves.get(4).getHop(0).getDestination().getIndex());
 		assertEquals(5, whiteMoves.get(5).getHop(0).getDestination().getIndex());
+		assertEquals(32, whiteMoves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(32, whiteMoves.get(5).getMovingPiece().getPosition().getIndex());
 		
 		
 		boardManager.addBlackQueen(12);
@@ -80,6 +86,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(12, blackMoves.get(1).getHop(0).getSource().getIndex());
 		assertEquals(8, blackMoves.get(0).getHop(0).getDestination().getIndex());
 		assertEquals(3, blackMoves.get(1).getHop(0).getDestination().getIndex());
+		assertEquals(12, blackMoves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(12, blackMoves.get(1).getMovingPiece().getPosition().getIndex());
 	}
 	
 	@Test
@@ -96,6 +104,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(37, whiteMoves.get(0).getHop(0).getDestination().getIndex());
 		assertEquals(41, whiteMoves.get(1).getHop(0).getDestination().getIndex());
 		assertEquals(46, whiteMoves.get(2).getHop(0).getDestination().getIndex());
+		assertEquals(32, whiteMoves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(32, whiteMoves.get(2).getMovingPiece().getPosition().getIndex());
 		
 		
 		boardManager.addBlackQueen(12);
@@ -110,6 +120,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(17, blackMoves.get(0).getHop(0).getDestination().getIndex());
 		assertEquals(21, blackMoves.get(1).getHop(0).getDestination().getIndex());
 		assertEquals(26, blackMoves.get(2).getHop(0).getDestination().getIndex());
+		assertEquals(12, blackMoves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(12, blackMoves.get(2).getMovingPiece().getPosition().getIndex());
 	}
 	
 	@Test
@@ -126,6 +138,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(38, whiteMoves.get(0).getHop(0).getDestination().getIndex());
 		assertEquals(43, whiteMoves.get(1).getHop(0).getDestination().getIndex());
 		assertEquals(49, whiteMoves.get(2).getHop(0).getDestination().getIndex());
+		assertEquals(32, whiteMoves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(32, whiteMoves.get(2).getMovingPiece().getPosition().getIndex());
 		
 		
 		boardManager.addBlackQueen(12);
@@ -143,6 +157,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(34, blackMoves.get(3).getHop(0).getDestination().getIndex());
 		assertEquals(40, blackMoves.get(4).getHop(0).getDestination().getIndex());
 		assertEquals(45, blackMoves.get(5).getHop(0).getDestination().getIndex());
+		assertEquals(12, blackMoves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(12, blackMoves.get(5).getMovingPiece().getPosition().getIndex());
 
 	}
 	

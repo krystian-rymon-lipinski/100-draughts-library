@@ -2,26 +2,34 @@ package draughts.library;
 
 import java.util.ArrayList;
 
+import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 
 public class Move<T extends Hop> {
 	
+	private Piece movingPiece;
 	private ArrayList<T> hops;
 	
-	public Move(T hop) {
+	public Move(Piece movingPiece, T hop) {
+		this.movingPiece = movingPiece;
 		hops = new ArrayList<>();
 		hops.add(hop);
 	}
 	
 	public Move(Move<T> move) {
-		hops = new ArrayList<>();
+		this.movingPiece = move.movingPiece;
+		this.hops = new ArrayList<>();
 		for(int i=0; i<move.getNumberOfHops(); i++) {
-			hops.add(move.getHop(i));
+			this.hops.add(move.hops.get(i));
 		}
 	}
 	
 	public ArrayList<T> getHops() {
 		return hops;
+	}
+	
+	public Piece getMovingPiece() {
+		return movingPiece;
 	}
 	
 	public T getHop(int numberOfHopInMove) {

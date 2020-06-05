@@ -40,7 +40,7 @@ public abstract class Queen extends Piece {
 			Tile target = findTarget(moveDirection, board, hopLength);
 
 			if(target.getState() == Tile.State.EMPTY) {
-				moves.add(new Move<Hop>(new Hop(getPosition(), target)));
+				moves.add(new Move<Hop>(this, new Hop(getPosition(), target)));
 				hopLength++;
 			} else break;
 			
