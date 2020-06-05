@@ -64,9 +64,55 @@ public class GameEngine {
 		boardManager.createStartingPosition();
 		gameState = GameState.RUNNING;
 		isWhiteToMove = true;
-		moveManager.findAllCorrectMoves(isWhiteToMove);
+		
+		moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
 	}
 	
+	//methods for making move all hops at once
+	
+	public void isMadeMoveCorrect(int source, int destination, ArrayList<Integer> taken) {
+		Move<? extends Hop> correctMove = moveManager.isMadeMoveCorrect(source, destination, taken);
+		if(correctMove != null) {
+			updateBoard(correctMove);
+		} 	
+	}
+	
+	public void findBoardObjectsByIndexes() {
+		
+	}
+	
+	public void updateBoard(Move<? extends Hop> correctMove) {
+		try {
+			ArrayList<Piece> takenPieces = new ArrayList<>();
+			Piece movedPiece = boardManager.findPieceByIndex(correctMove.getMoveSource().getIndex());
+			Tile destinationTile = boardManager.findTileByIndex(correctMove.getMoveDestination().getIndex());
+			
+			for(int i=0; i<correctMove.getNumberOfHops(); i++) {
+				if(correctMove.isCapture()) {
+					takenPieces.add(boardManager.findPieceByIndex(correctMove.getMoveTakenPawns().get(i).getIndex()));
+					boardManager.makeCapture(movedPiece, correctMove.getHop(i).getDestination(), takenPieces.get(i));
+				}
+				else {
+					boardManager.makeHop(movedPiece, destinationTile);
+				}
+			}
+			
+			
+			if(correctMove.isCapture()) {
+				for(int i=0; i<correctMove.getNumberOfHops(); i++) {
+					takenPieces.add(boardManager.findPieceByIndex(correctMove.getMoveTakenPawns().get(i).getIndex()));
+				}
+			}
+		} catch(NoPieceFoundInRequestedTileException ex) {}
+		
+		for(int i=0; i<correctMove.getNumberOfHops(); i++) {
+			if(correctMove.isCapture()) 
+				boardManager.makeCapture(movedPiece, destinationTile, takenPieces.get(i));
+		}
+	}
+	
+	
+	/*
 	public void tileClicked(int index) throws NoPieceFoundInRequestedTileException, 
 												 WrongColorFoundInRequestedTileException,
 												 NoCorrectMovesForSelectedPieceException, 
@@ -91,7 +137,7 @@ public class GameEngine {
 					addPossibleHopDestinations(index);
 				}
 				else if(isClickedTilePossibleDestination(index)) {
-					moveManager.makeHop(markedPiecePosition, index);
+					boardManager.makeHop(chosenPiece, index);
 					if(moveManager.isMoveFinished()) {
 						moveFinished(index);
 					}
@@ -102,10 +148,8 @@ public class GameEngine {
 			}
 		}		
 	}
+	*/
 	
-	public void moveMade(int source, int destination, ArrayList<Integer> takenPawns) { //for entire move done at once
-		
-	}
 	
 	public boolean isClickedTilePossibleDestination(int position) {
 		for(Integer possibleDestinations : possibleHopDestinations) {

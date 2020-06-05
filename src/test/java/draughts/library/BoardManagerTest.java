@@ -40,8 +40,9 @@ public class BoardManagerTest {
 		try {
 			Piece movedPiece = testObj.findPieceByIndex(source);
 			Tile dst = testObj.findTileByIndex(destination);
+			Piece takenPiece = testObj.findPieceByIndex(taken);
 			
-			testObj.makeCapture(movedPiece, dst, taken);
+			testObj.makeCapture(movedPiece, dst, takenPiece);
 		} catch(NoPieceFoundInRequestedTileException e) {}
 	}
 	

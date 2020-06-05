@@ -160,18 +160,10 @@ public class BoardManager {
 		
 	}
 
-	public void makeCapture(Piece movedPiece, Tile destination, int taken){
-		try {
-			Piece takenPiece = findPieceByIndex(taken);
+	public void makeCapture(Piece movedPiece, Tile destination, Piece takenPiece){
 			makeHop(movedPiece, destination);
-			
-			if(takenPiece.isWhite())
-				removeWhitePiece(takenPiece);
-			else 
-				removeBlackPiece(takenPiece);
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
-		}		
+			if(takenPiece.isWhite()) removeWhitePiece(takenPiece);
+			else                     removeBlackPiece(takenPiece);
 	}
 	
 	

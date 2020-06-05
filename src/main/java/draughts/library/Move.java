@@ -20,6 +20,10 @@ public class Move<T extends Hop> {
 		}
 	}
 	
+	public ArrayList<T> getHops() {
+		return hops;
+	}
+	
 	public T getHop(int numberOfHopInMove) {
 		return hops.get(numberOfHopInMove);
 	}
@@ -54,6 +58,24 @@ public class Move<T extends Hop> {
 			}
 		}
 		return takenPawns;
+	}
+	
+	public boolean doesSourceMatch(int source) {
+		return getMoveSource().getIndex() == source;
+	}
+	
+	public boolean doesDestinationMatch(int destination) {
+		return getMoveDestination().getIndex() == destination;
+	}
+	
+	public boolean doesTakenPawnsMatch(ArrayList<Integer> takenPawns) {
+		if(getMoveTakenPawns().size() != takenPawns.size()) return false;
+		else {
+			for(int i=0; i<takenPawns.size(); i++) {
+				if(takenPawns.get(i) != ((Capture) hops.get(i)).getTakenPawn().getIndex()) return false;
+			}
+			return true;
+		}
 	}
 
 	public String toString() {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import draughts.library.boardmodel.Piece;
+import draughts.library.boardmodel.Tile;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 
 public class MoveManager {
@@ -23,21 +24,21 @@ public class MoveManager {
 	public int getHopsMadeInMove() {
 		return hopsMadeInMove;
 	}
-	/*	
-	public void makeHop(int source, int destination) {
-		findMovesFromAllPossible(destination);
-		
-		if(!possibleMoves.get(0).isCapture())
-			boardManager.makeHop(source, destination);
-		else {
-			Capture capture = (Capture) possibleMoves.get(0).getHop(hopsMadeInMove);
-			boardManager.makeCapture(source, destination, capture.getTakenPawn());
+
+	//methods for making move all hops at once
+	
+	public Move<? extends Hop> isMadeMoveCorrect(int source, int destination, ArrayList<Integer> takenPawns) {
+		for(Move<? extends Hop> move : possibleMoves) {
+			if(move.doesSourceMatch(source) &&
+			   move.doesDestinationMatch(destination) &&
+			   move.doesTakenPawnsMatch(takenPawns))
+			   		return move;
 		}
 		
-		hopsMadeInMove++;
-		
+		return null;
 	}
-	*/
+	
+	//methods for making move hop by hop
 	
 	
 	public void findMovesFromAllPossible(int destination) {
@@ -71,7 +72,7 @@ public class MoveManager {
 		return (hopsMadeInMove == possibleMoves.get(0).getNumberOfHops()) ? true : false;
 	}
 	
-	public void findAllCorrectMoves(boolean isWhiteToMove) {
+	public void findAllCorrectMoves(BoardManager boardManager, boolean isWhiteToMove) {
 		
 		possibleMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
 		if(possibleMoves.size() == 0)

@@ -46,7 +46,7 @@ public class GameEngineTest {
 		testObj.startGame();
 		
 		assertTrue(testObj.getIsWhiteToMove());
-		assertEquals(0, testObj.getMarkedPiecePosition());
+		assertNull(testObj.getChosenPiece());
 		assertEquals(9, testObj.getMoveManager().getPossibleMoves().size());
 		assertEquals(GameState.RUNNING, testObj.getGameState());
 		assertEquals(50, testObj.getDrawArbiter().getDrawCounter());
