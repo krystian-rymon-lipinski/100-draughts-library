@@ -8,18 +8,12 @@ import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 
 public class MoveManager {
 	
-	private BoardManager boardManager;
 	private ArrayList<Move<? extends Hop>> possibleMoves;
 	private int hopsMadeInMove;
 	
 	public MoveManager() {
-		boardManager = new BoardManager();
 		possibleMoves = new ArrayList<>();
 		hopsMadeInMove = 0;
-	}
-	
-	public BoardManager getBoardManager() {
-		return boardManager;
 	}
 	
 	public ArrayList<Move<? extends Hop>> getPossibleMoves() {
@@ -43,6 +37,8 @@ public class MoveManager {
 		hopsMadeInMove++;
 		
 	}
+	
+	public void 
 	
 	
 	public void findMovesFromAllPossible(int destination) {

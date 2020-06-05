@@ -9,34 +9,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import draughts.library.boardmodel.Tile;
+
 @RunWith(MockitoJUnitRunner.class)
 public class MoveManagerTest {
 	
 	MoveManager testObj;
-	GameEngine gameEngine;
 	BoardManager boardManager;
 	
 	@Before
 	public void setUp() {
-		gameEngine = new GameEngine();
-		gameEngine.setIsWhiteToMove(true);
-		testObj = gameEngine.getMoveManager();
-		boardManager = testObj.getBoardManager();
+		testObj = new MoveManager();
+		boardManager = new BoardManager();
 		boardManager.createEmptyBoard();
-	}
-	
-	@Test
-	public void addHops_test() {
-		Move<Hop> move = new Move<Hop>(new Hop(31, 26));
-		move.addHop(new Hop(26, 21));
-		
-		assertEquals(2, move.getNumberOfHops());
-		
-		Move<Capture> move2 = new Move<Capture>(new Capture(35, 24, 30));
-		move2.addHop(new Capture(24, 15, 20));
-		move2.addHop(new Capture(15, 4, 10));
-		
-		assertEquals(3, move2.getNumberOfHops());
 	}
 	
 	@Test
@@ -78,7 +63,7 @@ public class MoveManagerTest {
 		boardManager.addWhitePawn(12);
 		boardManager.addBlackPawn(39);
 
-		testObj.findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		testObj.findAllCorrectMoves(true);
 		testObj.makeHop(12, 7);
 		gameEngine.moveFinished(7);
 		
@@ -95,7 +80,7 @@ public class MoveManagerTest {
 		boardManager.addWhitePawn(7);
 		boardManager.addBlackPawn(44);
 
-		testObj.findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		testObj.findAllCorrectMoves(true);
 		testObj.makeHop(7, 1);
 		gameEngine.moveFinished(1);
 		

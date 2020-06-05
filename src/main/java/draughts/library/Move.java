@@ -2,6 +2,8 @@ package draughts.library;
 
 import java.util.ArrayList;
 
+import draughts.library.boardmodel.Tile;
+
 public class Move<T extends Hop> {
 	
 	private ArrayList<T> hops;
@@ -33,7 +35,25 @@ public class Move<T extends Hop> {
 	public boolean isCapture() {
 		if(hops.get(0) instanceof Capture) return true;
 		else return false;
-		
+	}
+	
+	public Tile getMoveSource() {
+		return hops.get(0).getSource();
+	}
+	
+	public Tile getMoveDestination() {
+		return hops.get(hops.size()-1).getDestination();
+	}
+	
+	public ArrayList<Tile> getMoveTakenPawns() {
+		ArrayList<Tile> takenPawns = new ArrayList<>();
+		if(isCapture()) {
+			for(T hop : hops) {
+				Capture capture = (Capture) hop;
+				takenPawns.add(capture.getTakenPawn());
+			}
+		}
+		return takenPawns;
 	}
 
 	public String toString() {

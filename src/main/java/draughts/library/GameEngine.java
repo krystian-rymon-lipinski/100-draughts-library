@@ -2,6 +2,7 @@ package draughts.library;
 
 import java.util.ArrayList;
 
+import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
@@ -12,15 +13,17 @@ public class GameEngine {
 	
 	private MoveManager moveManager;
 	private boolean isWhiteToMove;
-	private int markedPiecePosition;
 	private ArrayList<Integer> possibleHopDestinations;
 	private GameState gameState;
 	private DrawArbiter drawArbiter;
+	private BoardManager boardManager;
+	private Piece chosenPiece;
 	
 	public GameEngine() {
+		boardManager = new BoardManager();
 		moveManager = new MoveManager();
 		drawArbiter = new DrawArbiter();
-		markedPiecePosition = 0;
+		chosenPiece = null;
 		possibleHopDestinations = new ArrayList<>();
 	}
 	
@@ -32,8 +35,8 @@ public class GameEngine {
 		this.isWhiteToMove = isWhiteToMove;
 	}
 	
-	public int getMarkedPiecePosition() {
-		return markedPiecePosition;
+	public Piece getChosenPiece() {
+		return chosenPiece;
 	}
 	
 	public MoveManager getMoveManager() {
@@ -69,7 +72,7 @@ public class GameEngine {
 												 NoCorrectMovesForSelectedPieceException, 
 												 WrongMoveException {
 		if(gameState == GameState.RUNNING) {
-			if(markedPiecePosition == 0) { //no piece marked yet - first part of making a hop
+			if(chosenPiece == null) { //no piece marked yet - first part of making a hop
 				if(isChosenTileEmpty(index)) 
 					throw new NoPieceFoundInRequestedTileException("No piece found on chosen tile!");
 					
@@ -77,14 +80,14 @@ public class GameEngine {
 					throw new WrongColorFoundInRequestedTileException("No piece of your color on chosen tile!");
 				
 				else {
-					markedPiecePosition = index;
+					chosenPiece = boardManager.findPieceByIndex(index);
 					addPossibleHopDestinations(index);
 				}
 			}
 			
 			else {
 				if(isClickedTileOccupiedByProperColor(index)) {
-					markedPiecePosition = index;
+					chosenPiece = boardManager.findPieceByIndex(index);
 					addPossibleHopDestinations(index);
 				}
 				else if(isClickedTilePossibleDestination(index)) {
