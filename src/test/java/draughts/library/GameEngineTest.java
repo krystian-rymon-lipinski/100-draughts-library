@@ -54,6 +54,9 @@ public class GameEngineTest {
 		assertEquals(DrawArbiter.DrawConditions.NONE, testObj.getDrawArbiter().getDrawConditions());
 	}
 	
+	//tests for making move all hops at once
+	
+	
 	@Test(expected = NoPieceFoundInRequestedTileException.class)
 	public void tileClicked_noPieceFound_test() throws NoPieceFoundInRequestedTileException, 
 	 												   WrongColorFoundInRequestedTileException,

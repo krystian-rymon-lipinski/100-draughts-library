@@ -72,12 +72,11 @@ public class GameEngine {
 	
 	//methods for making move all hops at once
 	
-	public void isMadeMoveCorrect(int source, int destination, ArrayList<Integer> taken) {
+	public void isMadeMoveCorrect(int source, int destination, ArrayList<Integer> taken) throws WrongMoveException {
 		if(gameState == GameState.RUNNING) {
 			Move<? extends Hop> correctMove = moveManager.isMadeMoveCorrect(source, destination, taken);
-			if(correctMove != null) {
-				updateBoard(correctMove);
-			} 	
+			if(correctMove == null) throw new WrongMoveException("Chosen move is not allowed");
+			else updateBoard(correctMove);
 		}
 	}
 	
@@ -114,7 +113,7 @@ public class GameEngine {
 	}
 	
 	public void changePlayer() {
-		moveManager.getPossibleMoves().clear();
+		moveManager.moveDone();
 		isWhiteToMove = !isWhiteToMove;
 		moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
 	}
@@ -126,38 +125,43 @@ public class GameEngine {
 		checkGameState();
 	}
 	
-	//methods for making moves hop by hop
 	
+	//methods for making moves hop by hop
 	
 	public void tileClicked(int index) throws NoPieceFoundInRequestedTileException, 
 												 WrongColorFoundInRequestedTileException,
 												 NoCorrectMovesForSelectedPieceException, 
 												 WrongMoveException {
 		if(gameState == GameState.RUNNING) {
+			Tile chosenTile = boardManager.findTileByIndex(index);
+
 			if(chosenPiece == null) { //no piece marked yet - first part of making a hop
-				if(isChosenTileEmpty(index)) 
-					throw new NoPieceFoundInRequestedTileException("No piece found on chosen tile!");
-					
-				else if(!isClickedTileOccupiedByProperColor(index)) 
-					throw new WrongColorFoundInRequestedTileException("No piece of your color on chosen tile!");
-				
+				if(isChosenTileEmpty(chosenTile)) 
+					throw new NoPieceFoundInRequestedTileException("No piece found on chosen tile!");				
+				else if(!isClickedTileOccupiedByProperColor(chosenTile)) 
+					throw new WrongColorFoundInRequestedTileException("No piece of your color on chosen tile!");		
 				else {
 					chosenPiece = boardManager.findPieceByIndex(index);
-					addPossibleHopDestinations(index);
+					if(moveManager.findPossibleHopDestinations(chosenPiece).size() == 0)
+						throw new NoCorrectMovesForSelectedPieceException("Other pieces should move");
 				}
-			}
-			
+			}		
 			else {
-				if(isClickedTileOccupiedByProperColor(index)) {
+				if(isClickedTileOccupiedByProperColor(chosenTile)) {
 					chosenPiece = boardManager.findPieceByIndex(index);
-					addPossibleHopDestinations(index);
+					if(moveManager.findPossibleHopDestinations(chosenPiece).size() == 0)
+						throw new NoCorrectMovesForSelectedPieceException("Other pieces should move");
 				}
-				else if(isClickedTilePossibleDestination(index)) {
-					boardManager.makeHop(chosenPiece, index);
+				else if(moveManager.isClickedTilePossibleDestination(chosenTile)) {
+					boardManager.makeHop(chosenPiece, chosenTile);
+					moveManager.hopFinished(chosenPiece);
 					if(moveManager.isMoveFinished()) {
-						moveFinished(index);
+						finishMove(moveManager.getPossibleMoves().get(0));
 					}
-					else hopFinished(index);
+					else {
+						moveManager.updatePossibleMoves(chosenPiece);
+						moveManager.findPossibleHopDestinations(chosenPiece);
+					}
 				}
 				else
 					throw new WrongMoveException("Wrong move");
@@ -165,68 +169,18 @@ public class GameEngine {
 		}		
 	}
 	
-	public boolean isClickedTilePossibleDestination(int position) {
-		for(Integer possibleDestinations : possibleHopDestinations) {
-			if(position == possibleDestinations) return true;
-		}	
-		return false;
-	}
-	
-	public boolean isClickedTileOccupiedByProperColor(int index) {
-		Tile.State chosenTileState = boardManager.findTileByIndex(index).getState();
+	public boolean isClickedTileOccupiedByProperColor(Tile chosenTile) {
 		if(isWhiteToMove)
-			return (chosenTileState == Tile.State.WHITE_PAWN ||
-					chosenTileState == Tile.State.WHITE_QUEEN) ? true : false;
+			return (chosenTile.getState() == Tile.State.WHITE_PAWN ||
+					chosenTile.getState() == Tile.State.WHITE_QUEEN) ? true : false;
 		else
-			return (chosenTileState == Tile.State.BLACK_PAWN ||
-			chosenTileState == Tile.State.BLACK_QUEEN) ? true : false;
+			return (chosenTile.getState() == Tile.State.BLACK_PAWN ||
+					chosenTile.getState() == Tile.State.BLACK_QUEEN) ? true : false;
 	}
 	
-	public boolean isChosenTileEmpty(int index) {
-		return boardManager.findTileByIndex(index).getState() == Tile.State.EMPTY ? true : false;
+	public boolean isChosenTileEmpty(Tile chosenTile) {
+		return chosenTile.getState() == Tile.State.EMPTY ? true : false;
 	}
-	
-	public void addPossibleHopDestinations(int position) throws NoCorrectMovesForSelectedPieceException {
-		possibleHopDestinations = moveManager.doesChosenPawnHaveMoves(position);
-		if(possibleHopDestinations.size() == 0)
-			throw new NoCorrectMovesForSelectedPieceException("Other pieces should move");
-	}
-	
-	public void moveFinished(int destination) {
-		finishPreviousMove(destination);
-		prepareNewMove();
-	
-		moveManager.findAllCorrectMoves(isWhiteToMove);		
-		checkGameState();
-	}
-	
-	public void finishPreviousMove(int destination) {
-		try {
-			moveManager.checkForPawnPromotion(destination);
-			drawArbiter.updateCounter(moveManager.getPossibleMoves().get(0).isCapture(), 
-									boardManager.findPieceByIndex(destination).isQueen());
-			} catch(Exception ex) {}
-			
-			drawArbiter.updateState((boardManager.getIsWhiteQueenOnBoard() && 
-									 boardManager.getIsBlackQueenOnBoard()),
-									 boardManager.getWhitePieces().size(),
-									 boardManager.getBlackPieces().size());	
-			moveManager.moveDone();
-	}
-	
-	public void prepareNewMove() {
-		isWhiteToMove = !isWhiteToMove;
-		markedPiecePosition = 0;
-		possibleHopDestinations.clear();
-	}
-	
-	public void hopFinished(int destination) throws NoCorrectMovesForSelectedPieceException {
-		markedPiecePosition = destination;
-		possibleHopDestinations.clear();
-		addPossibleHopDestinations(destination);
-		
-	}
-	
 	
 	////////////////////////// methods useful for both methods
 	

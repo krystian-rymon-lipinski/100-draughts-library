@@ -24,7 +24,7 @@ public class MoveManagerTest {
 		boardManager.createEmptyBoard();
 	}
 	
-	//methods for move made all hops at once
+	//tests for making move all hops at once
 	
 	@Test
 	public void isMadeMoveCorrect_wrongPieceMoved_test() {
