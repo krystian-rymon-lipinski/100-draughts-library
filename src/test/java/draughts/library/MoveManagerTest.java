@@ -57,7 +57,7 @@ public class MoveManagerTest {
 		
 		assertEquals(12, testObj.getPossibleMoves().size());
 	}
-	
+/*	
 	@Test
 	public void checkForPawnPromotion_noPromotion_test() {
 		boardManager.addWhitePawn(12);
@@ -91,6 +91,6 @@ public class MoveManagerTest {
 		
 		assertTrue(boardManager.getBlackPieces().get(0).isQueen());
 	}
-
+*/
 
 }

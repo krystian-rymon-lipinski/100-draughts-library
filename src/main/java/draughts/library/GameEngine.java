@@ -61,7 +61,7 @@ public class GameEngine {
 	
 	
 	public void startGame() {
-		moveManager.getBoardManager().createStartingPosition();
+		boardManager.createStartingPosition();
 		gameState = GameState.RUNNING;
 		isWhiteToMove = true;
 		moveManager.findAllCorrectMoves(isWhiteToMove);
@@ -101,6 +101,10 @@ public class GameEngine {
 					throw new WrongMoveException("Wrong move");
 			}
 		}		
+	}
+	
+	public void moveMade(int source, int destination, ArrayList<Integer> takenPawns) { //for entire move done at once
+		
 	}
 	
 	public boolean isClickedTilePossibleDestination(int position) {

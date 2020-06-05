@@ -104,12 +104,14 @@ public class BoardManager {
 		Tile position = findTileByIndex(index);
 		position.setState(Tile.State.WHITE_QUEEN);
 		whitePieces.add(new WhiteQueen(position));
+		isWhiteQueenOnBoard = true;
 	}
 	
 	public void addBlackQueen(int index) {
 		Tile position = findTileByIndex(index);
 		position.setState(Tile.State.BLACK_QUEEN);
 		blackPieces.add(new BlackQueen(position));
+		isBlackQueenOnBoard = true;
 	}
 	
 	public void removeWhitePiece(Piece piece) {
@@ -142,7 +144,6 @@ public class BoardManager {
 	}
 	
 	public void makeHop(Piece movedPiece, Tile destination) {
-		System.out.println(movedPiece.getPosition().getIndex() + "->" + destination.getIndex());
 		movedPiece.getPosition().setState(Tile.State.EMPTY);	
 		movedPiece.hop(destination);
 		
@@ -152,11 +153,9 @@ public class BoardManager {
 		if(promotedPawn.isWhite()) {
 			removeWhitePiece(promotedPawn);
 			addWhiteQueen(promotedPawn.getPosition().getIndex());
-			isWhiteQueenOnBoard = true;
 		} else {
 			removeBlackPiece(promotedPawn);
 			addBlackQueen(promotedPawn.getPosition().getIndex());
-			isBlackQueenOnBoard = true;
 		}
 		
 	}
@@ -278,7 +277,6 @@ public class BoardManager {
 				moves.clear();
 				moves.addAll(newMoves);
 			}
-			System.out.println(newMoves);
 			
 		} while (newMoves.size() != 0 );
 	

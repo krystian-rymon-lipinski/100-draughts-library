@@ -1,6 +1,7 @@
 package draughts.library;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -83,6 +84,57 @@ public class BoardManagerTest {
 		assertEquals(1, testObj.getBlackPieces().get(0).getPosition().getIndex());
 		assertEquals(50, testObj.getBlackPieces().get(1).getPosition().getIndex());
 	}
+	
+	@Test
+	public void removeWhitePieces_test() throws Exception {
+		testObj.createEmptyBoard();
+		
+		testObj.addWhitePawn(30);
+		testObj.addWhiteQueen(45);
+		testObj.addWhiteQueen(50);
+		
+		Piece piece1 = testObj.findPieceByIndex(30);
+		Piece piece2 = testObj.findPieceByIndex(45);
+		Piece piece3 = testObj.findPieceByIndex(50);
+		assertTrue(testObj.getIsWhiteQueenOnBoard());
+		
+		testObj.removeWhitePiece(piece1);
+		assertEquals(2, testObj.getWhitePieces().size());
+		
+		testObj.removeWhitePiece(piece2);
+		assertEquals(1, testObj.getWhitePieces().size());
+		assertTrue(testObj.getIsWhiteQueenOnBoard());
+		
+		testObj.removeWhitePiece(piece3);
+		assertEquals(0, testObj.getWhitePieces().size());
+		assertFalse(testObj.getIsWhiteQueenOnBoard());
+	}
+	
+	@Test
+	public void removeBlackPieces_Test() throws Exception {
+		testObj.createEmptyBoard();
+		
+		testObj.addBlackPawn(13);
+		testObj.addBlackQueen(24);
+		testObj.addBlackQueen(43);
+		
+		Piece piece1 = testObj.findPieceByIndex(13);
+		Piece piece2 = testObj.findPieceByIndex(24);
+		Piece piece3 = testObj.findPieceByIndex(43);
+		assertTrue(testObj.getIsBlackQueenOnBoard());
+		
+		testObj.removeBlackPiece(piece1);
+		assertEquals(2, testObj.getBlackPieces().size());
+		
+		testObj.removeBlackPiece(piece2);
+		assertEquals(1, testObj.getBlackPieces().size());
+		assertTrue(testObj.getIsBlackQueenOnBoard());
+		
+		testObj.removeBlackPiece(piece3);
+		assertEquals(0, testObj.getBlackPieces().size());
+		assertFalse(testObj.getIsBlackQueenOnBoard());
+	}
+	
 	@Test
 	public void prepareTiles_forStartingPosition_test() {
 		testObj.createStartingPosition();

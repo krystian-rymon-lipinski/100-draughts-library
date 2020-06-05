@@ -23,7 +23,7 @@ public class MoveManager {
 	public int getHopsMadeInMove() {
 		return hopsMadeInMove;
 	}
-		
+	/*	
 	public void makeHop(int source, int destination) {
 		findMovesFromAllPossible(destination);
 		
@@ -37,8 +37,7 @@ public class MoveManager {
 		hopsMadeInMove++;
 		
 	}
-	
-	public void 
+	*/
 	
 	
 	public void findMovesFromAllPossible(int destination) {
