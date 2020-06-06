@@ -2,7 +2,7 @@ package draughts.library.boardmodel;
 
 public class WhiteQueen extends Queen {
 
-	public WhiteQueen(int position) {
+	public WhiteQueen(Tile position) {
 		super(position);
 	}
 	

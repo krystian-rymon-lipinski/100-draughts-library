@@ -88,31 +88,45 @@ public class BoardManager {
 		createPiecesForStartingPosition();
 	}
 	
-	public void addWhitePawn(int position) {
-		whitePieces.add(new WhitePawn(position));
-		findTileByIndex(position).setState(Tile.State.WHITE_PAWN);
+	public WhitePawn addWhitePawn(int index) {
+		Tile position = findTileByIndex(index);
+		position.setState(Tile.State.WHITE_PAWN);
+		WhitePawn whitePawn = new WhitePawn(position);
+		whitePieces.add(whitePawn);
+		return whitePawn;
 	}
 	
-	public void addBlackPawn(int position) {
-		blackPieces.add(new BlackPawn(position));
-		findTileByIndex(position).setState(Tile.State.BLACK_PAWN);
+	public BlackPawn addBlackPawn(int index) {
+		Tile position = findTileByIndex(index);
+		position.setState(Tile.State.BLACK_PAWN);
+		BlackPawn blackPawn = new BlackPawn(position);
+		blackPieces.add(blackPawn);
+		return blackPawn;
 	}
 	
-	public void addWhiteQueen(int position) {
-		whitePieces.add(new WhiteQueen(position));
-		findTileByIndex(position).setState(Tile.State.WHITE_QUEEN);
+	public WhiteQueen addWhiteQueen(int index) {
+		Tile position = findTileByIndex(index);
+		position.setState(Tile.State.WHITE_QUEEN);
+		WhiteQueen whiteQueen = new WhiteQueen(position);
+		whitePieces.add(whiteQueen);
+		isWhiteQueenOnBoard = true;
+		return whiteQueen;
 	}
 	
-	public void addBlackQueen(int position) {
-		blackPieces.add(new BlackQueen(position));
-		findTileByIndex(position).setState(Tile.State.BLACK_QUEEN);
+	public BlackQueen addBlackQueen(int index) {
+		Tile position = findTileByIndex(index);
+		position.setState(Tile.State.BLACK_QUEEN);
+		BlackQueen blackQueen = new BlackQueen(position);
+		blackPieces.add(blackQueen);
+		isBlackQueenOnBoard = true;
+		return blackQueen;
 	}
 	
 	public void removeWhitePiece(Piece piece) {
 		boolean wasQueen = piece.isQueen();
 		
+		piece.getPosition().setState(Tile.State.EMPTY);	
 		whitePieces.remove(piece);
-		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
 		
 		if(wasQueen) {
 			for(Piece whitePiece : whitePieces) {
@@ -126,72 +140,38 @@ public class BoardManager {
 	public void removeBlackPiece(Piece piece) {
 		boolean wasQueen = piece.isQueen();
 		
+		piece.getPosition().setState(Tile.State.EMPTY);
 		blackPieces.remove(piece);
-		findTileByIndex(piece.getPosition()).setState(Tile.State.EMPTY);
 		
 		if(wasQueen) {
 			for(Piece blackPiece : blackPieces) {
 				if (blackPiece.isQueen()) return;
 			}
 			isBlackQueenOnBoard = false;
-		}
-		
-		
-	}
-	
-	public void makeHop(int source, int destination) {
-		try {
-			Piece movedPiece = findPieceByIndex(source);
-			Tile src = findTileByIndex(source);
-			src.setState(Tile.State.EMPTY);
-			
-			Tile dst = findTileByIndex(destination);
-			movedPiece.hop(dst);
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
-		}	
-	}
-	
-	public void promotePawn(Piece promotedPawn) {
-		if(promotedPawn.isWhite()) {
-			removeWhitePiece(promotedPawn);
-			addWhiteQueen(promotedPawn.getPosition());
-			isWhiteQueenOnBoard = true;
-		} else {
-			removeBlackPiece(promotedPawn);
-			addBlackQueen(promotedPawn.getPosition());
-			isBlackQueenOnBoard = true;
-		}
-		
-	}
-	
-	public void reverseHop(int source, int destination) {
-		try {
-			Piece movedPiece = findPieceByIndex(destination);
-			Tile dst = findTileByIndex(destination);
-			dst.setState(Tile.State.EMPTY);
-			
-			Tile src = findTileByIndex(source);
-			movedPiece.reverseHop(src);
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
-		}
-		
-		
-	}
-	
-	public void makeCapture(int source, int destination, int taken){
-		try {
-			Piece takenPiece = findPieceByIndex(taken);
-			makeHop(source, destination);
-			
-			if(isTakenPieceWhite(takenPiece))
-				removeWhitePiece(takenPiece);
-			else 
-				removeBlackPiece(takenPiece);
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
 		}		
+	}
+	
+	public void makeHop(Piece movedPiece, Tile destination) {
+		movedPiece.getPosition().setState(Tile.State.EMPTY);	
+		movedPiece.hop(destination);
+		
+	}
+	
+	public void promotePawn(Piece pawnToPromote) {
+		if(pawnToPromote.isWhite()) {
+			removeWhitePiece(pawnToPromote);
+			addWhiteQueen(pawnToPromote.getPosition().getIndex());
+		} else {
+			removeBlackPiece(pawnToPromote);
+			addBlackQueen(pawnToPromote.getPosition().getIndex());
+		}
+		
+	}
+
+	public void makeCapture(Piece movedPiece, Tile destination, Piece takenPiece){
+			makeHop(movedPiece, destination);
+			if(takenPiece.isWhite()) removeWhitePiece(takenPiece);
+			else                     removeBlackPiece(takenPiece);
 	}
 	
 	
@@ -212,7 +192,7 @@ public class BoardManager {
 		pieces.addAll(blackPieces);
 		
 		for(Piece piece : pieces) {
-			if(piece.getPosition() == tileIndex)
+			if(piece.getPosition().getIndex() == tileIndex)
 				return piece;
 		}
 		
@@ -228,8 +208,7 @@ public class BoardManager {
 		ArrayList<Move<Hop>> pieceMoves = new ArrayList<>();
 		
 		for(Piece piece : pieces) {
-			Tile currentPosition = findTileByIndex(piece.getPosition());
-			pieceMoves = piece.findMoves(board, currentPosition.getRow(), currentPosition.getColumn());
+			pieceMoves = piece.findMoves(board);
 			if(pieceMoves.size() > 0) allMoves.addAll(pieceMoves);
 		}
 		return allMoves;
@@ -259,9 +238,7 @@ public class BoardManager {
 		return allMoves;
 	}
 	
-	public ArrayList<Move<Capture>> findLongestConsecutiveCaptures(Piece piece) {
-		Tile source = findTileByIndex(piece.getPosition());
-		
+	public ArrayList<Move<Capture>> findLongestConsecutiveCaptures(Piece piece) {		
 		ArrayList<Capture> captures = new ArrayList<>();
 		ArrayList<Move<Capture>> moves = new ArrayList<>();
 		ArrayList<Move<Capture>> newMoves = new ArrayList<>();
@@ -270,29 +247,28 @@ public class BoardManager {
 			newMoves.clear();
 						
 			if(moves.size() == 0) { //first capture 
-				captures = piece.findCaptures(board, source.getRow(), source.getColumn());
+				captures = piece.findCaptures(board);
 				if(captures.size() == 0) break; //no captures available for piece
 				else {
 					for(Capture capture : captures) {
-						newMoves.add(new Move<Capture>(capture));
+						newMoves.add(new Move<Capture>(piece, capture));
 					}
 				}
 			}
 			else { //consecutive captures
 				for(int i=0; i<moves.size(); i++) {
 					for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
-						makeHop(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination());
+						makeHop(piece, moves.get(i).getHop(j).getDestination());
 					}
-					source = findTileByIndex(moves.get(i).getHop(moves.get(i).getNumberOfHops()-1).getDestination());
-					captures = piece.findCaptures(board, source.getRow(), source.getColumn());
+					captures = piece.findCaptures(board);
 					for(Capture capture: captures) {
-						if(!pawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
+						if(!isPawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
 							newMoves.add(new Move<Capture>(moves.get(i)));
 							newMoves.get(newMoves.size()-1).addHop(capture);
 						}			
 					}
 					for(int j=moves.get(i).getNumberOfHops()-1; j>=0; j--) {
-						reverseHop(moves.get(i).getHop(j).getSource(), moves.get(i).getHop(j).getDestination());
+						makeHop(piece, moves.get(i).getHop(j).getSource());
 					}
 				}
 			}		
@@ -308,7 +284,7 @@ public class BoardManager {
 	}
 	
 	
-	public boolean pawnAlreadyTaken(Move<Capture> move, Capture capture) {
+	public boolean isPawnAlreadyTaken(Move<Capture> move, Capture capture) {
 		for(int i=0; i<move.getNumberOfHops(); i++) {
 			if(move.getHop(i).getTakenPawn() == capture.getTakenPawn())
 				return true;

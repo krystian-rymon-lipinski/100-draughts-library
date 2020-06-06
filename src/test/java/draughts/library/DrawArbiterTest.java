@@ -12,6 +12,7 @@ public class DrawArbiterTest {
 	DrawArbiter testObj;
 	GameEngine gameEngine;
 	BoardManager boardManager;
+	MoveManager moveManager;
 	
 	@Before
 	public void setUp() {
@@ -19,7 +20,8 @@ public class DrawArbiterTest {
 		gameEngine.setIsWhiteToMove(true);
 		gameEngine.setGameState(GameState.RUNNING);
 		testObj = gameEngine.getDrawArbiter();
-		boardManager = gameEngine.getMoveManager().getBoardManager();
+		boardManager = gameEngine.getBoardManager();
+		moveManager = gameEngine.getMoveManager();
 		boardManager.createEmptyBoard();
 	}
 	
@@ -40,7 +42,7 @@ public class DrawArbiterTest {
 		boardManager.addBlackQueen(16);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		makeMove(10, 5);
 		
@@ -58,7 +60,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		makeMove(33, 6);
 		
@@ -75,7 +77,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		
 		gameEngine.setIsWhiteToMove(false);
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		makeMove(42, 47);
 		
@@ -93,7 +95,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		makeMove(43, 25);
 		makeMove(25, 3);
@@ -109,7 +111,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		
 		gameEngine.setIsWhiteToMove(false);
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		makeMove(45, 50);
 	
@@ -129,7 +131,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		makeMove(37, 19);
 		makeMove(19, 2);
@@ -149,7 +151,7 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		gameEngine.setIsWhiteToMove(false);
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		makeMove(4, 27);
 		makeMove(27, 49);
@@ -171,7 +173,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		makeMove(46, 14);
 		
@@ -189,7 +191,7 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		gameEngine.setIsWhiteToMove(false);
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		makeMove(15, 38);
 		
@@ -209,7 +211,7 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		testObj.updateState(true, 3, 3);
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 
 		assertEquals(50, testObj.getDrawCounter());
 		
@@ -237,7 +239,7 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		testObj.updateState(true, 3, 1);
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		assertEquals(32, testObj.getDrawCounter());
 		
@@ -258,7 +260,7 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		testObj.updateState(true, 2, 1);
-		gameEngine.getMoveManager().findAllCorrectMoves(gameEngine.getIsWhiteToMove());
+		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		assertEquals(10, testObj.getDrawCounter());
 		

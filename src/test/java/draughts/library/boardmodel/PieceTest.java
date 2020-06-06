@@ -21,9 +21,7 @@ public class PieceTest {
 		Piece piece = null;
 		try {
 			piece = boardManager.findPieceByIndex(piecePosition);
-			Tile currentTile = boardManager.findTileByIndex(piecePosition);
-			return piece.findMoves(boardManager.getBoard(), 
-								   currentTile.getRow(), currentTile.getColumn());
+			return piece.findMoves(boardManager.getBoard());
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
 		}
@@ -35,9 +33,7 @@ public class PieceTest {
 		Piece piece = null;
 		try {
 			piece = boardManager.findPieceByIndex(piecePosition);		
-			Tile currentTile = boardManager.findTileByIndex(piecePosition);
-			return piece.findCaptures(boardManager.getBoard(), 
-								   currentTile.getRow(), currentTile.getColumn());
+			return piece.findCaptures(boardManager.getBoard());
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
 		}

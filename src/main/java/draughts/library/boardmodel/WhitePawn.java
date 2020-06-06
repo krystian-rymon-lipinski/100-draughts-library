@@ -7,7 +7,7 @@ import draughts.library.Move;
 
 public class WhitePawn extends Pawn {
 
-	public WhitePawn(int position) {
+	public WhitePawn(Tile position) {
 		super(position);
 	}
 	
@@ -25,14 +25,14 @@ public class WhitePawn extends Pawn {
 		src.setState(Tile.State.WHITE_PAWN);
 	}
 	
-	public ArrayList<Move<Hop>> findMoves(Tile[][] board, int currentRow, int currentColumn) {
+	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
-		if(currentRow>1 && currentColumn>1) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board, currentRow, currentColumn));
-		if(currentRow>1 && currentColumn<10) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board, currentRow, currentColumn));
+		if(getPosition().getRow()>1 && getPosition().getColumn()>1) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board));
+		if(getPosition().getRow()>1 && getPosition().getColumn()<10) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board));
 		return moves;
 	}
 	

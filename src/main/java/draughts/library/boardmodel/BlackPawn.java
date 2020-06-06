@@ -7,7 +7,7 @@ import draughts.library.Move;
 
 public class BlackPawn extends Pawn {
 
-	public BlackPawn(int position) {
+	public BlackPawn(Tile position) {
 		super(position);
 	}
 	
@@ -25,14 +25,14 @@ public class BlackPawn extends Pawn {
 		src.setState(Tile.State.BLACK_PAWN);
 	}
 
-	public ArrayList<Move<Hop>> findMoves(Tile[][] board, int currentRow, int currentColumn) {
+	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
-		if(currentRow<10 && currentColumn>1) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board, currentRow, currentColumn));
-		if(currentRow<10 && currentColumn<10) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board, currentRow, currentColumn));
+		if(getPosition().getRow()<10 && getPosition().getColumn()>1) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board));
+		if(getPosition().getRow()<10 && getPosition().getColumn()<10) 
+			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board));
 		return moves;
 	}
 	

@@ -1,25 +1,27 @@
 package draughts.library;
 
+import draughts.library.boardmodel.Tile;
+
 public class Hop {
 	
-	private int source;
-	private int destination;
+	private Tile source;
+	private Tile destination;
 	
-	public Hop(int source, int destination) {
+	public Hop(Tile source, Tile destination) {
 		this.source = source;
 		this.destination = destination;
 	}
 	
-	public int getSource() {
+	public Tile getSource() {
 		return source;
 	}
 	
-	public int getDestination() {
+	public Tile getDestination() {
 		return destination;
 	}
 	
 	public String toString() {
-		return source + " -> " + destination; 
+		return source.getIndex() + " -> " + destination.getIndex(); 
 	}
 
 }
