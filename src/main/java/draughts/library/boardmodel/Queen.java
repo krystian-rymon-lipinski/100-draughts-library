@@ -20,13 +20,13 @@ public abstract class Queen extends Piece {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
-		if(getPosition().getRow()>1 && getPosition().getColumn()>1) 
+		if(position.getRow()>1 && position.getColumn()>1) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board));
-		if(getPosition().getRow()>1 && getPosition().getColumn()<10) 
+		if(position.getRow()>1 && position.getColumn()<10) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board));
-		if(getPosition().getRow()<10 && getPosition().getColumn()>1) 
+		if(position.getRow()<10 && position.getColumn()>1) 
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board));
-		if(getPosition().getRow()<10 && getPosition().getColumn()<10)
+		if(position.getRow()<10 && position.getColumn()<10)
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board));
 
 		return moves;
@@ -40,7 +40,7 @@ public abstract class Queen extends Piece {
 			Tile target = findTarget(moveDirection, board, hopLength);
 
 			if(target.getState() == Tile.State.EMPTY) {
-				moves.add(new Move<Hop>(this, new Hop(getPosition(), target)));
+				moves.add(new Move<Hop>(this, new Hop(position, target)));
 				hopLength++;
 			} else break;
 			
@@ -52,13 +52,13 @@ public abstract class Queen extends Piece {
 	public boolean isMovePossible(MoveDirection moveDirection, int hopLength) {
 		switch(moveDirection) {
 		case UP_LEFT:
-			return (getPosition().getRow()-hopLength > 0 && getPosition().getColumn()-hopLength > 0);
+			return (position.getRow()-hopLength > 0 && position.getColumn()-hopLength > 0);
 		case UP_RIGHT:
-			return (getPosition().getRow()-hopLength > 0 && getPosition().getColumn()+hopLength < 11);
+			return (position.getRow()-hopLength > 0 && position.getColumn()+hopLength < 11);
 		case DOWN_LEFT:
-			return (getPosition().getRow()+hopLength < 11 && getPosition().getColumn()-hopLength > 0);
+			return (position.getRow()+hopLength < 11 && position.getColumn()-hopLength > 0);
 		case DOWN_RIGHT:
-			return (getPosition().getRow()+hopLength < 11 && getPosition().getColumn()+hopLength < 11);
+			return (position.getRow()+hopLength < 11 && position.getColumn()+hopLength < 11);
 		default:
 			break;
 		}
@@ -77,7 +77,7 @@ public abstract class Queen extends Piece {
 				if(foundPawnToTake == null) 
 					hopLength++; 
 				else {
-					moves.add(new Capture(getPosition(), target, foundPawnToTake));
+					moves.add(new Capture(position, target, foundPawnToTake));
 					hopLength++;
 				}			
 			} 

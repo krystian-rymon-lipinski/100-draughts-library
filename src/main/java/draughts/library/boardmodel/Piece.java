@@ -8,7 +8,7 @@ import draughts.library.Move;
 
 public abstract class Piece {
 	
-	private Tile position;
+	protected Tile position;
 	
 	public Piece(Tile position) {
 		this.position = position;
