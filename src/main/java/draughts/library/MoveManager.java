@@ -4,22 +4,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import draughts.library.boardmodel.Piece;
-import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
+import draughts.library.boardmodel.Tile;
 
 public class MoveManager {
 	
-	private BoardManager boardManager;
 	private ArrayList<Move<? extends Hop>> possibleMoves;
+	
+	//used for making move hop by hop
 	private int hopsMadeInMove;
+	private ArrayList<Hop> possibleHops;
 	
 	public MoveManager() {
-		boardManager = new BoardManager();
 		possibleMoves = new ArrayList<>();
 		hopsMadeInMove = 0;
-	}
-	
-	public BoardManager getBoardManager() {
-		return boardManager;
+		possibleHops = new ArrayList<>();
 	}
 	
 	public ArrayList<Move<? extends Hop>> getPossibleMoves() {
@@ -29,45 +27,72 @@ public class MoveManager {
 	public int getHopsMadeInMove() {
 		return hopsMadeInMove;
 	}
-		
-	public void makeHop(int source, int destination) {
-		findMovesFromAllPossible(destination);
-		
-		if(!possibleMoves.get(0).isCapture())
-			boardManager.makeHop(source, destination);
-		else {
-			Capture capture = (Capture) possibleMoves.get(0).getHop(hopsMadeInMove);
-			boardManager.makeCapture(source, destination, capture.getTakenPawn());
-		}
-		
-		hopsMadeInMove++;
-		
+	
+	public ArrayList<Hop> getPossibleHops() {
+		return possibleHops;
 	}
 	
+	public void findAllCorrectMoves(BoardManager boardManager, boolean isWhiteToMove) {
+		possibleMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
+		if(possibleMoves.size() == 0)
+			possibleMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));		
+	}
+
+	//methods for making move all hops at once
 	
-	public void findMovesFromAllPossible(int destination) {
+	public Move<? extends Hop> isMadeMoveCorrect(int source, int destination, ArrayList<Integer> takenPawns) {
+		for(Move<? extends Hop> move : possibleMoves) {
+			if(move.doesSourceMatch(source) &&
+			   move.doesDestinationMatch(destination) &&
+			   move.doesTakenPawnsMatch(takenPawns))
+			   		return move;
+		}
+		return null;
+	}
+	
+	//methods for making move hop by hop
+	
+	public ArrayList<Hop> findPossibleHops(Piece chosenPiece) {
+		for(Move<? extends Hop> move : possibleMoves) {
+			if(chosenPiece.getPosition().getIndex() == move.getHop(hopsMadeInMove).getSource().getIndex())
+				possibleHops.add(move.getHop(hopsMadeInMove));
+		}
+		return possibleHops;
+	}
+	
+	public Hop findHopByDestination(Tile tileDestination) {
+		for(Hop hop : possibleHops) {
+			if(tileDestination.getIndex() == hop.getDestination().getIndex()) return hop;
+		}	
+		return null;
+	}
+	
+	public void hopFinished() {
+		possibleHops.clear();
+		hopsMadeInMove++;
+	}
+	
+	public void updatePossibleMoves(Piece chosenPiece) {
 		Iterator<Move<? extends Hop>> movesIterator = possibleMoves.iterator();
 		
 		while(movesIterator.hasNext()) {
 			Move<? extends Hop> move = movesIterator.next();
-			if(move.getHop(hopsMadeInMove).getDestination() != destination) {
+			if(move.getHop(hopsMadeInMove).getSource().getIndex() != chosenPiece.getPosition().getIndex()) {
 				movesIterator.remove();
 				possibleMoves.remove(move);
 			}
 		}
 	}
 	
-	public ArrayList<Integer> doesChosenPawnHaveMoves(int position) {
-		ArrayList<Integer> possibleHopDestinations = new ArrayList<Integer>();
+	public Move<? extends Hop> findMoveMade(Tile chosenTile) {
 		for(Move<? extends Hop> move : possibleMoves) {
-			if(position == move.getHop(hopsMadeInMove).getSource()) {
-				possibleHopDestinations.add(move.getHop(hopsMadeInMove).getDestination());
-			}
+			if(chosenTile.getIndex() == move.getMoveDestination().getIndex()) return move;
 		}
-		return possibleHopDestinations;
+		return null;
 	}
 	
 	public void moveDone() {
+		possibleHops.clear();
 		possibleMoves.clear();
 		hopsMadeInMove = 0;
 	}
@@ -75,28 +100,4 @@ public class MoveManager {
 	public boolean isMoveFinished() {
 		return (hopsMadeInMove == possibleMoves.get(0).getNumberOfHops()) ? true : false;
 	}
-	
-	public void findAllCorrectMoves(boolean isWhiteToMove) {
-		
-		possibleMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
-		if(possibleMoves.size() == 0)
-			possibleMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
-		
-	}
-	
-	public void checkForPawnPromotion(int destination) {
-		if(destination < 6 || destination > 45) {
-			Piece piece = null;
-			try {
-				piece = boardManager.findPieceByIndex(destination);
-			} catch (NoPieceFoundInRequestedTileException ex) {
-				ex.printStackTrace();
-			}
-			
-			if(!boardManager.isMovedPieceQueen(destination)) boardManager.promotePawn(piece);
-		}
-	}
-	
-	
-	
 }

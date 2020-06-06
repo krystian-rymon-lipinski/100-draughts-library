@@ -32,6 +32,8 @@ public class PawnTest extends PieceTest{
 				   moves.get(0).getHop(0).getDestination().getIndex() == 29);
 		assertTrue(moves.get(1).getHop(0).getDestination().getIndex() == 28 || 
 				   moves.get(1).getHop(0).getDestination().getIndex() == 29);
+		assertEquals(33, moves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(33, moves.get(1).getMovingPiece().getPosition().getIndex());
 	}
 	
 	@Test
@@ -44,6 +46,8 @@ public class PawnTest extends PieceTest{
 				   moves.get(0).getHop(0).getDestination().getIndex() == 22);
 		assertTrue(moves.get(1).getHop(0).getDestination().getIndex() == 23 || 
 				   moves.get(1).getHop(0).getDestination().getIndex() == 23);
+		assertEquals(18, moves.get(0).getMovingPiece().getPosition().getIndex());
+		assertEquals(18, moves.get(1).getMovingPiece().getPosition().getIndex());
 	}
 	
 	@Test
@@ -53,6 +57,7 @@ public class PawnTest extends PieceTest{
 		
 		assertEquals(1, moves.size());
 		assertEquals(21, moves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(16, moves.get(0).getMovingPiece().getPosition().getIndex());
 	}
 	
 	@Test
@@ -62,6 +67,7 @@ public class PawnTest extends PieceTest{
 		
 		assertEquals(1, moves.size());
 		assertEquals(30, moves.get(0).getHop(0).getDestination().getIndex());
+		assertEquals(35, moves.get(0).getMovingPiece().getPosition().getIndex());
 	}
 	
 	@Test

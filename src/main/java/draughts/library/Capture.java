@@ -13,7 +13,6 @@ public class Capture extends Hop {
 	
 	public Tile getTakenPawn() {
 		return takenPawn;
-	}
-	
+	}	
 
 }
