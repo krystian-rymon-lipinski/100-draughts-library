@@ -149,11 +149,11 @@ public class GameEngineTest {
 		testObj.tileClicked(33);
 
 		assertEquals(33, testObj.getChosenPiece().getPosition().getIndex());
-		assertEquals(2, moveManager.getPossibleHopDestinations().size());
-		assertTrue(moveManager.getPossibleHopDestinations().get(0).getIndex() == 28 ||
-				   moveManager.getPossibleHopDestinations().get(0).getIndex() == 29);
-		assertTrue(moveManager.getPossibleHopDestinations().get(1).getIndex() == 28 ||
-				   moveManager.getPossibleHopDestinations().get(1).getIndex() == 29);
+		assertEquals(2, moveManager.getPossibleHops().size());
+		assertTrue(moveManager.getPossibleHops().get(0).getDestination().getIndex() == 28 ||
+				   moveManager.getPossibleHops().get(0).getDestination().getIndex() == 29);
+		assertTrue(moveManager.getPossibleHops().get(1).getDestination().getIndex() == 28 ||
+				   moveManager.getPossibleHops().get(1).getDestination().getIndex() == 29);
 	}
 	
 	@Test(expected = WrongMoveException.class)
@@ -176,11 +176,11 @@ public class GameEngineTest {
 		testObj.tileClicked(31);
 		
 		assertEquals(31, testObj.getChosenPiece().getPosition().getIndex());
-		assertEquals(2, moveManager.getPossibleHopDestinations().size());
-		assertTrue(moveManager.getPossibleHopDestinations().get(0).getIndex() == 26 ||
-				   moveManager.getPossibleHopDestinations().get(0).getIndex() == 27);
-		assertTrue(moveManager.getPossibleHopDestinations().get(1).getIndex() == 26 ||
-				   moveManager.getPossibleHopDestinations().get(1).getIndex() == 27);
+		assertEquals(2, moveManager.getPossibleHops().size());
+		assertTrue(moveManager.getPossibleHops().get(0).getDestination().getIndex() == 26 ||
+				   moveManager.getPossibleHops().get(0).getDestination().getIndex() == 27);
+		assertTrue(moveManager.getPossibleHops().get(1).getDestination().getIndex() == 26 ||
+				   moveManager.getPossibleHops().get(1).getDestination().getIndex() == 27);
 		
 	}
 	
@@ -248,7 +248,7 @@ public class GameEngineTest {
 		
 		assertEquals(37, testObj.getChosenPiece().getPosition().getIndex());
 		assertEquals(1, moveManager.getHopsMadeInMove());
-		assertEquals(2, moveManager.getPossibleHopDestinations().size());
+		assertEquals(2, moveManager.getPossibleHops().size());
 		assertTrue(testObj.getIsWhiteToMove());
 		
 		try {
@@ -266,18 +266,18 @@ public class GameEngineTest {
 		testObj.tileClicked(37);
 		
 		assertEquals(37, testObj.getChosenPiece().getPosition().getIndex());
-		assertEquals(2, moveManager.getPossibleHopDestinations().size());
+		assertEquals(2, moveManager.getPossibleHops().size());
 		
 		testObj.tileClicked(28);
 		
 		assertEquals(28, testObj.getChosenPiece().getPosition().getIndex());
-		assertEquals(1, moveManager.getPossibleHopDestinations().size());
+		assertEquals(1, moveManager.getPossibleHops().size());
 		assertEquals(2, testObj.getMoveManager().getHopsMadeInMove());
 		assertTrue(testObj.getIsWhiteToMove());
 		
 		testObj.tileClicked(39);
 		
-		assertEquals(0, testObj.getChosenPiece().getPosition().getIndex());
+		assertNull(testObj.getChosenPiece());
 		assertEquals(0, moveManager.getHopsMadeInMove());
 		assertFalse(testObj.getIsWhiteToMove());
 		assertEquals(5, boardManager.getBlackPieces().size());
@@ -383,7 +383,8 @@ public class GameEngineTest {
 		boardManager.addWhiteQueen(16);
 		boardManager.addBlackQueen(5);
 		boardManager.addBlackPawn(3);
-		boardManager.addBlackPawn(21);
+		boardManager.addBlackPawn(26);
+		assertEquals(3, boardManager.getBlackPieces().size());
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
@@ -392,11 +393,15 @@ public class GameEngineTest {
 		
 		for(int i=0; i<8; i++) {
 			makeMove(16, 49);
+			assertEquals(3, boardManager.getBlackPieces().size());
+			assertEquals(12, moveManager.getPossibleMoves().size());
+
 			makeMove(5, 46);
 			makeMove(49, 16);
 			makeMove(46, 5);
 		}
 		
+		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
 		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());	
 	}
 	
@@ -422,6 +427,7 @@ public class GameEngineTest {
 		makeMove(33, 50);
 		makeMove(2, 35);
 		
+		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
 		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
 	}
 	

@@ -60,11 +60,11 @@ public class MoveManager {
 		return possibleHops;
 	}
 	
-	public boolean isClickedTilePossibleDestination(Tile tileDestination) {
+	public Hop findHopByDestination(Tile tileDestination) {
 		for(Hop hop : possibleHops) {
-			if(tileDestination.getIndex() == hop.getDestination().getIndex()) return true;
+			if(tileDestination.getIndex() == hop.getDestination().getIndex()) return hop;
 		}	
-		return false;
+		return null;
 	}
 	
 	public void hopFinished(Piece chosenPiece) {
@@ -82,6 +82,13 @@ public class MoveManager {
 				possibleMoves.remove(move);
 			}
 		}
+	}
+	
+	public Move<? extends Hop> findMoveMade(Tile chosenTile) {
+		for(Move<? extends Hop> move : possibleMoves) {
+			if(chosenTile.getIndex() == move.getMoveDestination().getIndex()) return move;
+		}
+		return null;
 	}
 	
 	public void moveDone() {
