@@ -67,7 +67,7 @@ public class MoveManager {
 		return null;
 	}
 	
-	public void hopFinished(Piece chosenPiece) {
+	public void hopFinished() {
 		possibleHops.clear();
 		hopsMadeInMove++;
 	}

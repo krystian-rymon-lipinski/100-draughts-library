@@ -98,32 +98,6 @@ public class GameEngine {
 		finishMove(correctMove);
 	}
 	
-	public void finishMove(Move<? extends Hop> move) {
-		checkForPawnPromotion(move);
-		changePlayer();	
-		checkIfGameShouldEnd(move);
-	}
-	
-	public void checkForPawnPromotion(Move<? extends Hop> move) {
-		if(!move.getMovingPiece().isQueen() && 
-				(move.getMoveDestination().getIndex() < 6 || move.getMoveDestination().getIndex() > 45))
-			boardManager.promotePawn(move.getMovingPiece());
-	}
-	
-	public void changePlayer() {
-		moveManager.moveDone();
-		chosenPiece = null;
-		isWhiteToMove = !isWhiteToMove;
-		moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
-	}
-	
-	public void checkIfGameShouldEnd(Move<? extends Hop> move) {
-		drawArbiter.updateCounter(move.isCapture(), move.getMovingPiece().isQueen());
-		drawArbiter.updateState((boardManager.getIsWhiteQueenOnBoard() && boardManager.getIsBlackQueenOnBoard()), 
-								 boardManager.getWhitePieces().size(), boardManager.getBlackPieces().size());
-		checkGameState();
-	}
-	
 	
 	//methods for making moves hop by hop
 	
@@ -163,7 +137,7 @@ public class GameEngine {
 							boardManager.makeCapture(chosenPiece, chosenTile, capturedPiece);
 						}
 						else boardManager.makeHop(chosenPiece, chosenTile);
-						moveManager.hopFinished(chosenPiece);
+						moveManager.hopFinished();
 						if(moveManager.isMoveFinished()) {
 							finishMove(moveManager.findMoveMade(chosenTile));
 						}
@@ -191,6 +165,32 @@ public class GameEngine {
 	}
 	
 	////////////////////////// methods useful for both methods
+	
+	public void finishMove(Move<? extends Hop> move) {
+		checkForPawnPromotion(move);
+		changePlayer();	
+		checkIfGameShouldEnd(move);
+	}
+	
+	public void checkForPawnPromotion(Move<? extends Hop> move) {
+		if(!move.getMovingPiece().isQueen() && 
+				(move.getMoveDestination().getIndex() < 6 || move.getMoveDestination().getIndex() > 45))
+			boardManager.promotePawn(move.getMovingPiece());
+	}
+	
+	public void changePlayer() {
+		moveManager.moveDone();
+		chosenPiece = null;
+		isWhiteToMove = !isWhiteToMove;
+		moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
+	}
+	
+	public void checkIfGameShouldEnd(Move<? extends Hop> move) {
+		drawArbiter.updateCounter(move.isCapture(), move.getMovingPiece().isQueen());
+		drawArbiter.updateState((boardManager.getIsWhiteQueenOnBoard() && boardManager.getIsBlackQueenOnBoard()), 
+								 boardManager.getWhitePieces().size(), boardManager.getBlackPieces().size());
+		checkGameState();
+	}
 	
 	public void checkGameState() {
 		if(moveManager.getPossibleMoves().size() == 0) {

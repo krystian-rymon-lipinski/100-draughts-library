@@ -88,30 +88,38 @@ public class BoardManager {
 		createPiecesForStartingPosition();
 	}
 	
-	public void addWhitePawn(int index) {
+	public WhitePawn addWhitePawn(int index) {
 		Tile position = findTileByIndex(index);
 		position.setState(Tile.State.WHITE_PAWN);
-		whitePieces.add(new WhitePawn(position));
+		WhitePawn whitePawn = new WhitePawn(position);
+		whitePieces.add(whitePawn);
+		return whitePawn;
 	}
 	
-	public void addBlackPawn(int index) {
+	public BlackPawn addBlackPawn(int index) {
 		Tile position = findTileByIndex(index);
 		position.setState(Tile.State.BLACK_PAWN);
-		blackPieces.add(new BlackPawn(position));
+		BlackPawn blackPawn = new BlackPawn(position);
+		blackPieces.add(blackPawn);
+		return blackPawn;
 	}
 	
-	public void addWhiteQueen(int index) {
+	public WhiteQueen addWhiteQueen(int index) {
 		Tile position = findTileByIndex(index);
 		position.setState(Tile.State.WHITE_QUEEN);
-		whitePieces.add(new WhiteQueen(position));
+		WhiteQueen whiteQueen = new WhiteQueen(position);
+		whitePieces.add(whiteQueen);
 		isWhiteQueenOnBoard = true;
+		return whiteQueen;
 	}
 	
-	public void addBlackQueen(int index) {
+	public BlackQueen addBlackQueen(int index) {
 		Tile position = findTileByIndex(index);
 		position.setState(Tile.State.BLACK_QUEEN);
-		blackPieces.add(new BlackQueen(position));
+		BlackQueen blackQueen = new BlackQueen(position);
+		blackPieces.add(blackQueen);
 		isBlackQueenOnBoard = true;
+		return blackQueen;
 	}
 	
 	public void removeWhitePiece(Piece piece) {
