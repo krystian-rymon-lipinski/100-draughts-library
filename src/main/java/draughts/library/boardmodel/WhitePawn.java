@@ -20,11 +20,6 @@ public class WhitePawn extends Pawn {
 		dst.setState(Tile.State.WHITE_PAWN);
 	}
 	
-	public void reverseHop(Tile src) {
-		super.reverseHop(src);
-		src.setState(Tile.State.WHITE_PAWN);
-	}
-	
 	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();

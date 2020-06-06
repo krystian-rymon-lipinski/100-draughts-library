@@ -19,11 +19,6 @@ public class BlackPawn extends Pawn {
 		super.hop(dst);
 		dst.setState(Tile.State.BLACK_PAWN);
 	}
-	
-	public void reverseHop(Tile src) {
-		super.reverseHop(src);
-		src.setState(Tile.State.BLACK_PAWN);
-	}
 
 	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
 		

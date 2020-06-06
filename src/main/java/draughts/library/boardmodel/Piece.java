@@ -39,10 +39,6 @@ public abstract class Piece {
 		this.position = dst;
 	}
 	
-	public void reverseHop(Tile src) {
-		this.position = src;
-	}
-	
 	public void addMovesIfAny(ArrayList<Move<Hop>> mainList, ArrayList<Move<Hop>> candidateList) {
 		if(candidateList != null && candidateList.size() > 0)
 			mainList.addAll(candidateList);
