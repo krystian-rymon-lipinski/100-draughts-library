@@ -1,6 +1,5 @@
 package draughts.library;
 
-import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 
 public class Capture extends Hop {

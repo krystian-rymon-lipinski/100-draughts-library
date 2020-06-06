@@ -13,7 +13,6 @@ public class GameEngine {
 	
 	private MoveManager moveManager;
 	private boolean isWhiteToMove;
-	private ArrayList<Integer> possibleHopDestinations;
 	private GameState gameState;
 	private DrawArbiter drawArbiter;
 	private BoardManager boardManager;
@@ -24,7 +23,6 @@ public class GameEngine {
 		moveManager = new MoveManager();
 		drawArbiter = new DrawArbiter();
 		chosenPiece = null;
-		possibleHopDestinations = new ArrayList<>();
 	}
 	
 	public boolean getIsWhiteToMove() {
@@ -43,8 +41,8 @@ public class GameEngine {
 		return moveManager;
 	}
 	
-	public ArrayList<Integer> getPossibleHopDestinations() {
-		return possibleHopDestinations;
+	public BoardManager getBoardManager() {
+		return boardManager;
 	}
 	
 	public GameState getGameState() {
@@ -142,14 +140,15 @@ public class GameEngine {
 					throw new WrongColorFoundInRequestedTileException("No piece of your color on chosen tile!");		
 				else {
 					chosenPiece = boardManager.findPieceByIndex(index);
-					if(moveManager.findPossibleHopDestinations(chosenPiece).size() == 0)
+					if(moveManager.findPossibleHops(chosenPiece).size() == 0)
 						throw new NoCorrectMovesForSelectedPieceException("Other pieces should move");
 				}
 			}		
 			else {
 				if(isClickedTileOccupiedByProperColor(chosenTile)) {
 					chosenPiece = boardManager.findPieceByIndex(index);
-					if(moveManager.findPossibleHopDestinations(chosenPiece).size() == 0)
+					moveManager.getPossibleHops().clear();
+					if(moveManager.findPossibleHops(chosenPiece).size() == 0)
 						throw new NoCorrectMovesForSelectedPieceException("Other pieces should move");
 				}
 				else if(moveManager.isClickedTilePossibleDestination(chosenTile)) {
@@ -160,7 +159,7 @@ public class GameEngine {
 					}
 					else {
 						moveManager.updatePossibleMoves(chosenPiece);
-						moveManager.findPossibleHopDestinations(chosenPiece);
+						moveManager.findPossibleHops(chosenPiece);
 					}
 				}
 				else

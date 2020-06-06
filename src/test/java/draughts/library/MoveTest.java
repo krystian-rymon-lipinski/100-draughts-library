@@ -25,7 +25,6 @@ public class MoveTest {
 		boardManager.createEmptyBoard();
 	}
 	
-	
 	public Tile getTile(int index) {
 		return boardManager.findTileByIndex(index);
 	}

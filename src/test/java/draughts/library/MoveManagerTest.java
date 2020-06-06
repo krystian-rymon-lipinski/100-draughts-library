@@ -121,40 +121,5 @@ public class MoveManagerTest {
 		
 		assertEquals(12, testObj.getPossibleMoves().size());
 	}
-/*	
-	@Test
-	public void checkForPawnPromotion_noPromotion_test() {
-		boardManager.addWhitePawn(12);
-		boardManager.addBlackPawn(39);
-
-		testObj.findAllCorrectMoves(true);
-		testObj.makeHop(12, 7);
-		gameEngine.moveFinished(7);
-		
-		assertFalse(boardManager.getWhitePieces().get(0).isQueen());
-		
-		testObj.makeHop(39, 44);
-		gameEngine.moveFinished(44);
-		
-		assertFalse(boardManager.getBlackPieces().get(0).isQueen());
-	}
-	
-	@Test
-	public void checkForPawnPromotion_promotion_test() {
-		boardManager.addWhitePawn(7);
-		boardManager.addBlackPawn(44);
-
-		testObj.findAllCorrectMoves(true);
-		testObj.makeHop(7, 1);
-		gameEngine.moveFinished(1);
-		
-		assertTrue(boardManager.getWhitePieces().get(0).isQueen());
-		
-		testObj.makeHop(44, 50);
-		gameEngine.moveFinished(50);
-		
-		assertTrue(boardManager.getBlackPieces().get(0).isQueen());
-	}
-*/
 
 }

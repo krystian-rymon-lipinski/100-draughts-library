@@ -12,12 +12,12 @@ public class MoveManager {
 	
 	//used for making move hop by hop
 	private int hopsMadeInMove;
-	private ArrayList<Tile> possibleHopDestinations;
+	private ArrayList<Hop> possibleHops;
 	
 	public MoveManager() {
 		possibleMoves = new ArrayList<>();
 		hopsMadeInMove = 0;
-		possibleHopDestinations = new ArrayList<>();
+		possibleHops = new ArrayList<>();
 	}
 	
 	public ArrayList<Move<? extends Hop>> getPossibleMoves() {
@@ -28,8 +28,11 @@ public class MoveManager {
 		return hopsMadeInMove;
 	}
 	
+	public ArrayList<Hop> getPossibleHops() {
+		return possibleHops;
+	}
+	
 	public void findAllCorrectMoves(BoardManager boardManager, boolean isWhiteToMove) {
-		
 		possibleMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
 		if(possibleMoves.size() == 0)
 			possibleMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));		
@@ -44,32 +47,29 @@ public class MoveManager {
 			   move.doesTakenPawnsMatch(takenPawns))
 			   		return move;
 		}
-		
 		return null;
 	}
 	
 	//methods for making move hop by hop
 	
-	public ArrayList<Tile> findPossibleHopDestinations(Piece chosenPiece) {
+	public ArrayList<Hop> findPossibleHops(Piece chosenPiece) {
 		for(Move<? extends Hop> move : possibleMoves) {
 			if(chosenPiece.getPosition().getIndex() == move.getHop(hopsMadeInMove).getSource().getIndex())
-				possibleHopDestinations.add(move.getHop(hopsMadeInMove).getDestination());
+				possibleHops.add(move.getHop(hopsMadeInMove));
 		}
-		return possibleHopDestinations;
+		return possibleHops;
 	}
 	
 	public boolean isClickedTilePossibleDestination(Tile tileDestination) {
-		for(Tile possibleDestination : possibleHopDestinations) {
-			if(tileDestination.getIndex() == possibleDestination.getIndex()) return true;
+		for(Hop hop : possibleHops) {
+			if(tileDestination.getIndex() == hop.getDestination().getIndex()) return true;
 		}	
 		return false;
 	}
 	
 	public void hopFinished(Piece chosenPiece) {
-		possibleHopDestinations.clear();
+		possibleHops.clear();
 		hopsMadeInMove++;
-		updatePossibleMoves(chosenPiece);
-		findPossibleHopDestinations(chosenPiece);
 	}
 	
 	public void updatePossibleMoves(Piece chosenPiece) {
@@ -85,7 +85,7 @@ public class MoveManager {
 	}
 	
 	public void moveDone() {
-		possibleHopDestinations.clear();
+		possibleHops.clear();
 		possibleMoves.clear();
 		hopsMadeInMove = 0;
 	}
