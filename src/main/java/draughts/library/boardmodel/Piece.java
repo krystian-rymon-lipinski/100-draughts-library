@@ -14,17 +14,21 @@ public abstract class Piece {
 		this.position = position;
 	}
 	
+	public abstract boolean isQueen();
+	
+	public abstract boolean isWhite();
+	
 	public abstract boolean isTileOccupiedBySameColor(Tile tile);
 	
 	public abstract boolean isTileOccupiedByOppositeColor(Tile tile);
 	
 	public abstract ArrayList<Move<Hop>> findMoves(Tile[][] board);
 	
+	public abstract ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board);
+	
 	public abstract ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board);
 	
-	public abstract boolean isQueen();
 	
-	public abstract boolean isWhite();
 	
 
 	public Tile getPosition() {

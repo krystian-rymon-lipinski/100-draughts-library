@@ -31,7 +31,6 @@ public class WhitePawn extends Pawn {
 		return moves;
 	}
 	
-	
 	public boolean isTileOccupiedBySameColor(Tile tile) {
 		return (tile.getState() == Tile.State.WHITE_PAWN || 
 				tile.getState() == Tile.State.WHITE_QUEEN ? true : false);

@@ -16,7 +16,6 @@ public abstract class Pawn extends Piece {
 		return false;
 	}
 	
-	
 	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
