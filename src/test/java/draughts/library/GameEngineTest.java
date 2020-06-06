@@ -110,8 +110,190 @@ public class GameEngineTest {
 		assertEquals(2, moveManager.getPossibleMoves().size());
 	}
 	
+	@Test
+	public void checkGameState_whiteWon_byCapturingAllBlackPieces() {
+		boardManager.createEmptyBoard();
+		boardManager.addWhitePawn(48);
+		boardManager.addBlackPawn(43);
+		
+		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
+		
+		makeMove(48, 39);
+		
+		assertEquals(0, boardManager.getBlackPieces().size());
+		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
+		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
+	}
+	
+	@Test
+	public void checkGameState_whiteWon_byBlockingAllBlackPieces() {	
+		boardManager.createEmptyBoard();
+		boardManager.addBlackPawn(26);
+		boardManager.addWhitePawn(31);
+		boardManager.addWhitePawn(41);
+		
+		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
+		
+		makeMove(41, 37);
+		
+		assertEquals(1, boardManager.getBlackPieces().size());
+		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
+		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
+		
+	}
+	
+	@Test
+	public void checkGameState_blackWon_byCapturingAllWhitePieces() {		
+		boardManager.createEmptyBoard();
+		boardManager.addBlackPawn(5);
+		boardManager.addWhitePawn(10);
+		
+		testObj.setIsWhiteToMove(false);
+		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
+		
+		makeMove(5, 14);
+		
+		assertEquals(0, boardManager.getWhitePieces().size());
+		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
+		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());
+	}
+	
+	@Test
+	public void checkGameState_blackWon_byBlockingAllWhitePieces() {		
+		boardManager.createEmptyBoard();
+		boardManager.addWhitePawn(25);
+		boardManager.addBlackPawn(20);
+		boardManager.addBlackPawn(10);
+		
+		testObj.setIsWhiteToMove(false);	
+		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
+		makeMove(10, 14);
+		
+		assertEquals(1, boardManager.getWhitePieces().size());
+		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
+		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());	
+	}
+	
+	
+	@Test
+	public void checkGameState_drawn_normalConditions_test() {				
+		boardManager.createEmptyBoard();
+		boardManager.addWhiteQueen(34);
+		boardManager.addBlackQueen(20);
+		boardManager.addWhitePawn(50);
+		boardManager.addBlackPawn(5);
+		boardManager.setIsWhiteQueenOnBoard(true);
+		boardManager.setIsBlackQueenOnBoard(true);
+		
+		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
+		testObj.getDrawArbiter().updateState(true, 2, 2);
+		assertEquals(DrawArbiter.DrawConditions.NORMAL, testObj.getDrawArbiter().getDrawConditions());
+
+		for(int i=0; i<12; i++) {
+			makeMove(34, 45);
+			makeMove(20, 3);
+			makeMove(45, 34);
+			makeMove(3, 20);
+		}
+		
+		makeMove(34, 45);
+		makeMove(20, 3);
+		
+		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
+		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
+	}
+	
+	@Test
+	public void checkGameState_drawn_3vs1Conditions_test() {		
+		boardManager.createEmptyBoard();
+		boardManager.addWhiteQueen(16);
+		boardManager.addBlackQueen(5);
+		boardManager.addBlackPawn(3);
+		boardManager.addBlackPawn(26);
+		assertEquals(3, boardManager.getBlackPieces().size());
+		boardManager.setIsWhiteQueenOnBoard(true);
+		boardManager.setIsBlackQueenOnBoard(true);
+		
+		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
+		testObj.getDrawArbiter().updateState(true, 1, 3);
+		
+		for(int i=0; i<8; i++) {
+			makeMove(16, 49);
+			assertEquals(3, boardManager.getBlackPieces().size());
+			assertEquals(12, moveManager.getPossibleMoves().size());
+
+			makeMove(5, 46);
+			makeMove(49, 16);
+			makeMove(46, 5);
+		}
+		
+		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
+		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());	
+	}
+	
+	@Test
+	public void checkGameState_drawn_2v1Conditions_test() {		
+		boardManager.createEmptyBoard();
+		boardManager.addWhiteQueen(33);
+		boardManager.addBlackQueen(5);
+		boardManager.addBlackQueen(2);
+		boardManager.setIsWhiteQueenOnBoard(true);
+		boardManager.setIsBlackQueenOnBoard(true);
+		
+		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
+		testObj.getDrawArbiter().updateState(true, 1, 2);
+		
+		for(int i=0; i<2; i++) {
+			makeMove(33, 50);
+			makeMove(2, 35);
+			makeMove(50, 33);
+			makeMove(35, 2);
+		}
+		
+		makeMove(33, 50);
+		makeMove(2, 35);
+		
+		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
+		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
+	}
+	
 	//tests for making move all hops at once
 	
+	@Test
+	public void updateBoard_noCapture_test() {
+		boardManager.createEmptyBoard();
+		Piece chosenPiece = boardManager.addWhiteQueen(30);
+		Move<Hop> move = new Move<>(chosenPiece, 
+								new Hop(chosenPiece.getPosition(), getTile(13)));
+		testObj.updateBoard(move);
+		assertEquals(Tile.State.EMPTY, getTile(30).getState());
+		assertEquals(13, chosenPiece.getPosition().getIndex());
+		assertEquals(Tile.State.WHITE_QUEEN, chosenPiece.getPosition().getState());
+	}
+	
+	@Test
+	public void updateBoard_capture_test() {
+		boardManager.createEmptyBoard();
+		Piece chosenPiece = boardManager.addBlackQueen(25);
+		boardManager.addWhitePawn(12);
+		boardManager.addWhitePawn(14);
+		boardManager.addWhitePawn(22);
+		Move<Capture> move = new Move<>(chosenPiece, 
+								new Capture(chosenPiece.getPosition(), getTile(3), getTile(14)));
+		move.addHop(new Capture(getTile(3), getTile(17), getTile(12)));
+		move.addHop(new Capture(getTile(17), getTile(50), getTile(22)));
+		
+		testObj.updateBoard(move);
+		assertEquals(Tile.State.EMPTY, getTile(25).getState());
+		assertEquals(Tile.State.EMPTY, getTile(14).getState());
+		assertEquals(Tile.State.EMPTY, getTile(12).getState());
+		assertEquals(Tile.State.EMPTY, getTile(22).getState());
+		assertEquals(50, chosenPiece.getPosition().getIndex());
+		assertEquals(Tile.State.BLACK_QUEEN, chosenPiece.getPosition().getState());
+		assertEquals(0, boardManager.getWhitePieces().size());
+	}
+	
+	//tests for making move hop by hop
 	
 	@Test(expected = NoPieceFoundInRequestedTileException.class)
 	public void tileClicked_noPieceFound_test() throws NoPieceFoundInRequestedTileException, 
@@ -284,151 +466,6 @@ public class GameEngineTest {
 		
 	}
 	
-	@Test
-	public void checkGameState_whiteWon_byCapturingAllBlackPieces() {
-		boardManager.createEmptyBoard();
-		boardManager.addWhitePawn(48);
-		boardManager.addBlackPawn(43);
-		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		
-		makeMove(48, 39);
-		
-		assertEquals(0, boardManager.getBlackPieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
-		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
-	}
 	
-	@Test
-	public void checkGameState_whiteWon_byBlockingAllBlackPieces() {	
-		boardManager.createEmptyBoard();
-		boardManager.addBlackPawn(26);
-		boardManager.addWhitePawn(31);
-		boardManager.addWhitePawn(41);
-		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		
-		makeMove(41, 37);
-		
-		assertEquals(1, boardManager.getBlackPieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
-		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
-		
-	}
-	
-	@Test
-	public void checkGameState_blackWon_byCapturingAllWhitePieces() {		
-		boardManager.createEmptyBoard();
-		boardManager.addBlackPawn(5);
-		boardManager.addWhitePawn(10);
-		
-		testObj.setIsWhiteToMove(false);
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		
-		makeMove(5, 14);
-		
-		assertEquals(0, boardManager.getWhitePieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
-		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());
-	}
-	
-	@Test
-	public void checkGameState_blackWon_byBlockingAllWhitePieces() {		
-		boardManager.createEmptyBoard();
-		boardManager.addWhitePawn(25);
-		boardManager.addBlackPawn(20);
-		boardManager.addBlackPawn(10);
-		
-		testObj.setIsWhiteToMove(false);	
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		makeMove(10, 14);
-		
-		assertEquals(1, boardManager.getWhitePieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
-		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());	
-	}
-	
-	
-	@Test
-	public void checkGameState_drawn_normalConditions_test() {				
-		boardManager.createEmptyBoard();
-		boardManager.addWhiteQueen(34);
-		boardManager.addBlackQueen(20);
-		boardManager.addWhitePawn(50);
-		boardManager.addBlackPawn(5);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
-		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		testObj.getDrawArbiter().updateState(true, 2, 2);
-		assertEquals(DrawArbiter.DrawConditions.NORMAL, testObj.getDrawArbiter().getDrawConditions());
-
-		for(int i=0; i<12; i++) {
-			makeMove(34, 45);
-			makeMove(20, 3);
-			makeMove(45, 34);
-			makeMove(3, 20);
-		}
-		
-		makeMove(34, 45);
-		makeMove(20, 3);
-		
-		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
-		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
-	}
-	
-	@Test
-	public void checkGameState_drawn_3vs1Conditions_test() {		
-		boardManager.createEmptyBoard();
-		boardManager.addWhiteQueen(16);
-		boardManager.addBlackQueen(5);
-		boardManager.addBlackPawn(3);
-		boardManager.addBlackPawn(26);
-		assertEquals(3, boardManager.getBlackPieces().size());
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
-		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		testObj.getDrawArbiter().updateState(true, 1, 3);
-		
-		for(int i=0; i<8; i++) {
-			makeMove(16, 49);
-			assertEquals(3, boardManager.getBlackPieces().size());
-			assertEquals(12, moveManager.getPossibleMoves().size());
-
-			makeMove(5, 46);
-			makeMove(49, 16);
-			makeMove(46, 5);
-		}
-		
-		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
-		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());	
-	}
-	
-	@Test
-	public void checkGameState_drawn_2v1Conditions_test() {		
-		boardManager.createEmptyBoard();
-		boardManager.addWhiteQueen(33);
-		boardManager.addBlackQueen(5);
-		boardManager.addBlackQueen(2);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
-		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		testObj.getDrawArbiter().updateState(true, 1, 2);
-		
-		for(int i=0; i<2; i++) {
-			makeMove(33, 50);
-			makeMove(2, 35);
-			makeMove(50, 33);
-			makeMove(35, 2);
-		}
-		
-		makeMove(33, 50);
-		makeMove(2, 35);
-		
-		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
-		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
-	}
 	
 }
