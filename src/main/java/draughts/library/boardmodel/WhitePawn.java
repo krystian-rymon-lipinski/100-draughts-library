@@ -2,8 +2,8 @@ package draughts.library.boardmodel;
 
 import java.util.ArrayList;
 
-import draughts.library.Hop;
-import draughts.library.Move;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 public class WhitePawn extends Pawn {
 

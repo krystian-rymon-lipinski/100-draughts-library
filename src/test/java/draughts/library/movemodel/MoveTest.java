@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.movemodel;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,6 +11,10 @@ import draughts.library.boardmodel.BlackPawn;
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.boardmodel.WhitePawn;
+import draughts.library.managers.BoardManager;
+import draughts.library.movemodel.Capture;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MoveTest {

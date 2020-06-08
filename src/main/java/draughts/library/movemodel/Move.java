@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.movemodel;
 
 import java.util.ArrayList;
 
@@ -32,8 +32,8 @@ public class Move<T extends Hop> {
 		return movingPiece;
 	}
 	
-	public T getHop(int numberOfHopInMove) {
-		return hops.get(numberOfHopInMove);
+	public T getHop(int numberOfHop) {
+		return hops.get(numberOfHop);
 	}
 	
 	public void addHop(T hop) {

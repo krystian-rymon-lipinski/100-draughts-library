@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.managers;
 
 import java.util.ArrayList;
 
@@ -10,6 +10,9 @@ import draughts.library.boardmodel.Tile;
 import draughts.library.boardmodel.WhitePawn;
 import draughts.library.boardmodel.WhiteQueen;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
+import draughts.library.movemodel.Capture;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 public class BoardManager {
 	
@@ -244,7 +247,6 @@ public class BoardManager {
 		ArrayList<Move<Capture>> newMoves = new ArrayList<>();
 		
 		do  {
-			newMoves.clear();
 						
 			if(moves.size() == 0) { //first capture 
 				captures = piece.findCaptures(board);
@@ -256,6 +258,8 @@ public class BoardManager {
 				}
 			}
 			else { //consecutive captures
+				newMoves.clear();
+
 				for(int i=0; i<moves.size(); i++) {
 					for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
 						makeHop(piece, moves.get(i).getHop(j).getDestination());
@@ -291,20 +295,5 @@ public class BoardManager {
 		}
 		return false;
 	}
-	
-	
-	public boolean isTakenPieceWhite(Piece takenPiece) {
-		return takenPiece.isWhite();
-	}	
-	
-	public boolean isMovedPieceQueen(int source) {
-		try {
-			Piece piece = findPieceByIndex(source);
-			return piece.isQueen();
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			return false;
-		}
-	}
-	
 
 }

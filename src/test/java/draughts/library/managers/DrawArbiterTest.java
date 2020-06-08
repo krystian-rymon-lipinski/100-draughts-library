@@ -1,11 +1,15 @@
-package draughts.library;
+package draughts.library.managers;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import draughts.library.GameEngine.GameState;
+import draughts.library.managers.BoardManager;
+import draughts.library.managers.DrawArbiter;
+import draughts.library.managers.GameEngine;
+import draughts.library.managers.MoveManager;
+import draughts.library.managers.GameEngine.GameState;
 
 public class DrawArbiterTest {
 	
@@ -210,7 +214,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		testObj.updateState(true, 3, 3);
+		testObj.updateConditions(true, 3, 3);
 		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 
 		assertEquals(50, testObj.getDrawCounter());
@@ -238,7 +242,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		testObj.updateState(true, 3, 1);
+		testObj.updateConditions(true, 3, 1);
 		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		assertEquals(32, testObj.getDrawCounter());
@@ -259,7 +263,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		testObj.updateState(true, 2, 1);
+		testObj.updateConditions(true, 2, 1);
 		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 		
 		assertEquals(10, testObj.getDrawCounter());

@@ -2,9 +2,9 @@ package draughts.library.boardmodel;
 
 import java.util.ArrayList;
 
-import draughts.library.Hop;
-import draughts.library.Capture;
-import draughts.library.Move;
+import draughts.library.movemodel.Capture;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 public abstract class Pawn extends Piece {
 

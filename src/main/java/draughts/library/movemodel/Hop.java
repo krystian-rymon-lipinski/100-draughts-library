@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.movemodel;
 
 import draughts.library.boardmodel.Tile;
 

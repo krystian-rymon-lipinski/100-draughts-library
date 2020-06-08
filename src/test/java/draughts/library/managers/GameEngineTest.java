@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.managers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,13 +12,20 @@ import org.junit.runner.RunWith;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import draughts.library.GameEngine.GameState;
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 import draughts.library.exceptions.WrongColorFoundInRequestedTileException;
 import draughts.library.exceptions.WrongMoveException;
+import draughts.library.managers.BoardManager;
+import draughts.library.managers.DrawArbiter;
+import draughts.library.managers.GameEngine;
+import draughts.library.managers.MoveManager;
+import draughts.library.managers.GameEngine.GameState;
+import draughts.library.movemodel.Capture;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameEngineTest {
@@ -103,7 +110,7 @@ public class GameEngineTest {
 		boardManager.addWhitePawn(40);
 		boardManager.addBlackPawn(8);
 		
-		testObj.changePlayer();
+		testObj.changePlayingColor();
 		
 		assertEquals(0, moveManager.getHopsMadeInMove());
 		assertFalse(testObj.getIsWhiteToMove());
@@ -186,7 +193,7 @@ public class GameEngineTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		testObj.getDrawArbiter().updateState(true, 2, 2);
+		testObj.getDrawArbiter().updateConditions(true, 2, 2);
 		assertEquals(DrawArbiter.DrawConditions.NORMAL, testObj.getDrawArbiter().getDrawConditions());
 
 		for(int i=0; i<12; i++) {
@@ -215,7 +222,7 @@ public class GameEngineTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		testObj.getDrawArbiter().updateState(true, 1, 3);
+		testObj.getDrawArbiter().updateConditions(true, 1, 3);
 		
 		for(int i=0; i<8; i++) {
 			makeMove(16, 49);
@@ -241,7 +248,7 @@ public class GameEngineTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		testObj.getDrawArbiter().updateState(true, 1, 2);
+		testObj.getDrawArbiter().updateConditions(true, 1, 2);
 		
 		for(int i=0; i<2; i++) {
 			makeMove(33, 50);

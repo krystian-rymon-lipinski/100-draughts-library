@@ -9,9 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import draughts.library.Capture;
-import draughts.library.Hop;
-import draughts.library.Move;
+import draughts.library.movemodel.Capture;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QueenTest extends PieceTest {

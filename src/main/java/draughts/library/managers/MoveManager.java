@@ -1,10 +1,12 @@
-package draughts.library;
+package draughts.library.managers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 public class MoveManager {
 	

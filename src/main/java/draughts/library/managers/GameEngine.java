@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.managers;
 
 import java.util.ArrayList;
 
@@ -8,6 +8,9 @@ import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 import draughts.library.exceptions.WrongColorFoundInRequestedTileException;
 import draughts.library.exceptions.WrongMoveException;
+import draughts.library.movemodel.Capture;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 public class GameEngine {
 	
@@ -168,7 +171,7 @@ public class GameEngine {
 	
 	public void finishMove(Move<? extends Hop> move) {
 		checkForPawnPromotion(move);
-		changePlayer();	
+		changePlayingColor();	
 		checkIfGameShouldEnd(move);
 	}
 	
@@ -178,7 +181,7 @@ public class GameEngine {
 			boardManager.promotePawn(move.getMovingPiece());
 	}
 	
-	public void changePlayer() {
+	public void changePlayingColor() {
 		moveManager.moveDone();
 		chosenPiece = null;
 		isWhiteToMove = !isWhiteToMove;
@@ -187,7 +190,7 @@ public class GameEngine {
 	
 	public void checkIfGameShouldEnd(Move<? extends Hop> move) {
 		drawArbiter.updateCounter(move.isCapture(), move.getMovingPiece().isQueen());
-		drawArbiter.updateState((boardManager.getIsWhiteQueenOnBoard() && boardManager.getIsBlackQueenOnBoard()), 
+		drawArbiter.updateConditions((boardManager.getIsWhiteQueenOnBoard() && boardManager.getIsBlackQueenOnBoard()), 
 								 boardManager.getWhitePieces().size(), boardManager.getBlackPieces().size());
 		checkGameState();
 	}
@@ -198,13 +201,9 @@ public class GameEngine {
 			else setGameState(GameState.WON_BY_WHITE);
 		}		
 		else 
-			if(isGameDrawn()) setGameState(GameState.DRAWN);
+			if(drawArbiter.isGameDrawn()) setGameState(GameState.DRAWN);
 	}
 	
-	public boolean isGameDrawn() {
-		if(drawArbiter.getDrawCounter() == 0) return true;
-		else return false;
-	}
 	
 	public enum GameState {
 		RUNNING,

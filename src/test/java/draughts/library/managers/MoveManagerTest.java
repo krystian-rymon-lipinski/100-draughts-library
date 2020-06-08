@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.managers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -13,6 +13,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
+import draughts.library.managers.BoardManager;
+import draughts.library.managers.MoveManager;
+import draughts.library.movemodel.Capture;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MoveManagerTest {

@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.managers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -16,6 +16,10 @@ import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.boardmodel.WhitePawn;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
+import draughts.library.managers.BoardManager;
+import draughts.library.movemodel.Capture;
+import draughts.library.movemodel.Hop;
+import draughts.library.movemodel.Move;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BoardManagerTest {

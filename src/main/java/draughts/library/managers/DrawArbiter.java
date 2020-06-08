@@ -1,4 +1,4 @@
-package draughts.library;
+package draughts.library.managers;
 
 public class DrawArbiter {
 	
@@ -18,7 +18,7 @@ public class DrawArbiter {
 		return drawConditions;
 	}
 	
-	public void updateState(boolean bothColorsHaveQueen, int numberOfWhitePieces, int numberOfBlackPieces) {
+	public void updateConditions(boolean bothColorsHaveQueen, int numberOfWhitePieces, int numberOfBlackPieces) {
 		switch(drawConditions) {
 		case NONE: 
 			if(!bothColorsHaveQueen) break;
