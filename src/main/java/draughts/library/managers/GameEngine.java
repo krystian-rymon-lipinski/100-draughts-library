@@ -73,11 +73,14 @@ public class GameEngine {
 	
 	//methods for making move all hops at once
 	
-	public void isMadeMoveCorrect(int source, int destination, ArrayList<Integer> taken) throws WrongMoveException {
+	public void makeMove(int source, int destination, ArrayList<Integer> taken) throws WrongMoveException {
 		if(gameState == GameState.RUNNING) {
 			Move<? extends Hop> correctMove = moveManager.isMadeMoveCorrect(source, destination, taken);
 			if(correctMove == null) throw new WrongMoveException("Chosen move is not allowed");
-			else updateBoard(correctMove);
+			else {
+				updateBoard(correctMove);
+				finishMove(correctMove);
+			}
 		}
 	}
 	
@@ -97,8 +100,6 @@ public class GameEngine {
 				}
 			}		
 		} catch(NoPieceFoundInRequestedTileException ex) {}
-		
-		finishMove(correctMove);
 	}
 	
 	
