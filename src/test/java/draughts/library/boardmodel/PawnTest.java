@@ -80,7 +80,7 @@ public class PawnTest extends PieceTest{
 		assertEquals(1, whiteMoves.size());
 		assertEquals(22, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(11, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(17, whiteMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(17, whiteMoves.get(0).getTakenPiece().getIndex());
 		
 		boardManager.addBlackPawn(39);
 		boardManager.addWhitePawn(33);
@@ -90,7 +90,7 @@ public class PawnTest extends PieceTest{
 		assertEquals(1, blackMoves.size());
 		assertEquals(39, blackMoves.get(0).getSource().getIndex());
 		assertEquals(28, blackMoves.get(0).getDestination().getIndex());
-		assertEquals(33, blackMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(33, blackMoves.get(0).getTakenPiece().getIndex());
 	}
 	
 	@Test
@@ -103,7 +103,7 @@ public class PawnTest extends PieceTest{
 		assertEquals(1, whiteMoves.size());
 		assertEquals(22, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(13, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(18, whiteMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(18, whiteMoves.get(0).getTakenPiece().getIndex());
 		
 		boardManager.addBlackPawn(39);
 		boardManager.addWhitePawn(34);
@@ -113,7 +113,7 @@ public class PawnTest extends PieceTest{
 		assertEquals(1, blackMoves.size());
 		assertEquals(39, blackMoves.get(0).getSource().getIndex());
 		assertEquals(30, blackMoves.get(0).getDestination().getIndex());
-		assertEquals(34, blackMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(34, blackMoves.get(0).getTakenPiece().getIndex());
 	}
 	
 	@Test
@@ -126,7 +126,7 @@ public class PawnTest extends PieceTest{
 		assertEquals(1, whiteMoves.size());
 		assertEquals(22, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(31, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(27, whiteMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(27, whiteMoves.get(0).getTakenPiece().getIndex());
 		
 		boardManager.addBlackPawn(39);
 		boardManager.addWhitePawn(43);
@@ -136,7 +136,7 @@ public class PawnTest extends PieceTest{
 		assertEquals(1, blackMoves.size());
 		assertEquals(39, blackMoves.get(0).getSource().getIndex());
 		assertEquals(48, blackMoves.get(0).getDestination().getIndex());
-		assertEquals(43, blackMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(43, blackMoves.get(0).getTakenPiece().getIndex());
 	}
 	
 	@Test
@@ -149,7 +149,7 @@ public class PawnTest extends PieceTest{
 		assertEquals(1, whiteMoves.size());
 		assertEquals(22, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(33, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(28, whiteMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(28, whiteMoves.get(0).getTakenPiece().getIndex());
 		
 		boardManager.addBlackPawn(39);
 		boardManager.addWhitePawn(44);
@@ -159,7 +159,7 @@ public class PawnTest extends PieceTest{
 		assertEquals(1, blackMoves.size());
 		assertEquals(39, blackMoves.get(0).getSource().getIndex());
 		assertEquals(50, blackMoves.get(0).getDestination().getIndex());
-		assertEquals(44, blackMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(44, blackMoves.get(0).getTakenPiece().getIndex());
 	}
 	
 	

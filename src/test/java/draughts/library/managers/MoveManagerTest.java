@@ -190,7 +190,7 @@ public class MoveManagerTest {
 		Hop hop = testObj.findHopByDestination(getTile(19));
 		
 		Capture capture = (Capture) hop;
-		assertEquals(23, capture.getTakenPawn().getIndex()); 
+		assertEquals(23, capture.getTakenPiece().getIndex()); 
 	}
 	
 	@Test

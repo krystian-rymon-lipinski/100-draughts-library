@@ -198,8 +198,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(27, whiteMoves.get(0).getDestination().getIndex());
 		assertEquals(21, whiteMoves.get(1).getDestination().getIndex());
 		assertEquals(16, whiteMoves.get(2).getDestination().getIndex());
-		assertEquals(32, whiteMoves.get(0).getTakenPawn().getIndex());
-		assertEquals(32, whiteMoves.get(2).getTakenPawn().getIndex());
+		assertEquals(32, whiteMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(32, whiteMoves.get(2).getTakenPiece().getIndex());
 				
 		
 		boardManager.addBlackQueen(18);
@@ -212,8 +212,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(18, blackMoves.get(1).getSource().getIndex());
 		assertEquals(7, blackMoves.get(0).getDestination().getIndex());
 		assertEquals(1, blackMoves.get(1).getDestination().getIndex());
-		assertEquals(12, blackMoves.get(0).getTakenPawn().getIndex());
-		assertEquals(12, blackMoves.get(1).getTakenPawn().getIndex());
+		assertEquals(12, blackMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(12, blackMoves.get(1).getTakenPiece().getIndex());
 		
 	}
 
@@ -231,8 +231,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(24, whiteMoves.get(1).getDestination().getIndex());
 		assertEquals(20, whiteMoves.get(2).getDestination().getIndex());
 		assertEquals(15, whiteMoves.get(3).getDestination().getIndex());
-		assertEquals(33, whiteMoves.get(0).getTakenPawn().getIndex());
-		assertEquals(33, whiteMoves.get(3).getTakenPawn().getIndex());
+		assertEquals(33, whiteMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(33, whiteMoves.get(3).getTakenPiece().getIndex());
 				
 		
 		boardManager.addBlackQueen(18);
@@ -245,8 +245,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(18, blackMoves.get(1).getSource().getIndex());
 		assertEquals(9, blackMoves.get(0).getDestination().getIndex());
 		assertEquals(4, blackMoves.get(1).getDestination().getIndex());
-		assertEquals(13, blackMoves.get(0).getTakenPawn().getIndex());
-		assertEquals(13, blackMoves.get(1).getTakenPawn().getIndex());
+		assertEquals(13, blackMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(13, blackMoves.get(1).getTakenPiece().getIndex());
 		
 	}
 	
@@ -260,7 +260,7 @@ public class QueenTest extends PieceTest {
 		assertEquals(1, whiteMoves.size());
 		assertEquals(38, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(47, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(42, whiteMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(42, whiteMoves.get(0).getTakenPiece().getIndex());
 				
 		
 		boardManager.addBlackQueen(18);
@@ -274,8 +274,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(27, blackMoves.get(0).getDestination().getIndex());
 		assertEquals(31, blackMoves.get(1).getDestination().getIndex());
 		assertEquals(36, blackMoves.get(2).getDestination().getIndex());
-		assertEquals(22, blackMoves.get(0).getTakenPawn().getIndex());
-		assertEquals(22, blackMoves.get(1).getTakenPawn().getIndex());
+		assertEquals(22, blackMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(22, blackMoves.get(1).getTakenPiece().getIndex());
 		
 	}
 	
@@ -289,7 +289,7 @@ public class QueenTest extends PieceTest {
 		assertEquals(1, whiteMoves.size());
 		assertEquals(38, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(49, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(43, whiteMoves.get(0).getTakenPawn().getIndex());
+		assertEquals(43, whiteMoves.get(0).getTakenPiece().getIndex());
 				
 		
 		boardManager.addBlackQueen(18);
@@ -304,8 +304,8 @@ public class QueenTest extends PieceTest {
 		assertEquals(34, blackMoves.get(1).getDestination().getIndex());
 		assertEquals(40, blackMoves.get(2).getDestination().getIndex());
 		assertEquals(45, blackMoves.get(3).getDestination().getIndex());
-		assertEquals(23, blackMoves.get(0).getTakenPawn().getIndex());
-		assertEquals(23, blackMoves.get(3).getTakenPawn().getIndex());
+		assertEquals(23, blackMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(23, blackMoves.get(3).getTakenPiece().getIndex());
 		
 	}
 	

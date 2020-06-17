@@ -137,7 +137,7 @@ public class GameEngine {
 					else {
 						if(hop instanceof Capture) {
 							Capture capture = (Capture) hop;
-							Piece capturedPiece = boardManager.findPieceByIndex(capture.getTakenPawn().getIndex());
+							Piece capturedPiece = boardManager.findPieceByIndex(capture.getTakenPiece().getIndex());
 							boardManager.makeCapture(chosenPiece, chosenTile, capturedPiece);
 						}
 						else boardManager.makeHop(chosenPiece, chosenTile);
