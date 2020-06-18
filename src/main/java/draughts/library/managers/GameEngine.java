@@ -85,21 +85,18 @@ public class GameEngine {
 	}
 	
 	public void updateBoard(Move<? extends Hop> correctMove) {
-		try {
-			ArrayList<Piece> takenPieces = new ArrayList<>();
-			Piece movedPiece = boardManager.findPieceByIndex(correctMove.getMoveSource().getIndex());
-			Tile destinationTile = boardManager.findTileByIndex(correctMove.getMoveDestination().getIndex());
-			
-			for(int i=0; i<correctMove.getNumberOfHops(); i++) {
-				if(correctMove.isCapture()) {
-					takenPieces.add(boardManager.findPieceByIndex(correctMove.getMoveTakenPawns().get(i).getIndex()));
-					boardManager.makeCapture(movedPiece, correctMove.getHop(i).getDestination(), takenPieces.get(i));
-				}
-				else {
-					boardManager.makeHop(movedPiece, destinationTile);
-				}
-			}		
-		} catch(NoPieceFoundInRequestedTileException ex) {}
+		Piece movedPiece = correctMove.getMovingPiece();
+		
+		for(int i=0; i<correctMove.getNumberOfHops(); i++) {
+			Tile hopDestination = correctMove.getHop(i).getDestination();
+			if(correctMove.isCapture()) {
+				Piece takenPiece = correctMove.getMoveTakenPawns().get(i);
+				boardManager.makeCapture(movedPiece, hopDestination, takenPiece);
+			}
+			else {
+				boardManager.makeHop(movedPiece, hopDestination);
+			}
+		}		
 	}
 	
 	
@@ -137,7 +134,7 @@ public class GameEngine {
 					else {
 						if(hop instanceof Capture) {
 							Capture capture = (Capture) hop;
-							Piece capturedPiece = boardManager.findPieceByIndex(capture.getTakenPiece().getIndex());
+							Piece capturedPiece = capture.getTakenPiece();
 							boardManager.makeCapture(chosenPiece, chosenTile, capturedPiece);
 						}
 						else boardManager.makeHop(chosenPiece, chosenTile);

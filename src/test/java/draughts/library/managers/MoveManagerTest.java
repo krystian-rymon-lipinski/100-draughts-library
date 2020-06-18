@@ -1,6 +1,7 @@
 package draughts.library.managers;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
@@ -123,6 +124,7 @@ public class MoveManagerTest {
 		testObj.findAllCorrectMoves(boardManager, true);
 		
 		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(43, 38, new ArrayList<>());
+		assertNotNull(correctMove);
 		assertEquals(43, correctMove.getMoveSource().getIndex());
 		assertEquals(38, correctMove.getMoveDestination().getIndex());
 	}
@@ -130,13 +132,14 @@ public class MoveManagerTest {
 	@Test
 	public void isMadeMoveCorrect_correctMove_withCapture_test() {
 		boardManager.addBlackPawn(9);
-		boardManager.addWhitePawn(13);
-		boardManager.addWhitePawn(23);
+		Piece whitePiece1 = boardManager.addWhitePawn(13);
+		Piece whitePiece2 = boardManager.addWhitePawn(23);
 		testObj.findAllCorrectMoves(boardManager, false);
 
 		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(9, 29, new ArrayList<>(Arrays.asList(13, 23)));
-		assertEquals(13, correctMove.getMoveTakenPawns().get(0).getIndex());
-		assertEquals(23, correctMove.getMoveTakenPawns().get(1).getIndex());
+		assertNotNull(correctMove);
+		assertEquals(whitePiece1, correctMove.getMoveTakenPawns().get(0));
+		assertEquals(whitePiece2, correctMove.getMoveTakenPawns().get(1));
 	}
 	
 	//tests for making moves hop by hop
@@ -184,13 +187,13 @@ public class MoveManagerTest {
 	@Test
 	public void findHopByDestination_rightDestination_withCapture_test() {
 		Piece chosenPiece = boardManager.addWhitePawn(28);
-		boardManager.addBlackPawn(23);
+		Piece takenPiece = boardManager.addBlackPawn(23);
 		testObj.findAllCorrectMoves(boardManager, true);
 		testObj.findPossibleHops(chosenPiece);
 		Hop hop = testObj.findHopByDestination(getTile(19));
 		
 		Capture capture = (Capture) hop;
-		assertEquals(23, capture.getTakenPiece().getIndex()); 
+		assertEquals(takenPiece, capture.getTakenPiece()); 
 	}
 	
 	@Test
