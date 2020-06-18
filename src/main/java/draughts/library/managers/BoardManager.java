@@ -1,7 +1,7 @@
 package draughts.library.managers;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
 import draughts.library.boardmodel.BlackPawn;
 import draughts.library.boardmodel.BlackQueen;
 import draughts.library.boardmodel.Board;
@@ -125,6 +125,17 @@ public class BoardManager {
 		return blackQueen;
 	}
 	
+	public Piece addPiece(Piece piece) {
+		if (piece.isWhite()) {
+			if (piece.isQueen()) return addWhiteQueen(piece.getPosition().getIndex());
+			else 				 return addWhitePawn(piece.getPosition().getIndex());
+		}
+		else {
+			if (piece.isQueen()) return addBlackQueen(piece.getPosition().getIndex());
+			else 				 return addBlackPawn(piece.getPosition().getIndex());
+		}
+	}
+	
 	public void removeWhitePiece(Piece piece) {
 		boolean wasQueen = piece.isQueen();
 		
@@ -137,7 +148,6 @@ public class BoardManager {
 			}
 			isWhiteQueenOnBoard = false;
 		}
-		
 	}
 	
 	public void removeBlackPiece(Piece piece) {
@@ -160,6 +170,36 @@ public class BoardManager {
 		
 	}
 	
+	public void makeCapture(Piece movedPiece, Tile destination, Piece takenPiece) {
+		makeHop(movedPiece, destination);
+		if(takenPiece.isWhite()) removeWhitePiece(takenPiece);
+		else                     removeBlackPiece(takenPiece);
+	}
+	
+	public void makeWholeMove(Move<? extends Hop> move) {
+		for (Hop hop : move.getHops()) {
+			if(move.isCapture()) {
+				Capture capture = (Capture) hop;
+				makeCapture(move.getMovingPiece(), capture.getDestination(), capture.getTakenPiece());
+			}
+			else {
+				makeHop(move.getMovingPiece(), hop.getDestination());
+			}
+		}
+	}
+	
+	public void reverseWholeMove(Move<? extends Hop> move) {
+		Collections.reverse(move.getHops());
+		
+		for (Hop hop : move.getHops()) {
+			makeHop(move.getMovingPiece(), hop.getSource());
+			if(move.isCapture()) {
+				Capture capture = (Capture) hop;
+				addPiece(capture.getTakenPiece());
+			}
+		}
+	}
+	
 	public void promotePawn(Piece pawnToPromote) {
 		if(pawnToPromote.isWhite()) {
 			removeWhitePiece(pawnToPromote);
@@ -170,13 +210,6 @@ public class BoardManager {
 		}
 		
 	}
-
-	public void makeCapture(Piece movedPiece, Tile destination, Piece takenPiece){
-			makeHop(movedPiece, destination);
-			if(takenPiece.isWhite()) removeWhitePiece(takenPiece);
-			else                     removeBlackPiece(takenPiece);
-	}
-	
 	
 	public Tile findTileByIndex(int tileIndex) {
 		for (int i=0; i<board.length; i++) {
