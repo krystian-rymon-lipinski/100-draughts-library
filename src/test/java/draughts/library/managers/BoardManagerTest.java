@@ -70,10 +70,8 @@ public class BoardManagerTest {
 		testObj.addWhiteQueen(41);
 		
 		assertEquals(2, testObj.getWhitePieces().size());
-		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(12).getState());
-		assertEquals(Tile.State.WHITE_QUEEN, testObj.findTileByIndex(41).getState());
-		assertEquals(12, testObj.getWhitePieces().get(0).getPosition().getIndex());
-		assertEquals(41, testObj.getWhitePieces().get(1).getPosition().getIndex());
+		assertEquals(testObj.findTileByIndex(12), testObj.getWhitePieces().get(0).getPosition());
+		assertEquals(testObj.findTileByIndex(41), testObj.getWhitePieces().get(1).getPosition());
 	}
 	
 	@Test
@@ -84,60 +82,60 @@ public class BoardManagerTest {
 		testObj.addBlackQueen(50);
 		
 		assertEquals(2, testObj.getBlackPieces().size());
-		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(1).getState());
-		assertEquals(Tile.State.BLACK_QUEEN, testObj.findTileByIndex(50).getState());
-		assertEquals(1, testObj.getBlackPieces().get(0).getPosition().getIndex());
-		assertEquals(50, testObj.getBlackPieces().get(1).getPosition().getIndex());
+		assertEquals(testObj.findTileByIndex(1), testObj.getBlackPieces().get(0).getPosition());
+		assertEquals(testObj.findTileByIndex(50), testObj.getBlackPieces().get(1).getPosition());
 	}
 	
 	@Test
 	public void removeWhitePieces_test() throws Exception {
 		testObj.createEmptyBoard();
 		
-		testObj.addWhitePawn(30);
-		testObj.addWhiteQueen(45);
-		testObj.addWhiteQueen(50);
-		
-		Piece piece1 = testObj.findPieceByIndex(30);
-		Piece piece2 = testObj.findPieceByIndex(45);
-		Piece piece3 = testObj.findPieceByIndex(50);
+		Piece piece1 = testObj.addWhitePawn(30);
+		Piece piece2 = testObj.addWhiteQueen(45);
+		Piece piece3 = testObj.addWhiteQueen(50);
+	
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
 		
 		testObj.removeWhitePiece(piece1);
 		assertEquals(2, testObj.getWhitePieces().size());
+		assertTrue(testObj.getIsWhiteQueenOnBoard());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(30).getState());
 		
 		testObj.removeWhitePiece(piece2);
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(45).getState());
 		
 		testObj.removeWhitePiece(piece3);
 		assertEquals(0, testObj.getWhitePieces().size());
 		assertFalse(testObj.getIsWhiteQueenOnBoard());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(50).getState());
 	}
 	
 	@Test
 	public void removeBlackPieces_Test() throws Exception {
 		testObj.createEmptyBoard();
 		
-		testObj.addBlackPawn(13);
-		testObj.addBlackQueen(24);
-		testObj.addBlackQueen(43);
-		
-		Piece piece1 = testObj.findPieceByIndex(13);
-		Piece piece2 = testObj.findPieceByIndex(24);
-		Piece piece3 = testObj.findPieceByIndex(43);
+		Piece piece1 = testObj.addBlackPawn(13);
+		Piece piece2 = testObj.addBlackQueen(24);
+		Piece piece3 = testObj.addBlackQueen(43);
+	
 		assertTrue(testObj.getIsBlackQueenOnBoard());
 		
 		testObj.removeBlackPiece(piece1);
 		assertEquals(2, testObj.getBlackPieces().size());
+		assertTrue(testObj.getIsBlackQueenOnBoard());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(13).getState());
 		
 		testObj.removeBlackPiece(piece2);
 		assertEquals(1, testObj.getBlackPieces().size());
 		assertTrue(testObj.getIsBlackQueenOnBoard());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(24).getState());
 		
 		testObj.removeBlackPiece(piece3);
 		assertEquals(0, testObj.getBlackPieces().size());
 		assertFalse(testObj.getIsBlackQueenOnBoard());
+		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(43).getState());
 	}
 	
 	@Test
@@ -220,14 +218,12 @@ public class BoardManagerTest {
 
 		makeHop(31, 27);
 		
-		assertEquals(27, testObj.getWhitePieces().get(0).getPosition().getIndex());
-		assertEquals(Tile.State.WHITE_PAWN, testObj.findTileByIndex(27).getState());
+		assertEquals(testObj.findTileByIndex(27), testObj.getWhitePieces().get(0).getPosition());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(31).getState());
 		
 		makeHop(20, 25);
 		
-		assertEquals(25, testObj.getBlackPieces().get(0).getPosition().getIndex());
-		assertEquals(Tile.State.BLACK_PAWN, testObj.findTileByIndex(25).getState());
+		assertEquals(testObj.findTileByIndex(25), testObj.getBlackPieces().get(0).getPosition());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(20).getState());
 		
 	}

@@ -148,7 +148,6 @@ public class BoardManager {
 			}
 			isWhiteQueenOnBoard = false;
 		}
-		
 	}
 	
 	public void removeBlackPiece(Piece piece) {
