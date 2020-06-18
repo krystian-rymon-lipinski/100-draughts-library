@@ -36,20 +36,54 @@ public class MoveTest {
 	@Test
 	public void addHops_test() {
 		Piece whitePawn = new WhitePawn(new Tile(5, 0));
-		testObj = new Move<Hop>(whitePawn, new Hop(getTile(31), getTile(26)));
-		testObj.addHop(new Hop(getTile(26), getTile(21)));
 		
+		testObj = new Move<Hop>(whitePawn, new Hop(getTile(31), getTile(26)));
+		
+		assertEquals(1, testObj.getNumberOfHops());
+		assertEquals(whitePawn, testObj.getMovingPiece());
+		assertEquals(31, testObj.getMoveSource().getIndex());
+		assertEquals(26, testObj.getMoveDestination().getIndex());
+		
+		testObj.addHop(new Hop(getTile(26), getTile(21)));
+			
 		assertEquals(2, testObj.getNumberOfHops());	
+		assertEquals(31, testObj.getMoveSource().getIndex());
+		assertEquals(21, testObj.getMoveDestination().getIndex());
 	}
 	
 	@Test
 	public void addCaptures_test() {
 		Piece blackPawn = new BlackPawn(new Tile(6, 9));
-		testObj2 = new Move<Capture>(blackPawn, new Capture(getTile(35), getTile(24), getTile(30)));
-		testObj2.addHop(new Capture(getTile(24), getTile(15), getTile(20)));
-		testObj2.addHop(new Capture(getTile(15), getTile(4), getTile(10)));
+		Piece whitePawn1 = new WhitePawn(new Tile(5, 8));
+		Piece whitePawn2 = new WhitePawn(new Tile(5, 6));
+		Piece whitePawn3 = new WhitePawn(new Tile(5, 4));
+		
+		testObj2 = new Move<Capture>(blackPawn, new Capture(getTile(35), getTile(24), whitePawn1));
+		
+		assertEquals(1, testObj2.getNumberOfHops());
+		assertEquals(blackPawn, testObj2.getMovingPiece());
+		assertEquals(35, testObj2.getMoveSource().getIndex());
+		assertEquals(24, testObj2.getMoveDestination().getIndex());
+		assertEquals(1, testObj2.getMoveTakenPawns().size());
+		assertEquals(whitePawn1, testObj2.getMoveTakenPawns().get(0));
+		
+		testObj2.addHop(new Capture(getTile(24), getTile(15), whitePawn2));
+		
+		assertEquals(2, testObj2.getNumberOfHops());
+		assertEquals(blackPawn, testObj2.getMovingPiece());
+		assertEquals(35, testObj2.getMoveSource().getIndex());
+		assertEquals(15, testObj2.getMoveDestination().getIndex());
+		assertEquals(2, testObj2.getMoveTakenPawns().size());
+		assertEquals(whitePawn2, testObj2.getMoveTakenPawns().get(1));
+		
+		testObj2.addHop(new Capture(getTile(15), getTile(4), whitePawn3));
 		
 		assertEquals(3, testObj2.getNumberOfHops());
+		assertEquals(blackPawn, testObj2.getMovingPiece());
+		assertEquals(35, testObj2.getMoveSource().getIndex());
+		assertEquals(4, testObj2.getMoveDestination().getIndex());
+		assertEquals(3, testObj2.getMoveTakenPawns().size());
+		assertEquals(whitePawn3, testObj2.getMoveTakenPawns().get(2));
 	}
 
 }

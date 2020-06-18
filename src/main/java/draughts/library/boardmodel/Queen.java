@@ -2,6 +2,7 @@ package draughts.library.boardmodel;
 
 import java.util.ArrayList;
 
+import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
@@ -65,10 +66,12 @@ public abstract class Queen extends Piece {
 		return false;
 	}
 	
-	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board) {
+	public ArrayList<Capture> findCapturesInDirection
+		(MoveDirection moveDirection, Tile[][] board, ArrayList<ArrayList<Piece>> allPieces) 
+	{
 		ArrayList<Capture> moves = new ArrayList<>();
 		int hopLength = 1;
-		Tile foundPawnToTake = null;
+		Piece foundPawnToTake = null;
 		
 		while(isMovePossible(moveDirection, hopLength)) {
 			Tile target = findTarget(moveDirection, board, hopLength);
@@ -86,8 +89,13 @@ public abstract class Queen extends Piece {
 			}
 			else if(isTileOccupiedByOppositeColor(target)){
 				if(foundPawnToTake == null) {
-					foundPawnToTake = target;
-					hopLength++;
+					try {
+						foundPawnToTake = findPieceBeingTaken(target, allPieces);
+					} catch(NoPieceFoundInRequestedTileException ex) {
+						ex.printStackTrace();
+					} finally {
+						hopLength++;
+					}
 				}
 				else break;
 			}

@@ -57,12 +57,12 @@ public class Move<T extends Hop> {
 		return hops.get(hops.size()-1).getDestination();
 	}
 	
-	public ArrayList<Tile> getMoveTakenPawns() {
-		ArrayList<Tile> takenPawns = new ArrayList<>();
+	public ArrayList<Piece> getMoveTakenPawns() {
+		ArrayList<Piece> takenPawns = new ArrayList<>();
 		if(isCapture()) {
 			for(T hop : hops) {
 				Capture capture = (Capture) hop;
-				takenPawns.add(capture.getTakenPawn());
+				takenPawns.add(capture.getTakenPiece());
 			}
 		}
 		return takenPawns;
@@ -80,7 +80,10 @@ public class Move<T extends Hop> {
 		if(getMoveTakenPawns().size() != takenPawns.size()) return false;
 		else {
 			for(int i=0; i<takenPawns.size(); i++) {
-				if(takenPawns.get(i) != ((Capture) hops.get(i)).getTakenPawn().getIndex()) return false;
+				Capture capture = (Capture) hops.get(i);
+				if(takenPawns.get(i) != capture.getTakenPiece().getPosition().getIndex()) {
+					return false;
+				}
 			}
 			return true;
 		}

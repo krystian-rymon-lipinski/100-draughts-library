@@ -282,13 +282,13 @@ public class GameEngineTest {
 	public void updateBoard_capture_test() {
 		boardManager.createEmptyBoard();
 		Piece chosenPiece = boardManager.addBlackQueen(25);
-		boardManager.addWhitePawn(12);
-		boardManager.addWhitePawn(14);
-		boardManager.addWhitePawn(22);
+		Piece whitePiece1 = boardManager.addWhitePawn(12);
+		Piece whitePiece2 = boardManager.addWhitePawn(14);
+		Piece whitePiece3 = boardManager.addWhitePawn(22);
 		Move<Capture> move = new Move<>(chosenPiece, 
-								new Capture(chosenPiece.getPosition(), getTile(3), getTile(14)));
-		move.addHop(new Capture(getTile(3), getTile(17), getTile(12)));
-		move.addHop(new Capture(getTile(17), getTile(50), getTile(22)));
+								new Capture(chosenPiece.getPosition(), getTile(3), whitePiece1));
+		move.addHop(new Capture(getTile(3), getTile(17), whitePiece2));
+		move.addHop(new Capture(getTile(17), getTile(50), whitePiece3));
 		
 		testObj.updateBoard(move);
 		assertEquals(Tile.State.EMPTY, getTile(25).getState());
