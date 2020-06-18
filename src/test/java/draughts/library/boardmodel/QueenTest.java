@@ -23,143 +23,150 @@ public class QueenTest extends PieceTest {
 	
 	@Test
 	public void findMoves_upLeft_test() {
-		boardManager.addWhiteQueen(32);
+		Piece movingPiece = boardManager.addWhiteQueen(32);
 		boardManager.addWhitePawn(28);
 		boardManager.addWhitePawn(38);
 		boardManager.addWhitePawn(37);
 		ArrayList<Move<Hop>> whiteMoves = findMovesForPiece(32);
 		
 		assertEquals(3, whiteMoves.size());
-		assertEquals(32, whiteMoves.get(0).getHop(0).getSource().getIndex());
-		assertEquals(32, whiteMoves.get(2).getHop(0).getSource().getIndex());
-		assertEquals(27, whiteMoves.get(0).getHop(0).getDestination().getIndex());
-		assertEquals(21, whiteMoves.get(1).getHop(0).getDestination().getIndex());
-		assertEquals(16, whiteMoves.get(2).getHop(0).getDestination().getIndex());
-		assertEquals(32, whiteMoves.get(0).getMovingPiece().getPosition().getIndex());
-		assertEquals(32, whiteMoves.get(2).getMovingPiece().getPosition().getIndex());
+		for(Move<Hop> move : whiteMoves) {
+			assertEquals(32, move.getMoveSource().getIndex());
+			assertEquals(movingPiece, move.getMovingPiece());
+			assertEquals(1, move.getNumberOfHops());
+		}	
+		assertEquals(27, whiteMoves.get(0).getMoveDestination().getIndex());
+		assertEquals(21, whiteMoves.get(1).getMoveDestination().getIndex());
+		assertEquals(16, whiteMoves.get(2).getMoveDestination().getIndex());
 		
 		
-		boardManager.addBlackQueen(12);
+		Piece movingPiece2 = boardManager.addBlackQueen(12);
 		boardManager.addBlackPawn(8);
 		boardManager.addBlackPawn(18);
 		boardManager.addBlackPawn(17);
 		ArrayList<Move<Hop>> blackMoves = findMovesForPiece(12);
 		
 		assertEquals(2, blackMoves.size());
-		assertEquals(12, blackMoves.get(0).getHop(0).getSource().getIndex());
-		assertEquals(12, blackMoves.get(1).getHop(0).getSource().getIndex());
-		assertEquals(7, blackMoves.get(0).getHop(0).getDestination().getIndex());
-		assertEquals(1, blackMoves.get(1).getHop(0).getDestination().getIndex());
-		assertEquals(12, blackMoves.get(0).getMovingPiece().getPosition().getIndex());
-		assertEquals(12, blackMoves.get(1).getMovingPiece().getPosition().getIndex());
+		for(Move<Hop> move : blackMoves) {
+			assertEquals(12, move.getMoveSource().getIndex());
+			assertEquals(movingPiece2, move.getMovingPiece());
+			assertEquals(1, move.getNumberOfHops());
+		}
+		assertEquals(7, blackMoves.get(0).getMoveDestination().getIndex());
+		assertEquals(1, blackMoves.get(1).getMoveDestination().getIndex());
 	}
 	
 	@Test
 	public void findMoves_upRight_test() {
-		boardManager.addWhiteQueen(32);
+		Piece movingPiece = boardManager.addWhiteQueen(32);
 		boardManager.addWhitePawn(27);
 		boardManager.addWhitePawn(38);
 		boardManager.addWhitePawn(37);
 		ArrayList<Move<Hop>> whiteMoves = findMovesForPiece(32);
 		
 		assertEquals(6, whiteMoves.size());
-		assertEquals(32, whiteMoves.get(0).getHop(0).getSource().getIndex());
-		assertEquals(32, whiteMoves.get(5).getHop(0).getSource().getIndex());
-		assertEquals(28, whiteMoves.get(0).getHop(0).getDestination().getIndex());
-		assertEquals(23, whiteMoves.get(1).getHop(0).getDestination().getIndex());
-		assertEquals(19, whiteMoves.get(2).getHop(0).getDestination().getIndex());
-		assertEquals(14, whiteMoves.get(3).getHop(0).getDestination().getIndex());
-		assertEquals(10, whiteMoves.get(4).getHop(0).getDestination().getIndex());
-		assertEquals(5, whiteMoves.get(5).getHop(0).getDestination().getIndex());
-		assertEquals(32, whiteMoves.get(0).getMovingPiece().getPosition().getIndex());
-		assertEquals(32, whiteMoves.get(5).getMovingPiece().getPosition().getIndex());
+		for(Move<Hop> move : whiteMoves) {
+			assertEquals(32, move.getMoveSource().getIndex());
+			assertEquals(movingPiece, move.getMovingPiece());
+			assertEquals(1, move.getNumberOfHops());
+		}
+		assertEquals(28, whiteMoves.get(0).getMoveDestination().getIndex());
+		assertEquals(23, whiteMoves.get(1).getMoveDestination().getIndex());
+		assertEquals(19, whiteMoves.get(2).getMoveDestination().getIndex());
+		assertEquals(14, whiteMoves.get(3).getMoveDestination().getIndex());
+		assertEquals(10, whiteMoves.get(4).getMoveDestination().getIndex());
+		assertEquals(5, whiteMoves.get(5).getMoveDestination().getIndex());		
 		
-		
-		boardManager.addBlackQueen(12);
+		Piece movingPiece2 = boardManager.addBlackQueen(12);
 		boardManager.addBlackPawn(7);
 		boardManager.addBlackPawn(18);
 		boardManager.addBlackPawn(17);
 		ArrayList<Move<Hop>> blackMoves = findMovesForPiece(12);
 		
 		assertEquals(2, blackMoves.size());
-		assertEquals(12, blackMoves.get(0).getHop(0).getSource().getIndex());
-		assertEquals(12, blackMoves.get(1).getHop(0).getSource().getIndex());
-		assertEquals(8, blackMoves.get(0).getHop(0).getDestination().getIndex());
-		assertEquals(3, blackMoves.get(1).getHop(0).getDestination().getIndex());
-		assertEquals(12, blackMoves.get(0).getMovingPiece().getPosition().getIndex());
-		assertEquals(12, blackMoves.get(1).getMovingPiece().getPosition().getIndex());
+		for(Move<Hop> move : blackMoves) {
+			assertEquals(12, move.getMoveSource().getIndex());
+			assertEquals(movingPiece2, move.getMovingPiece());
+			assertEquals(1, move.getNumberOfHops());
+		}
+		assertEquals(8, blackMoves.get(0).getMoveDestination().getIndex());
+		assertEquals(3, blackMoves.get(1).getMoveDestination().getIndex());
+	
 	}
 	
 	@Test
 	public void findMoves_downLeft_test() {
-		boardManager.addWhiteQueen(32);
+		Piece movingPiece = boardManager.addWhiteQueen(32);
 		boardManager.addWhitePawn(27);
 		boardManager.addWhitePawn(38);
 		boardManager.addWhitePawn(28);
 		ArrayList<Move<Hop>> whiteMoves = findMovesForPiece(32);
 		
 		assertEquals(3, whiteMoves.size());
-		assertEquals(32, whiteMoves.get(0).getHop(0).getSource().getIndex());
-		assertEquals(32, whiteMoves.get(2).getHop(0).getSource().getIndex());
-		assertEquals(37, whiteMoves.get(0).getHop(0).getDestination().getIndex());
-		assertEquals(41, whiteMoves.get(1).getHop(0).getDestination().getIndex());
-		assertEquals(46, whiteMoves.get(2).getHop(0).getDestination().getIndex());
-		assertEquals(32, whiteMoves.get(0).getMovingPiece().getPosition().getIndex());
-		assertEquals(32, whiteMoves.get(2).getMovingPiece().getPosition().getIndex());
+		for(Move<Hop> move : whiteMoves) {
+			assertEquals(32, move.getMoveSource().getIndex());
+			assertEquals(movingPiece, move.getMovingPiece());
+			assertEquals(1, move.getNumberOfHops());
+		}
+		assertEquals(37, whiteMoves.get(0).getMoveDestination().getIndex());
+		assertEquals(41, whiteMoves.get(1).getMoveDestination().getIndex());
+		assertEquals(46, whiteMoves.get(2).getMoveDestination().getIndex());
+
 		
-		
-		boardManager.addBlackQueen(12);
+		Piece movingPiece2 = boardManager.addBlackQueen(12);
 		boardManager.addBlackPawn(7);
 		boardManager.addBlackPawn(18);
 		boardManager.addBlackPawn(8);
 		ArrayList<Move<Hop>> blackMoves = findMovesForPiece(12);
 		
 		assertEquals(3, blackMoves.size());
-		assertEquals(12, blackMoves.get(0).getHop(0).getSource().getIndex());
-		assertEquals(12, blackMoves.get(2).getHop(0).getSource().getIndex());
-		assertEquals(17, blackMoves.get(0).getHop(0).getDestination().getIndex());
-		assertEquals(21, blackMoves.get(1).getHop(0).getDestination().getIndex());
-		assertEquals(26, blackMoves.get(2).getHop(0).getDestination().getIndex());
-		assertEquals(12, blackMoves.get(0).getMovingPiece().getPosition().getIndex());
-		assertEquals(12, blackMoves.get(2).getMovingPiece().getPosition().getIndex());
+		for(Move<Hop> move : blackMoves) {
+			assertEquals(12, move.getMoveSource().getIndex());
+			assertEquals(movingPiece2, move.getMovingPiece());
+			assertEquals(1, move.getNumberOfHops());
+		}
+		assertEquals(17, blackMoves.get(0).getMoveDestination().getIndex());
+		assertEquals(21, blackMoves.get(1).getMoveDestination().getIndex());
+		assertEquals(26, blackMoves.get(2).getMoveDestination().getIndex());
 	}
 	
 	@Test
 	public void findMoves_downRight_test() {
-		boardManager.addWhiteQueen(32);
+		Piece movingPiece = boardManager.addWhiteQueen(32);
 		boardManager.addWhitePawn(27);
 		boardManager.addWhitePawn(37);
 		boardManager.addWhitePawn(28);
 		ArrayList<Move<Hop>> whiteMoves = findMovesForPiece(32);
 		
 		assertEquals(3, whiteMoves.size());
-		assertEquals(32, whiteMoves.get(0).getHop(0).getSource().getIndex());
-		assertEquals(32, whiteMoves.get(2).getHop(0).getSource().getIndex());
-		assertEquals(38, whiteMoves.get(0).getHop(0).getDestination().getIndex());
-		assertEquals(43, whiteMoves.get(1).getHop(0).getDestination().getIndex());
-		assertEquals(49, whiteMoves.get(2).getHop(0).getDestination().getIndex());
-		assertEquals(32, whiteMoves.get(0).getMovingPiece().getPosition().getIndex());
-		assertEquals(32, whiteMoves.get(2).getMovingPiece().getPosition().getIndex());
-		
-		
-		boardManager.addBlackQueen(12);
+		for(Move<Hop> move : whiteMoves) {
+			assertEquals(32, move.getMoveSource().getIndex());
+			assertEquals(movingPiece, move.getMovingPiece());
+			assertEquals(1, move.getNumberOfHops());
+		}
+		assertEquals(38, whiteMoves.get(0).getMoveDestination().getIndex());
+		assertEquals(43, whiteMoves.get(1).getMoveDestination().getIndex());
+		assertEquals(49, whiteMoves.get(2).getMoveDestination().getIndex());
+
+			
+		Piece movingPiece2 = boardManager.addBlackQueen(12);
 		boardManager.addBlackPawn(7);
 		boardManager.addBlackPawn(17);
 		boardManager.addBlackPawn(8);
 		ArrayList<Move<Hop>> blackMoves = findMovesForPiece(12);
 		
 		assertEquals(6, blackMoves.size());
-		assertEquals(12, blackMoves.get(0).getHop(0).getSource().getIndex());
-		assertEquals(12, blackMoves.get(5).getHop(0).getSource().getIndex());
-		assertEquals(18, blackMoves.get(0).getHop(0).getDestination().getIndex());
-		assertEquals(23, blackMoves.get(1).getHop(0).getDestination().getIndex());
-		assertEquals(29, blackMoves.get(2).getHop(0).getDestination().getIndex());
-		assertEquals(34, blackMoves.get(3).getHop(0).getDestination().getIndex());
-		assertEquals(40, blackMoves.get(4).getHop(0).getDestination().getIndex());
-		assertEquals(45, blackMoves.get(5).getHop(0).getDestination().getIndex());
-		assertEquals(12, blackMoves.get(0).getMovingPiece().getPosition().getIndex());
-		assertEquals(12, blackMoves.get(5).getMovingPiece().getPosition().getIndex());
-
+		for(Move<Hop> move : blackMoves) {
+			assertEquals(12, move.getMoveSource().getIndex());
+			assertEquals(movingPiece2, move.getMovingPiece());
+			assertEquals(1, move.getNumberOfHops());
+		}
+		assertEquals(18, blackMoves.get(0).getMoveDestination().getIndex());
+		assertEquals(23, blackMoves.get(1).getMoveDestination().getIndex());
+		assertEquals(29, blackMoves.get(2).getMoveDestination().getIndex());
+		assertEquals(34, blackMoves.get(3).getMoveDestination().getIndex());
+		assertEquals(40, blackMoves.get(4).getMoveDestination().getIndex());
+		assertEquals(45, blackMoves.get(5).getMoveDestination().getIndex());
 	}
 	
 	@Test
