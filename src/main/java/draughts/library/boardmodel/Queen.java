@@ -90,7 +90,7 @@ public abstract class Queen extends Piece {
 			else if(isTileOccupiedByOppositeColor(target)){
 				if(foundPawnToTake == null) {
 					try {
-						foundPawnToTake = findPieceBeingTaken(target.getIndex(), allPieces);
+						foundPawnToTake = findPieceBeingTaken(target, allPieces);
 					} catch(NoPieceFoundInRequestedTileException ex) {
 						ex.printStackTrace();
 					} finally {

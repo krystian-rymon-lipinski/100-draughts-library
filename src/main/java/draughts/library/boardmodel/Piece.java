@@ -93,13 +93,13 @@ public abstract class Piece {
 		return null;
 	}
 	
-	public Piece findPieceBeingTaken(int tileIndex, ArrayList<ArrayList<Piece>> allPieces) throws NoPieceFoundInRequestedTileException {
+	public Piece findPieceBeingTaken(Tile position, ArrayList<ArrayList<Piece>> allPieces) throws NoPieceFoundInRequestedTileException {
 		ArrayList<Piece> piecesOfColor;
-		if (this.isWhite()) piecesOfColor = allPieces.get(0);
-		else piecesOfColor = allPieces.get(1);
+		if (this.isWhite()) piecesOfColor = allPieces.get(1);
+		else piecesOfColor = allPieces.get(0);
 		
 		for(Piece piece : piecesOfColor) {
-			if (piece.getPosition().getIndex() == tileIndex) return piece;
+			if (piece.getPosition().equals(position)) return piece;
 		}
 		
 		throw new NoPieceFoundInRequestedTileException("No piece on seemingly taken tile");

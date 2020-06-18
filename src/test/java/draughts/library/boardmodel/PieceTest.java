@@ -11,9 +11,12 @@ import draughts.library.movemodel.Move;
 public class PieceTest {
 	
 	public BoardManager boardManager;
+	ArrayList<ArrayList<Piece>> pieces = new ArrayList<>();
 	
 	public void setUp() {
 		boardManager = new BoardManager();
+		pieces.add(boardManager.getWhitePieces());
+		pieces.add(boardManager.getBlackPieces());
 		boardManager.createEmptyBoard();
 	}
 	
@@ -33,7 +36,7 @@ public class PieceTest {
 		Piece piece = null;
 		try {
 			piece = boardManager.findPieceByIndex(piecePosition);		
-			return piece.findCaptures(boardManager.getBoard());
+			return piece.findCaptures(boardManager.getBoard(), pieces);
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
 		}

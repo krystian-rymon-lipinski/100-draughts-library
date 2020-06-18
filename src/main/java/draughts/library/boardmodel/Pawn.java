@@ -36,7 +36,7 @@ public abstract class Pawn extends Piece {
 		
 		if(isTakePossible(target, possibleTake)) {
 			try {
-				Piece takenPiece = findPieceBeingTaken(possibleTake.getIndex(), allPieces);
+				Piece takenPiece = findPieceBeingTaken(possibleTake, allPieces);
 				hops.add(new Capture(position, target, takenPiece));
 			} catch(NoPieceFoundInRequestedTileException ex) {
 				ex.printStackTrace();

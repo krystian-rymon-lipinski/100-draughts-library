@@ -15,7 +15,7 @@ import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PawnTest extends PieceTest{
+public class PawnTest extends PieceTest {
 	
 	@Before
 	public void setUp() {
@@ -73,93 +73,93 @@ public class PawnTest extends PieceTest{
 	@Test
 	public void findSingleCapture_upLeft_test() {
 		boardManager.addWhitePawn(22);
-		boardManager.addBlackPawn(17);
+		Piece takenPiece = boardManager.addBlackPawn(17);
 		
 		ArrayList<Capture> whiteMoves = findTakesForPiece(22);
 		
 		assertEquals(1, whiteMoves.size());
 		assertEquals(22, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(11, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(17, whiteMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(takenPiece, whiteMoves.get(0).getTakenPiece());
 		
 		boardManager.addBlackPawn(39);
-		boardManager.addWhitePawn(33);
+		Piece takenPiece2 = boardManager.addWhitePawn(33);
 		
 		ArrayList<Capture> blackMoves = findTakesForPiece(39);
 		
 		assertEquals(1, blackMoves.size());
 		assertEquals(39, blackMoves.get(0).getSource().getIndex());
 		assertEquals(28, blackMoves.get(0).getDestination().getIndex());
-		assertEquals(33, blackMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(takenPiece2, blackMoves.get(0).getTakenPiece());
 	}
 	
 	@Test
 	public void findSingleCapture_upRight_test() {
 		boardManager.addWhitePawn(22);
-		boardManager.addBlackPawn(18);
+		Piece takenPiece = boardManager.addBlackPawn(18);
 		
 		ArrayList<Capture> whiteMoves = findTakesForPiece(22);
 		
 		assertEquals(1, whiteMoves.size());
 		assertEquals(22, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(13, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(18, whiteMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(takenPiece, whiteMoves.get(0).getTakenPiece());
 		
 		boardManager.addBlackPawn(39);
-		boardManager.addWhitePawn(34);
+		Piece takenPiece2 = boardManager.addWhitePawn(34);
 		
 		ArrayList<Capture> blackMoves = findTakesForPiece(39);
 		
 		assertEquals(1, blackMoves.size());
 		assertEquals(39, blackMoves.get(0).getSource().getIndex());
 		assertEquals(30, blackMoves.get(0).getDestination().getIndex());
-		assertEquals(34, blackMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(takenPiece2, blackMoves.get(0).getTakenPiece());
 	}
 	
 	@Test
 	public void findSingleCapture_downLeft_test() {
 		boardManager.addWhitePawn(22);
-		boardManager.addBlackPawn(27);
+		Piece takenPiece = boardManager.addBlackPawn(27);
 		
 		ArrayList<Capture> whiteMoves = findTakesForPiece(22);
 		
 		assertEquals(1, whiteMoves.size());
 		assertEquals(22, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(31, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(27, whiteMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(takenPiece, whiteMoves.get(0).getTakenPiece());
 		
 		boardManager.addBlackPawn(39);
-		boardManager.addWhitePawn(43);
+		Piece takenPiece2 = boardManager.addWhitePawn(43);
 		
 		ArrayList<Capture> blackMoves = findTakesForPiece(39);
 		
 		assertEquals(1, blackMoves.size());
 		assertEquals(39, blackMoves.get(0).getSource().getIndex());
 		assertEquals(48, blackMoves.get(0).getDestination().getIndex());
-		assertEquals(43, blackMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(takenPiece2, blackMoves.get(0).getTakenPiece());
 	}
 	
 	@Test
 	public void findSingleCapture_downRight_test() {
 		boardManager.addWhitePawn(22);
-		boardManager.addBlackPawn(28);
+		Piece takenPiece = boardManager.addBlackPawn(28);
 		
 		ArrayList<Capture> whiteMoves = findTakesForPiece(22);
 		
 		assertEquals(1, whiteMoves.size());
 		assertEquals(22, whiteMoves.get(0).getSource().getIndex());
 		assertEquals(33, whiteMoves.get(0).getDestination().getIndex());
-		assertEquals(28, whiteMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(takenPiece, whiteMoves.get(0).getTakenPiece());
 		
 		boardManager.addBlackPawn(39);
-		boardManager.addWhitePawn(44);
+		Piece takenPiece2 = boardManager.addWhitePawn(44);
 		
 		ArrayList<Capture> blackMoves = findTakesForPiece(39);
 		
 		assertEquals(1, blackMoves.size());
 		assertEquals(39, blackMoves.get(0).getSource().getIndex());
 		assertEquals(50, blackMoves.get(0).getDestination().getIndex());
-		assertEquals(44, blackMoves.get(0).getTakenPiece().getIndex());
+		assertEquals(takenPiece2, blackMoves.get(0).getTakenPiece());
 	}
 	
 	
