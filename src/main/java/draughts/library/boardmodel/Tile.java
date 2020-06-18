@@ -1,5 +1,7 @@
 package draughts.library.boardmodel;
 
+import java.util.Objects;
+
 public class Tile {
 	
 	private int index;
@@ -51,6 +53,20 @@ public class Tile {
 			else 
 				return 0;	
 		}
+	}
+	
+	public boolean equals(Object o) {
+		Tile comparedTile = (Tile) o;
+		if (this.index == comparedTile.index &&
+			this.state == comparedTile.state) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+	
+	public int hashCode() {
+		return Objects.hash(index, state.ordinal());
 	}
 	
 	public enum State {

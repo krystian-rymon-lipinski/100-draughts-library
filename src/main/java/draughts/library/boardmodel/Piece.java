@@ -1,6 +1,7 @@
 package draughts.library.boardmodel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 import draughts.library.movemodel.Capture;
@@ -102,6 +103,16 @@ public abstract class Piece {
 		}
 		
 		throw new NoPieceFoundInRequestedTileException("No piece on seemingly taken tile");
+	}
+	
+	public boolean equals(Object o) {
+		Piece comparedPiece = (Piece) o;
+		if (this.position.equals(comparedPiece.position)) return true;
+		else return false;
+	}
+	
+	public int hashCode() {
+		return Objects.hash(position, isWhite(), isQueen());
 	}
 	
 	public enum MoveDirection {
