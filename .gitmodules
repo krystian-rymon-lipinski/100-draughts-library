@@ -1,0 +1,3 @@
+[submodule "decision-tree-library"]
+	path = decision-tree-library
+	url = https://github.com/krystian-rymon-lipinski/decision-tree-library
