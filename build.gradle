@@ -10,5 +10,5 @@ repositories {
 dependencies { 
     testImplementation 'junit:junit:4.12'
 	testCompile 'org.mockito:mockito-core:2.+'
-	api project(':decision-tree-library')
+	api project('decision-tree-library')
 }
