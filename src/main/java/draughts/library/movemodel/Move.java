@@ -10,15 +10,18 @@ public class Move<T extends Hop> {
 	private Piece movingPiece;
 	private ArrayList<T> hops;
 	
-	public Move(Piece movingPiece, T hop) {
+	public Move(Piece movingPiece) {
 		this.movingPiece = movingPiece;
 		hops = new ArrayList<>();
+	}
+	
+	public Move(Piece movingPiece, T hop) {
+		this(movingPiece);
 		hops.add(hop);
 	}
 	
 	public Move(Move<T> move) {
-		this.movingPiece = move.movingPiece;
-		this.hops = new ArrayList<>();
+		this(move.movingPiece);
 		for(int i=0; i<move.getNumberOfHops(); i++) {
 			this.hops.add(move.hops.get(i));
 		}
