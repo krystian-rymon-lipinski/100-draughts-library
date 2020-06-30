@@ -34,10 +34,11 @@ public class MoveManager {
 		return possibleHops;
 	}
 	
-	public void findAllCorrectMoves(BoardManager boardManager, boolean isWhiteToMove) {
+	public ArrayList<Move<? extends Hop>> findAllCorrectMoves(BoardManager boardManager, boolean isWhiteToMove) {
 		possibleMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
 		if(possibleMoves.size() == 0)
-			possibleMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));		
+			possibleMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
+		return possibleMoves;
 	}
 
 	//methods for making move all hops at once
