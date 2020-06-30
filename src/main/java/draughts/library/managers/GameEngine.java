@@ -73,7 +73,7 @@ public class GameEngine {
 	
 	//methods for making move all hops at once
 	
-	public void makeMove(int source, int destination, ArrayList<Integer> taken) throws WrongMoveException {
+	public void checkIfMoveIsCorrect(int source, int destination, ArrayList<Integer> taken) throws WrongMoveException {
 		if(gameState == GameState.RUNNING) {
 			Move<? extends Hop> correctMove = moveManager.isMadeMoveCorrect(source, destination, taken);
 			if(correctMove == null) throw new WrongMoveException("Chosen move is not allowed");
@@ -84,19 +84,8 @@ public class GameEngine {
 		}
 	}
 	
-	public void updateBoard(Move<? extends Hop> correctMove) {
-		Piece movedPiece = correctMove.getMovingPiece();
-		
-		for(int i=0; i<correctMove.getNumberOfHops(); i++) {
-			Tile hopDestination = correctMove.getHop(i).getDestination();
-			if(correctMove.isCapture()) {
-				Piece takenPiece = correctMove.getMoveTakenPawns().get(i);
-				boardManager.makeCapture(movedPiece, hopDestination, takenPiece);
-			}
-			else {
-				boardManager.makeHop(movedPiece, hopDestination);
-			}
-		}		
+	public void updateBoard(Move<? extends Hop> move) {
+		boardManager.makeWholeMove(move);
 	}
 	
 	
