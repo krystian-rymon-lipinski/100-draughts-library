@@ -65,7 +65,11 @@ public class GameEngine {
 		boardManager.createStartingPosition();
 		gameState = GameState.RUNNING;
 		isWhiteToMove = true;
-		
+
+		prepareMove(isWhiteToMove);
+	}
+
+	public void prepareMove(boolean isWhiteToMove) {
 		moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
 	}
 	
@@ -144,21 +148,21 @@ public class GameEngine {
 	public boolean isChosenTileOccupiedByProperColor(Tile chosenTile) {
 		if(isWhiteToMove)
 			return (chosenTile.getState() == Tile.State.WHITE_PAWN ||
-					chosenTile.getState() == Tile.State.WHITE_QUEEN) ? true : false;
+					chosenTile.getState() == Tile.State.WHITE_QUEEN);
 		else
 			return (chosenTile.getState() == Tile.State.BLACK_PAWN ||
-					chosenTile.getState() == Tile.State.BLACK_QUEEN) ? true : false;
+					chosenTile.getState() == Tile.State.BLACK_QUEEN);
 	}
 	
 	public boolean isChosenTileEmpty(Tile chosenTile) {
-		return chosenTile.getState() == Tile.State.EMPTY ? true : false;
+		return chosenTile.getState() == Tile.State.EMPTY;
 	}
 	
 	////////////////////////// methods useful for both methods
 	
 	public void finishMove(Move<? extends Hop> move) {
 		checkForPawnPromotion(move);
-		changePlayingColor();	
+		endPlayerTurn();
 		checkIfGameShouldEnd(move);
 	}
 	
@@ -168,11 +172,11 @@ public class GameEngine {
 			boardManager.promotePawn(move.getMovingPiece());
 	}
 	
-	public void changePlayingColor() {
+	public void endPlayerTurn() {
 		moveManager.moveDone();
 		chosenPiece = null;
 		isWhiteToMove = !isWhiteToMove;
-		moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
+		prepareMove(isWhiteToMove);
 	}
 	
 	public void checkIfGameShouldEnd(Move<? extends Hop> move) {

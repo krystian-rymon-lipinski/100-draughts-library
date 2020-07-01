@@ -18,10 +18,6 @@ import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 import draughts.library.exceptions.WrongColorFoundInRequestedTileException;
 import draughts.library.exceptions.WrongMoveException;
-import draughts.library.managers.BoardManager;
-import draughts.library.managers.DrawArbiter;
-import draughts.library.managers.GameEngine;
-import draughts.library.managers.MoveManager;
 import draughts.library.managers.GameEngine.GameState;
 import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
@@ -110,7 +106,7 @@ public class GameEngineTest {
 		boardManager.addWhitePawn(40);
 		boardManager.addBlackPawn(8);
 		
-		testObj.changePlayingColor();
+		testObj.endPlayerTurn();
 		
 		assertEquals(0, moveManager.getHopsMadeInMove());
 		assertFalse(testObj.getIsWhiteToMove());

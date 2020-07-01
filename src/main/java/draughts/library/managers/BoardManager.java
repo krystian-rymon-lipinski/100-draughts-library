@@ -325,7 +325,7 @@ public class BoardManager {
 	}
 	
 	
-	public boolean isPawnAlreadyTaken(Move<Capture> move, Capture capture) {
+	private boolean isPawnAlreadyTaken(Move<Capture> move, Capture capture) {
 		for(int i=0; i<move.getNumberOfHops(); i++) {
 			if(move.getHop(i).getTakenPiece() == capture.getTakenPiece())
 				return true;
