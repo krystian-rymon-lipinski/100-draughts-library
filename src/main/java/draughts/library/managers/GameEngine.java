@@ -168,8 +168,11 @@ public class GameEngine {
 	
 	public void checkForPawnPromotion(Move<? extends Hop> move) {
 		if(!move.getMovingPiece().isQueen() && 
-				(move.getMoveDestination().getIndex() < 6 || move.getMoveDestination().getIndex() > 45))
-			boardManager.promotePawn(move.getMovingPiece());
+				(move.getMoveDestination().getIndex() < 6 || move.getMoveDestination().getIndex() > 45)) {
+			move.setIsPromotion(true);
+			Piece newQueen = boardManager.promotePawn(move.getMovingPiece());
+			move.setMovingPiece(newQueen);
+		}
 	}
 	
 	public void endPlayerTurn() {

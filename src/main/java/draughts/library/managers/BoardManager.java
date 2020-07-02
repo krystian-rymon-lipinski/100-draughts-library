@@ -200,15 +200,28 @@ public class BoardManager {
 		}
 	}
 	
-	public void promotePawn(Piece pawnToPromote) {
+	public Piece promotePawn(Piece pawnToPromote) {
+		Piece newQueen;
 		if(pawnToPromote.isWhite()) {
 			removeWhitePiece(pawnToPromote);
-			addWhiteQueen(pawnToPromote.getPosition().getIndex());
+			newQueen = addWhiteQueen(pawnToPromote.getPosition().getIndex());
 		} else {
 			removeBlackPiece(pawnToPromote);
-			addBlackQueen(pawnToPromote.getPosition().getIndex());
+			newQueen = addBlackQueen(pawnToPromote.getPosition().getIndex());
 		}
-		
+		return newQueen;
+	}
+
+	public Piece demoteQueen(Piece queenToDemote) {
+		Piece newPawn;
+		if (queenToDemote.isWhite()) {
+			removeWhitePiece(queenToDemote);
+			newPawn = addWhitePawn(queenToDemote.getPosition().getIndex());
+		} else {
+			removeBlackPiece(queenToDemote);
+			newPawn = addBlackPawn(queenToDemote.getPosition().getIndex());
+		}
+		return newPawn;
 	}
 	
 	public Tile findTileByIndex(int tileIndex) {

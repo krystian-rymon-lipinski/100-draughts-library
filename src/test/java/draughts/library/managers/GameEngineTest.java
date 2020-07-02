@@ -77,9 +77,11 @@ public class GameEngineTest {
 		
 		testObj.checkForPawnPromotion(whiteMove);
 		assertFalse(boardManager.getWhitePieces().get(0).isQueen());
+		assertFalse(whiteMove.getIsPromotion());
 		
 		testObj.checkForPawnPromotion(blackMove);
-		assertFalse(boardManager.getBlackPieces().get(0).isQueen());		
+		assertFalse(boardManager.getBlackPieces().get(0).isQueen());
+		assertFalse(blackMove.getIsPromotion());
 	}
 	
 	@Test
@@ -94,10 +96,14 @@ public class GameEngineTest {
 		Move<? extends Hop> blackMove = new Move<Hop>(blackPiece, new Hop(getTile(44), getTile(50)));
 		
 		testObj.checkForPawnPromotion(whiteMove);
+		assertTrue(whiteMove.getMovingPiece().isQueen());
 		assertTrue(boardManager.getWhitePieces().get(0).isQueen());
+		assertTrue(whiteMove.getIsPromotion());
 		
 		testObj.checkForPawnPromotion(blackMove);
-		assertTrue(boardManager.getBlackPieces().get(0).isQueen());		
+		assertTrue(blackMove.getMovingPiece().isQueen());
+		assertTrue(boardManager.getBlackPieces().get(0).isQueen());
+		assertTrue(blackMove.getIsPromotion());
 	}
 	
 	@Test

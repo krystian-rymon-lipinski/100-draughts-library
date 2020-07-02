@@ -9,10 +9,12 @@ public class Move<T extends Hop> {
 	
 	private Piece movingPiece;
 	private ArrayList<T> hops;
+	private boolean isPromotion;
 	
 	public Move(Piece movingPiece) {
 		this.movingPiece = movingPiece;
 		hops = new ArrayList<>();
+		isPromotion = false;
 	}
 	
 	public Move(Piece movingPiece, T hop) {
@@ -34,6 +36,8 @@ public class Move<T extends Hop> {
 	public Piece getMovingPiece() {
 		return movingPiece;
 	}
+
+	public void setMovingPiece(Piece movingPiece) {this.movingPiece = movingPiece;}
 	
 	public T getHop(int numberOfHop) {
 		return hops.get(numberOfHop);
@@ -70,7 +74,15 @@ public class Move<T extends Hop> {
 		}
 		return takenPawns;
 	}
-	
+
+	public boolean getIsPromotion() {
+		return isPromotion;
+	}
+
+	public void setIsPromotion(boolean isPromotion) {
+		this.isPromotion = isPromotion;
+	}
+
 	public boolean doesSourceMatch(int source) {
 		return getMoveSource().getIndex() == source;
 	}

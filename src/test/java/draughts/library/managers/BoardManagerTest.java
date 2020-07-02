@@ -285,6 +285,12 @@ public class BoardManagerTest {
 		assertEquals(testObj.findTileByIndex(19), testObj.getWhitePieces().get(2).getPosition());
 		assertEquals(testObj.findTileByIndex(10), testObj.getWhitePieces().get(3).getPosition());
 	}
+
+	@Test
+	public void reverseWholeMove_demoteQueenToPawn() {
+		testObj.createEmptyBoard();
+		testObj.addWhitePawn(6);
+	}
 	
 	@Test
 	public void findLongestConsecutiveCapturesForPiece_twoLevels_test() {
