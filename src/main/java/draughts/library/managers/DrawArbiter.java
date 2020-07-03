@@ -13,9 +13,17 @@ public class DrawArbiter {
 	public int getDrawCounter() {
 		return drawCounter;
 	}
-	
+
+	public void setDrawCounter(int drawCounter) {
+		this.drawCounter = drawCounter;
+	}
+
 	public DrawConditions getDrawConditions() {
 		return drawConditions;
+	}
+
+	public void setDrawConditions(DrawConditions drawConditions) {
+		this.drawConditions = drawConditions;
 	}
 	
 	public void updateConditions(boolean bothColorsHaveQueen, int numberOfWhitePieces, int numberOfBlackPieces) {
@@ -94,7 +102,7 @@ public class DrawArbiter {
 	
 	
 	public boolean isGameDrawn() {
-		return (drawCounter == 0) ? true : false;
+		return drawCounter == 0;
 	}
 	
 	public enum DrawConditions {
