@@ -14,6 +14,8 @@ public class Capture extends Hop {
 	
 	public Piece getTakenPiece() {
 		return takenPiece;
-	}	
+	}
+
+	public void setTakenPiece(Piece takenPiece) { this.takenPiece = takenPiece; }
 
 }

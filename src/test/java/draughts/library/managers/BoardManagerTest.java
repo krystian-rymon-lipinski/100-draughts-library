@@ -268,22 +268,22 @@ public class BoardManagerTest {
 	public void reverseWholeMove() {
 		testObj.createEmptyBoard();
 		testObj.addBlackPawn(5);
-		testObj.addWhitePawn(10);
-		testObj.addWhitePawn(19);
-		testObj.addWhitePawn(28);
-		testObj.addWhitePawn(38);
+		Piece takenPiece1 = testObj.addWhitePawn(10);
+		Piece takenPiece2 = testObj.addWhitePawn(19);
+		Piece takenPiece3 = testObj.addWhitePawn(28);
+		Piece takenPiece4 = testObj.addWhitePawn(38);
 		
 		ArrayList<Move<Capture>> blackMoves = testObj.findCapturesForAllPieces(false);
 		testObj.makeWholeMove(blackMoves.get(0));
-		testObj.reverseWholeMove(blackMoves.get(0));
+		ArrayList<Piece> piecesToReturn = testObj.reverseWholeMove(blackMoves.get(0));
 		
 		assertEquals(4, testObj.getWhitePieces().size());
 		assertEquals(testObj.findTileByIndex(5), testObj.getBlackPieces().get(0).getPosition());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(43).getState());
-		assertEquals(testObj.findTileByIndex(38), testObj.getWhitePieces().get(0).getPosition());
-		assertEquals(testObj.findTileByIndex(28), testObj.getWhitePieces().get(1).getPosition());
-		assertEquals(testObj.findTileByIndex(19), testObj.getWhitePieces().get(2).getPosition());
-		assertEquals(testObj.findTileByIndex(10), testObj.getWhitePieces().get(3).getPosition());
+		assertEquals(takenPiece1, piecesToReturn.get(0));
+		assertEquals(takenPiece2, piecesToReturn.get(1));
+		assertEquals(takenPiece3, piecesToReturn.get(2));
+		assertEquals(takenPiece4, piecesToReturn.get(3));
 	}
 
 	@Test

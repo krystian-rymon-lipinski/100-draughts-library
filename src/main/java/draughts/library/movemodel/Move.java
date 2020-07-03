@@ -75,6 +75,16 @@ public class Move<T extends Hop> {
 		return takenPawns;
 	}
 
+	public void setMoveTakenPawns(ArrayList<Piece> moveTakenPawns) {
+		if (isCapture()) {
+			int takenPawnIndex = 0;
+			for (T hop : hops) {
+				Capture capture = (Capture) hop;
+				capture.setTakenPiece(moveTakenPawns.get(takenPawnIndex++));
+			}
+		}
+	}
+
 	public boolean getIsPromotion() {
 		return isPromotion;
 	}

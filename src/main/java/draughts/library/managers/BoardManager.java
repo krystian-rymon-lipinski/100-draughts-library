@@ -189,17 +189,16 @@ public class BoardManager {
 	}
 	
 	public ArrayList<Piece> reverseWholeMove(Move<? extends Hop> move) {
-		ArrayList<Piece> piecesToReturn = new ArrayList<Piece>();
+		ArrayList<Piece> piecesToReturn = new ArrayList<>();
 		Collections.reverse(move.getHops());
 		
 		for (Hop hop : move.getHops()) {
 			makeHop(move.getMovingPiece(), hop.getSource());
 			if(move.isCapture()) {
 				Capture capture = (Capture) hop;
-				piecesToReturn.add(addPiece(capture.getTakenPiece()));
+				piecesToReturn.add(0, addPiece(capture.getTakenPiece()));
 			}
 		}
-
 		return piecesToReturn;
 	}
 	
