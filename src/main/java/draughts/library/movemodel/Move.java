@@ -1,6 +1,7 @@
 package draughts.library.movemodel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
@@ -116,5 +117,20 @@ public class Move<T extends Hop> {
 
 	public String toString() {
 		return hops.toString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Move<?> move = (Move<?>) o;
+		return isPromotion == move.isPromotion &&
+				movingPiece.equals(move.movingPiece) &&
+				hops.equals(move.hops);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(movingPiece, hops, isPromotion);
 	}
 }

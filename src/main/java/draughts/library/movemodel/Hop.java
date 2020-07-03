@@ -2,6 +2,8 @@ package draughts.library.movemodel;
 
 import draughts.library.boardmodel.Tile;
 
+import java.util.Objects;
+
 public class Hop {
 	
 	private Tile source;
@@ -24,4 +26,17 @@ public class Hop {
 		return source.getIndex() + " -> " + destination.getIndex(); 
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Hop hop = (Hop) o;
+		return source.equals(hop.source) &&
+				destination.equals(hop.destination);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(source, destination);
+	}
 }

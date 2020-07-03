@@ -104,17 +104,20 @@ public abstract class Piece {
 		
 		throw new NoPieceFoundInRequestedTileException("No piece on seemingly taken tile");
 	}
-	
+
+	@Override
 	public boolean equals(Object o) {
-		Piece comparedPiece = (Piece) o;
-		if (this.position.equals(comparedPiece.position)) return true;
-		else return false;
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Piece piece = (Piece) o;
+		return position.equals(piece.position);
 	}
-	
+
+	@Override
 	public int hashCode() {
-		return Objects.hash(position, isWhite(), isQueen());
+		return Objects.hash(position);
 	}
-	
+
 	public enum MoveDirection {
 		UP_LEFT,
 		UP_RIGHT,

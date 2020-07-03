@@ -54,21 +54,21 @@ public class Tile {
 				return 0;	
 		}
 	}
-	
+
+	@Override
 	public boolean equals(Object o) {
-		Tile comparedTile = (Tile) o;
-		if (this.index == comparedTile.index &&
-			this.state == comparedTile.state) {
-			return true;
-		} else {
-			return false;
-		}		
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Tile tile = (Tile) o;
+		return index == tile.index &&
+				state == tile.state;
 	}
-	
+
+	@Override
 	public int hashCode() {
-		return Objects.hash(index, state.ordinal());
+		return Objects.hash(index, state);
 	}
-	
+
 	public enum State {
 		EMPTY, //empty black tile
 		WHITE_PAWN,
