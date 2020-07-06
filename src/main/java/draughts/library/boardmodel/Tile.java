@@ -69,6 +69,14 @@ public class Tile {
 		return Objects.hash(index, state);
 	}
 
+	@Override
+	public String toString() {
+		return "Tile{" +
+				"index=" + index +
+				", state=" + state +
+				'}';
+	}
+
 	public enum State {
 		EMPTY, //empty black tile
 		WHITE_PAWN,

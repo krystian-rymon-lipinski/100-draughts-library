@@ -118,6 +118,13 @@ public abstract class Piece {
 		return Objects.hash(position);
 	}
 
+	@Override
+	public String toString() {
+		return "Piece{" +
+				"position=" + position +
+				'}';
+	}
+
 	public enum MoveDirection {
 		UP_LEFT,
 		UP_RIGHT,
