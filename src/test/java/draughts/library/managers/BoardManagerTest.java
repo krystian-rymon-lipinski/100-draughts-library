@@ -30,6 +30,10 @@ public class BoardManagerTest {
 	public void setUp() {
 		testObj = new BoardManager();
 	}
+
+	public Tile getTile(int index) {
+		return testObj.findTileByIndex(index);
+	}
 	
 	public void makeHop(int source, int destination) {
 		try {
@@ -244,6 +248,25 @@ public class BoardManagerTest {
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(39).getState());	
 	}
+
+	@Test
+	public void reverseCapture_test() {
+		testObj.createEmptyBoard();
+		Piece movingPiece = testObj.addWhitePawn(20);
+		Piece takenPiece = testObj.addBlackPawn(14);
+
+		Capture capture = new Capture(getTile(20), getTile(9), takenPiece);
+
+		testObj.makeCapture(movingPiece, getTile(9), takenPiece);
+
+		assertEquals(0, testObj.getBlackPieces().size());
+
+		testObj.reverseCapture(movingPiece, capture);
+
+		assertEquals(1, testObj.getBlackPieces().size());
+		assertEquals(takenPiece, testObj.getBlackPieces().get(0));
+		assertEquals(getTile(14), testObj.getBlackPieces().get(0).getPosition());
+	}
 	
 	@Test
 	public void makeWholeMove_test() {
@@ -263,7 +286,7 @@ public class BoardManagerTest {
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(18).getState());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(8).getState());
 	}
-	
+
 	@Test
 	public void reverseWholeMove() {
 		testObj.createEmptyBoard();
@@ -275,15 +298,15 @@ public class BoardManagerTest {
 		
 		ArrayList<Move<Capture>> blackMoves = testObj.findCapturesForAllPieces(false);
 		testObj.makeWholeMove(blackMoves.get(0));
-		ArrayList<Piece> piecesToReturn = testObj.reverseWholeMove(blackMoves.get(0));
+		testObj.reverseWholeMove(blackMoves.get(0));
 		
 		assertEquals(4, testObj.getWhitePieces().size());
 		assertEquals(testObj.findTileByIndex(5), testObj.getBlackPieces().get(0).getPosition());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(43).getState());
-		assertEquals(takenPiece1, piecesToReturn.get(0));
-		assertEquals(takenPiece2, piecesToReturn.get(1));
-		assertEquals(takenPiece3, piecesToReturn.get(2));
-		assertEquals(takenPiece4, piecesToReturn.get(3));
+		assertEquals(takenPiece4, testObj.getWhitePieces().get(0));
+		assertEquals(takenPiece3, testObj.getWhitePieces().get(1));
+		assertEquals(takenPiece2, testObj.getWhitePieces().get(2));
+		assertEquals(takenPiece1, testObj.getWhitePieces().get(3));
 	}
 
 	@Test

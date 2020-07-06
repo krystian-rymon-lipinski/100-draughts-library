@@ -175,9 +175,26 @@ public class BoardManager {
 		if(takenPiece.isWhite()) removeWhitePiece(takenPiece);
 		else                     removeBlackPiece(takenPiece);
 	}
+
+	public void reverseCapture(Piece movingPiece, Capture capture) {
+		if (movingPiece.isWhite()) {
+			if (movingPiece.isQueen()) {
+				capture.getTakenPiece().getPosition().setState(Tile.State.BLACK_QUEEN);
+			} else {
+				capture.getTakenPiece().getPosition().setState(Tile.State.BLACK_PAWN);
+			}
+			blackPieces.add(capture.getTakenPiece());
+		} else {
+			if (movingPiece.isQueen()) {
+				capture.getTakenPiece().getPosition().setState(Tile.State.WHITE_QUEEN);
+			} else {
+				capture.getTakenPiece().getPosition().setState(Tile.State.WHITE_PAWN);
+			}
+			whitePieces.add(capture.getTakenPiece());
+		}
+	}
 	
 	public void makeWholeMove(Move<? extends Hop> move) {
-		System.out.println("Make move: " + move + " Moving piece: " + move.getMovingPiece());
 		for (Hop hop : move.getHops()) {
 			if(move.isCapture()) {
 				Capture capture = (Capture) hop;
@@ -190,19 +207,16 @@ public class BoardManager {
 	}
 	
 	public void reverseWholeMove(Move<? extends Hop> move) {
-		System.out.println("Reverse move: " + move + " Moving piece: " + move.getMovingPiece());
-
-		ArrayList<Piece> piecesToReturn = new ArrayList<>();
 		Collections.reverse(move.getHops());
 		
 		for (Hop hop : move.getHops()) {
 			makeHop(move.getMovingPiece(), hop.getSource());
 			if(move.isCapture()) {
 				Capture capture = (Capture) hop;
-				piecesToReturn.add(0, addPiece(capture.getTakenPiece()));
+				reverseCapture(move.getMovingPiece(), capture);
 			}
 		}
-		move.setMoveTakenPawns(piecesToReturn);
+		Collections.reverse(move.getHops());
 	}
 	
 	public Piece promotePawn(Piece pawnToPromote) {
