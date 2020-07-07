@@ -41,6 +41,10 @@ public class MoveManager {
 		return possibleMoves;
 	}
 
+	public boolean isAnyMovePossible(BoardManager boardManager, boolean isWhiteToMove) {
+		return boardManager.isAnyMovePossible(isWhiteToMove);
+	}
+
 	//methods for making move all hops at once
 	
 	public Move<? extends Hop> isMadeMoveCorrect(int source, int destination, ArrayList<Integer> takenPawns) {

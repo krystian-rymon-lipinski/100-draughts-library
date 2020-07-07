@@ -281,6 +281,29 @@ public class BoardManager {
 		}
 		return allMoves;
 	}
+
+	public boolean isAnyMovePossible(boolean isWhiteToMove) {
+		ArrayList<Piece> pieces;
+		if (isWhiteToMove) pieces = whitePieces;
+		else 			   pieces = blackPieces;
+
+		ArrayList<ArrayList<Piece>> allPieces = new ArrayList<>();
+		allPieces.add(whitePieces);
+		allPieces.add(blackPieces);
+
+		ArrayList<Move<Hop>> pieceMoves = new ArrayList<>();
+		ArrayList<Capture> pieceCaptures = new ArrayList<>();
+		for(Piece piece : pieces) {
+			pieceCaptures = piece.findCaptures(board, allPieces);
+			if (pieceCaptures.size() > 0) return true;
+			else {
+				pieceMoves = piece.findMoves(board);
+				if (pieceMoves.size() > 0) return true;
+			}
+		}
+
+		return false;
+	}
 	
 	public ArrayList<Move<Capture>> findCapturesForAllPieces(boolean isWhiteToMove) {
 		ArrayList<Piece> pieces;
