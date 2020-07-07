@@ -68,7 +68,7 @@ public class GameEngine {
 
 	public ArrayList<Move<? extends Hop>> prepareMove(boolean isWhiteToMove) {
 		ArrayList<Move<? extends Hop>> moves = moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
-		checkGameState();
+		//checkGameState();
 		return moves;
 	}
 	
@@ -163,6 +163,7 @@ public class GameEngine {
 		checkForPawnPromotion(move);
 		updateDrawArbiter(move);
 		endPlayerTurn();
+		checkGameState();
 	}
 	
 	public void checkForPawnPromotion(Move<? extends Hop> move) {
@@ -185,13 +186,14 @@ public class GameEngine {
 	}
 	
 	public void updateDrawArbiter(Move<? extends Hop> move) {
+		System.out.println("Update draw arbiter!" + move);
 		drawArbiter.updateCounter(move.isCapture(), move.getMovingPiece().isQueen());
 		drawArbiter.updateConditions((boardManager.getIsWhiteQueenOnBoard() && boardManager.getIsBlackQueenOnBoard()), 
 								 boardManager.getWhitePieces().size(), boardManager.getBlackPieces().size());
 	}
 	
 	public void checkGameState() {
-		if(moveManager.getPossibleMoves().size() == 0) {
+		if (!moveManager.isAnyMovePossible(boardManager, isWhiteToMove)) {
 			if(isWhiteToMove) setGameState(GameState.WON_BY_BLACK);
 			else setGameState(GameState.WON_BY_WHITE);
 		}

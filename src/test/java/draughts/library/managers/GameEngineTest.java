@@ -116,7 +116,6 @@ public class GameEngineTest {
 		
 		assertEquals(0, moveManager.getHopsMadeInMove());
 		assertFalse(testObj.getIsWhiteToMove());
-		assertEquals(2, moveManager.getPossibleMoves().size());
 	}
 	
 	@Test
@@ -130,7 +129,7 @@ public class GameEngineTest {
 		makeMove(48, 39);
 		
 		assertEquals(0, boardManager.getBlackPieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
+		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
 	}
 	
@@ -146,7 +145,7 @@ public class GameEngineTest {
 		makeMove(41, 37);
 		
 		assertEquals(1, boardManager.getBlackPieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
+		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
 		
 	}
@@ -163,7 +162,7 @@ public class GameEngineTest {
 		makeMove(5, 14);
 		
 		assertEquals(0, boardManager.getWhitePieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
+		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());
 	}
 	
@@ -179,7 +178,7 @@ public class GameEngineTest {
 		makeMove(10, 14);
 		
 		assertEquals(1, boardManager.getWhitePieces().size());
-		assertEquals(0, testObj.getMoveManager().getPossibleMoves().size());
+		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());	
 	}
 	
@@ -193,7 +192,7 @@ public class GameEngineTest {
 		boardManager.addBlackPawn(5);
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
-		
+
 		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
 		testObj.getDrawArbiter().updateConditions(true, 2, 2);
 		assertEquals(DrawArbiter.DrawConditions.NORMAL, testObj.getDrawArbiter().getDrawConditions());
