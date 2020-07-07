@@ -43,6 +43,7 @@ public class GameEngineTest {
 	
 	public void makeMove(int source, int destination) {
 		try {
+			testObj.prepareMove(testObj.getIsWhiteToMove());
 			testObj.tileClicked(source);
 			testObj.tileClicked(destination);
 		} catch(Exception ex) {}	
@@ -123,9 +124,7 @@ public class GameEngineTest {
 		boardManager.createEmptyBoard();
 		boardManager.addWhitePawn(48);
 		boardManager.addBlackPawn(43);
-		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		
+
 		makeMove(48, 39);
 		
 		assertEquals(0, boardManager.getBlackPieces().size());
@@ -139,9 +138,7 @@ public class GameEngineTest {
 		boardManager.addBlackPawn(26);
 		boardManager.addWhitePawn(31);
 		boardManager.addWhitePawn(41);
-		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		
+
 		makeMove(41, 37);
 		
 		assertEquals(1, boardManager.getBlackPieces().size());
@@ -157,8 +154,6 @@ public class GameEngineTest {
 		boardManager.addWhitePawn(10);
 		
 		testObj.setIsWhiteToMove(false);
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		
 		makeMove(5, 14);
 		
 		assertEquals(0, boardManager.getWhitePieces().size());
@@ -174,7 +169,6 @@ public class GameEngineTest {
 		boardManager.addBlackPawn(10);
 		
 		testObj.setIsWhiteToMove(false);	
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
 		makeMove(10, 14);
 		
 		assertEquals(1, boardManager.getWhitePieces().size());
@@ -193,7 +187,6 @@ public class GameEngineTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
 		testObj.getDrawArbiter().updateConditions(true, 2, 2);
 		assertEquals(DrawArbiter.DrawConditions.NORMAL, testObj.getDrawArbiter().getDrawConditions());
 
@@ -222,14 +215,10 @@ public class GameEngineTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
 		testObj.getDrawArbiter().updateConditions(true, 1, 3);
 		
 		for(int i=0; i<8; i++) {
 			makeMove(16, 49);
-			assertEquals(3, boardManager.getBlackPieces().size());
-			assertEquals(12, moveManager.getPossibleMoves().size());
-
 			makeMove(5, 46);
 			makeMove(49, 16);
 			makeMove(46, 5);
@@ -248,7 +237,6 @@ public class GameEngineTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
 		testObj.getDrawArbiter().updateConditions(true, 1, 2);
 		
 		for(int i=0; i<2; i++) {
@@ -399,9 +387,7 @@ public class GameEngineTest {
 		boardManager.createEmptyBoard();
 		boardManager.addWhitePawn(33);
 		boardManager.addBlackPawn(28);
-		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
-		
+
 		makeMove(33, 22);
 		
 		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(28).getState());
@@ -426,7 +412,7 @@ public class GameEngineTest {
 		boardManager.addBlackPawn(33);
 		boardManager.addBlackPawn(42);
 		
-		moveManager.findAllCorrectMoves(boardManager, testObj.getIsWhiteToMove());
+		testObj.prepareMove(testObj.getIsWhiteToMove());
 		
 		testObj.tileClicked(48);
 		try {

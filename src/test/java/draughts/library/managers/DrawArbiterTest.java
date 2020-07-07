@@ -31,6 +31,7 @@ public class DrawArbiterTest {
 	
 	public void makeMove(int source, int destination) {
 		try {
+			gameEngine.prepareMove(gameEngine.getIsWhiteToMove());
 			gameEngine.tileClicked(source);
 			gameEngine.tileClicked(destination);
 		} catch (Exception ex) {}
@@ -45,9 +46,7 @@ public class DrawArbiterTest {
 		boardManager.addBlackPawn(26);
 		boardManager.addBlackQueen(16);
 		boardManager.setIsBlackQueenOnBoard(true);
-		
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
+
 		makeMove(10, 5);
 		
 		assertEquals(DrawArbiter.DrawConditions.NORMAL, testObj.getDrawConditions());
@@ -63,9 +62,7 @@ public class DrawArbiterTest {
 		boardManager.addBlackQueen(10);
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
-		
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
+
 		makeMove(33, 6);
 		
 		assertEquals(DrawArbiter.DrawConditions.THREE_VS_ONE, testObj.getDrawConditions());
@@ -81,8 +78,6 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		
 		gameEngine.setIsWhiteToMove(false);
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
 		makeMove(42, 47);
 		
 		assertEquals(DrawArbiter.DrawConditions.THREE_VS_ONE, testObj.getDrawConditions());
@@ -98,9 +93,7 @@ public class DrawArbiterTest {
 		boardManager.addWhiteQueen(43);
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
-		
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
+
 		makeMove(43, 25);
 		makeMove(25, 3);
 		
@@ -115,8 +108,7 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		
 		gameEngine.setIsWhiteToMove(false);
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
+
 		makeMove(45, 50);
 	
 		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawConditions());
@@ -134,9 +126,7 @@ public class DrawArbiterTest {
 		boardManager.addBlackQueen(15);
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
-		
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
+
 		makeMove(37, 19);
 		makeMove(19, 2);
 		
@@ -155,8 +145,7 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		gameEngine.setIsWhiteToMove(false);
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
+
 		makeMove(4, 27);
 		makeMove(27, 49);
 		
@@ -176,9 +165,7 @@ public class DrawArbiterTest {
 		boardManager.addBlackQueen(19);
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
-		
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
+
 		makeMove(46, 14);
 		
 		assertEquals(DrawArbiter.DrawConditions.NONE, testObj.getDrawConditions());
@@ -195,8 +182,6 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		gameEngine.setIsWhiteToMove(false);
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
 		makeMove(15, 38);
 		
 		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawConditions());
@@ -215,7 +200,6 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		testObj.updateConditions(true, 3, 3);
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
 
 		assertEquals(50, testObj.getDrawCounter());
 		
@@ -243,8 +227,7 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		testObj.updateConditions(true, 3, 1);
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
+
 		assertEquals(32, testObj.getDrawCounter());
 		
 		makeMove(41, 36);
@@ -264,8 +247,7 @@ public class DrawArbiterTest {
 		boardManager.setIsBlackQueenOnBoard(true);
 		
 		testObj.updateConditions(true, 2, 1);
-		moveManager.findAllCorrectMoves(boardManager, gameEngine.getIsWhiteToMove());
-		
+
 		assertEquals(10, testObj.getDrawCounter());
 		
 		makeMove(23, 1);

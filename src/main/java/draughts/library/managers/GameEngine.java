@@ -52,6 +52,8 @@ public class GameEngine {
 	public DrawArbiter getDrawArbiter() {
 		return drawArbiter;
 	}
+
+	public void setDrawArbiter(DrawArbiter drawArbiter) { this.drawArbiter = drawArbiter; }
 	
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
@@ -186,7 +188,6 @@ public class GameEngine {
 	}
 	
 	public void updateDrawArbiter(Move<? extends Hop> move) {
-		System.out.println("Update draw arbiter!" + move);
 		drawArbiter.updateCounter(move.isCapture(), move.getMovingPiece().isQueen());
 		drawArbiter.updateConditions((boardManager.getIsWhiteQueenOnBoard() && boardManager.getIsBlackQueenOnBoard()), 
 								 boardManager.getWhitePieces().size(), boardManager.getBlackPieces().size());
