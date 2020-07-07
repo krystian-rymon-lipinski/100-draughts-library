@@ -27,7 +27,7 @@ public abstract class Pawn extends Piece {
 		return moves;
 	}
 	
-	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, ArrayList<ArrayList<Piece>> allPieces) {
+	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, ArrayList<Piece> allPieces) {
 		
 		ArrayList<Capture> hops = new ArrayList<>();
 		
@@ -48,7 +48,7 @@ public abstract class Pawn extends Piece {
 	
 	public boolean isTakePossible(Tile target, Tile possibleTake) {
 		return isTileOccupiedByOppositeColor(possibleTake) && 
-				   target.getState() == Tile.State.EMPTY ? true : false;
+				   target.getState() == Tile.State.EMPTY;
 	}
 
 }

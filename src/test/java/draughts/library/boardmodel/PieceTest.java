@@ -11,17 +11,14 @@ import draughts.library.movemodel.Move;
 public class PieceTest {
 	
 	public BoardManager boardManager;
-	ArrayList<ArrayList<Piece>> pieces = new ArrayList<>();
-	
+
 	public void setUp() {
 		boardManager = new BoardManager();
-		pieces.add(boardManager.getWhitePieces());
-		pieces.add(boardManager.getBlackPieces());
 		boardManager.createEmptyBoard();
 	}
 	
 	public ArrayList<Move<Hop>> findMovesForPiece(int piecePosition) {
-		Piece piece = null;
+		Piece piece;
 		try {
 			piece = boardManager.findPieceByIndex(piecePosition);
 			return piece.findMoves(boardManager.getBoard());
@@ -33,15 +30,20 @@ public class PieceTest {
 	}
 	
 	public ArrayList<Capture> findTakesForPiece(int piecePosition) {
-		Piece piece = null;
+		Piece piece;
 		try {
-			piece = boardManager.findPieceByIndex(piecePosition);		
-			return piece.findCaptures(boardManager.getBoard(), pieces);
+			piece = boardManager.findPieceByIndex(piecePosition);
+			ArrayList<Piece> oppositePieces = returnOppositePieces(piece.isWhite());
+			return piece.findCaptures(boardManager.getBoard(), oppositePieces);
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
 		}
 		return null;
-		
+	}
+
+	public ArrayList<Piece> returnOppositePieces(boolean isMovingPieceWhite) {
+		if (isMovingPieceWhite) return boardManager.getBlackPieces();
+		else 					return boardManager.getWhitePieces();
 	}
 
 }

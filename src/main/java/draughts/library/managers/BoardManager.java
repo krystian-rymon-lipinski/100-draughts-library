@@ -284,17 +284,20 @@ public class BoardManager {
 
 	public boolean isAnyMovePossible(boolean isWhiteToMove) {
 		ArrayList<Piece> pieces;
-		if (isWhiteToMove) pieces = whitePieces;
-		else 			   pieces = blackPieces;
-
-		ArrayList<ArrayList<Piece>> allPieces = new ArrayList<>();
-		allPieces.add(whitePieces);
-		allPieces.add(blackPieces);
+		ArrayList<Piece> oppositePieces;
+		if (isWhiteToMove) {
+			pieces = whitePieces;
+			oppositePieces = blackPieces;
+		}
+		else 			   {
+			pieces = blackPieces;
+			oppositePieces = whitePieces;
+		}
 
 		ArrayList<Move<Hop>> pieceMoves = new ArrayList<>();
 		ArrayList<Capture> pieceCaptures = new ArrayList<>();
 		for(Piece piece : pieces) {
-			pieceCaptures = piece.findCaptures(board, allPieces);
+			pieceCaptures = piece.findCaptures(board, oppositePieces);
 			if (pieceCaptures.size() > 0) return true;
 			else {
 				pieceMoves = piece.findMoves(board);
@@ -334,14 +337,14 @@ public class BoardManager {
 		ArrayList<Move<Capture>> moves = new ArrayList<>();
 		ArrayList<Move<Capture>> newMoves = new ArrayList<>();
 		
-		ArrayList<ArrayList<Piece>> allPieces = new ArrayList<>();
-		allPieces.add(whitePieces);
-		allPieces.add(blackPieces);
+		ArrayList<Piece> oppositePieces = new ArrayList<>();
+		if (piece.isWhite()) oppositePieces = blackPieces;
+		else 				 oppositePieces = whitePieces;
 		
 		do  {
 						
 			if(moves.size() == 0) { //first capture 
-				captures = piece.findCaptures(board, allPieces);
+				captures = piece.findCaptures(board, oppositePieces);
 				if(captures.size() == 0) break; //no captures available for piece
 				else {
 					for(Capture capture : captures) {
@@ -356,7 +359,7 @@ public class BoardManager {
 					for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
 						makeHop(piece, moves.get(i).getHop(j).getDestination());
 					}
-					captures = piece.findCaptures(board, allPieces);
+					captures = piece.findCaptures(board, oppositePieces);
 					for(Capture capture: captures) {
 						if(!isPawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
 							newMoves.add(new Move<Capture>(moves.get(i)));
