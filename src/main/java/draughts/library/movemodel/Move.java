@@ -1,6 +1,7 @@
 package draughts.library.movemodel;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
@@ -9,10 +10,12 @@ public class Move<T extends Hop> {
 	
 	private Piece movingPiece;
 	private ArrayList<T> hops;
+	private boolean isPromotion;
 	
 	public Move(Piece movingPiece) {
 		this.movingPiece = movingPiece;
 		hops = new ArrayList<>();
+		isPromotion = false;
 	}
 	
 	public Move(Piece movingPiece, T hop) {
@@ -34,6 +37,8 @@ public class Move<T extends Hop> {
 	public Piece getMovingPiece() {
 		return movingPiece;
 	}
+
+	public void setMovingPiece(Piece movingPiece) {this.movingPiece = movingPiece;}
 	
 	public T getHop(int numberOfHop) {
 		return hops.get(numberOfHop);
@@ -70,7 +75,25 @@ public class Move<T extends Hop> {
 		}
 		return takenPawns;
 	}
-	
+
+	public void setMoveTakenPawns(ArrayList<Piece> moveTakenPawns) {
+		if (isCapture()) {
+			int takenPawnIndex = 0;
+			for (T hop : hops) {
+				Capture capture = (Capture) hop;
+				capture.setTakenPiece(moveTakenPawns.get(takenPawnIndex++));
+			}
+		}
+	}
+
+	public boolean getIsPromotion() {
+		return isPromotion;
+	}
+
+	public void setIsPromotion(boolean isPromotion) {
+		this.isPromotion = isPromotion;
+	}
+
 	public boolean doesSourceMatch(int source) {
 		return getMoveSource().getIndex() == source;
 	}
@@ -94,5 +117,20 @@ public class Move<T extends Hop> {
 
 	public String toString() {
 		return hops.toString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Move<?> move = (Move<?>) o;
+		return isPromotion == move.isPromotion &&
+				movingPiece.equals(move.movingPiece) &&
+				hops.equals(move.hops);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(movingPiece, hops, isPromotion);
 	}
 }

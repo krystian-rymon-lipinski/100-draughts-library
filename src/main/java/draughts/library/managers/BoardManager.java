@@ -175,6 +175,24 @@ public class BoardManager {
 		if(takenPiece.isWhite()) removeWhitePiece(takenPiece);
 		else                     removeBlackPiece(takenPiece);
 	}
+
+	public void reverseCapture(Piece movingPiece, Capture capture) {
+		if (movingPiece.isWhite()) {
+			if (movingPiece.isQueen()) {
+				capture.getTakenPiece().getPosition().setState(Tile.State.BLACK_QUEEN);
+			} else {
+				capture.getTakenPiece().getPosition().setState(Tile.State.BLACK_PAWN);
+			}
+			blackPieces.add(capture.getTakenPiece());
+		} else {
+			if (movingPiece.isQueen()) {
+				capture.getTakenPiece().getPosition().setState(Tile.State.WHITE_QUEEN);
+			} else {
+				capture.getTakenPiece().getPosition().setState(Tile.State.WHITE_PAWN);
+			}
+			whitePieces.add(capture.getTakenPiece());
+		}
+	}
 	
 	public void makeWholeMove(Move<? extends Hop> move) {
 		for (Hop hop : move.getHops()) {
@@ -195,20 +213,34 @@ public class BoardManager {
 			makeHop(move.getMovingPiece(), hop.getSource());
 			if(move.isCapture()) {
 				Capture capture = (Capture) hop;
-				addPiece(capture.getTakenPiece());
+				reverseCapture(move.getMovingPiece(), capture);
 			}
 		}
+		Collections.reverse(move.getHops());
 	}
 	
-	public void promotePawn(Piece pawnToPromote) {
+	public Piece promotePawn(Piece pawnToPromote) {
+		Piece newQueen;
 		if(pawnToPromote.isWhite()) {
 			removeWhitePiece(pawnToPromote);
-			addWhiteQueen(pawnToPromote.getPosition().getIndex());
+			newQueen = addWhiteQueen(pawnToPromote.getPosition().getIndex());
 		} else {
 			removeBlackPiece(pawnToPromote);
-			addBlackQueen(pawnToPromote.getPosition().getIndex());
+			newQueen = addBlackQueen(pawnToPromote.getPosition().getIndex());
 		}
-		
+		return newQueen;
+	}
+
+	public Piece demoteQueen(Piece queenToDemote) {
+		Piece newPawn;
+		if (queenToDemote.isWhite()) {
+			removeWhitePiece(queenToDemote);
+			newPawn = addWhitePawn(queenToDemote.getPosition().getIndex());
+		} else {
+			removeBlackPiece(queenToDemote);
+			newPawn = addBlackPawn(queenToDemote.getPosition().getIndex());
+		}
+		return newPawn;
 	}
 	
 	public Tile findTileByIndex(int tileIndex) {
@@ -249,6 +281,32 @@ public class BoardManager {
 		}
 		return allMoves;
 	}
+
+	public boolean isAnyMovePossible(boolean isWhiteToMove) {
+		ArrayList<Piece> pieces;
+		ArrayList<Piece> oppositePieces;
+		if (isWhiteToMove) {
+			pieces = whitePieces;
+			oppositePieces = blackPieces;
+		}
+		else 			   {
+			pieces = blackPieces;
+			oppositePieces = whitePieces;
+		}
+
+		ArrayList<Move<Hop>> pieceMoves = new ArrayList<>();
+		ArrayList<Capture> pieceCaptures = new ArrayList<>();
+		for(Piece piece : pieces) {
+			pieceCaptures = piece.findCaptures(board, oppositePieces);
+			if (pieceCaptures.size() > 0) return true;
+			else {
+				pieceMoves = piece.findMoves(board);
+				if (pieceMoves.size() > 0) return true;
+			}
+		}
+
+		return false;
+	}
 	
 	public ArrayList<Move<Capture>> findCapturesForAllPieces(boolean isWhiteToMove) {
 		ArrayList<Piece> pieces;
@@ -279,14 +337,14 @@ public class BoardManager {
 		ArrayList<Move<Capture>> moves = new ArrayList<>();
 		ArrayList<Move<Capture>> newMoves = new ArrayList<>();
 		
-		ArrayList<ArrayList<Piece>> allPieces = new ArrayList<>();
-		allPieces.add(whitePieces);
-		allPieces.add(blackPieces);
+		ArrayList<Piece> oppositePieces = new ArrayList<>();
+		if (piece.isWhite()) oppositePieces = blackPieces;
+		else 				 oppositePieces = whitePieces;
 		
 		do  {
 						
 			if(moves.size() == 0) { //first capture 
-				captures = piece.findCaptures(board, allPieces);
+				captures = piece.findCaptures(board, oppositePieces);
 				if(captures.size() == 0) break; //no captures available for piece
 				else {
 					for(Capture capture : captures) {
@@ -301,7 +359,7 @@ public class BoardManager {
 					for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
 						makeHop(piece, moves.get(i).getHop(j).getDestination());
 					}
-					captures = piece.findCaptures(board, allPieces);
+					captures = piece.findCaptures(board, oppositePieces);
 					for(Capture capture: captures) {
 						if(!isPawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
 							newMoves.add(new Move<Capture>(moves.get(i)));
@@ -325,7 +383,7 @@ public class BoardManager {
 	}
 	
 	
-	public boolean isPawnAlreadyTaken(Move<Capture> move, Capture capture) {
+	private boolean isPawnAlreadyTaken(Move<Capture> move, Capture capture) {
 		for(int i=0; i<move.getNumberOfHops(); i++) {
 			if(move.getHop(i).getTakenPiece() == capture.getTakenPiece())
 				return true;

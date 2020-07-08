@@ -30,6 +30,10 @@ public class BoardManagerTest {
 	public void setUp() {
 		testObj = new BoardManager();
 	}
+
+	public Tile getTile(int index) {
+		return testObj.findTileByIndex(index);
+	}
 	
 	public void makeHop(int source, int destination) {
 		try {
@@ -244,6 +248,25 @@ public class BoardManagerTest {
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(39).getState());	
 	}
+
+	@Test
+	public void reverseCapture_test() {
+		testObj.createEmptyBoard();
+		Piece movingPiece = testObj.addWhitePawn(20);
+		Piece takenPiece = testObj.addBlackPawn(14);
+
+		Capture capture = new Capture(getTile(20), getTile(9), takenPiece);
+
+		testObj.makeCapture(movingPiece, getTile(9), takenPiece);
+
+		assertEquals(0, testObj.getBlackPieces().size());
+
+		testObj.reverseCapture(movingPiece, capture);
+
+		assertEquals(1, testObj.getBlackPieces().size());
+		assertEquals(takenPiece, testObj.getBlackPieces().get(0));
+		assertEquals(getTile(14), testObj.getBlackPieces().get(0).getPosition());
+	}
 	
 	@Test
 	public void makeWholeMove_test() {
@@ -263,15 +286,15 @@ public class BoardManagerTest {
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(18).getState());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(8).getState());
 	}
-	
+
 	@Test
 	public void reverseWholeMove() {
 		testObj.createEmptyBoard();
 		testObj.addBlackPawn(5);
-		testObj.addWhitePawn(10);
-		testObj.addWhitePawn(19);
-		testObj.addWhitePawn(28);
-		testObj.addWhitePawn(38);
+		Piece takenPiece1 = testObj.addWhitePawn(10);
+		Piece takenPiece2 = testObj.addWhitePawn(19);
+		Piece takenPiece3 = testObj.addWhitePawn(28);
+		Piece takenPiece4 = testObj.addWhitePawn(38);
 		
 		ArrayList<Move<Capture>> blackMoves = testObj.findCapturesForAllPieces(false);
 		testObj.makeWholeMove(blackMoves.get(0));
@@ -280,10 +303,16 @@ public class BoardManagerTest {
 		assertEquals(4, testObj.getWhitePieces().size());
 		assertEquals(testObj.findTileByIndex(5), testObj.getBlackPieces().get(0).getPosition());
 		assertEquals(Tile.State.EMPTY, testObj.findTileByIndex(43).getState());
-		assertEquals(testObj.findTileByIndex(38), testObj.getWhitePieces().get(0).getPosition());
-		assertEquals(testObj.findTileByIndex(28), testObj.getWhitePieces().get(1).getPosition());
-		assertEquals(testObj.findTileByIndex(19), testObj.getWhitePieces().get(2).getPosition());
-		assertEquals(testObj.findTileByIndex(10), testObj.getWhitePieces().get(3).getPosition());
+		assertEquals(takenPiece4, testObj.getWhitePieces().get(0));
+		assertEquals(takenPiece3, testObj.getWhitePieces().get(1));
+		assertEquals(takenPiece2, testObj.getWhitePieces().get(2));
+		assertEquals(takenPiece1, testObj.getWhitePieces().get(3));
+	}
+
+	@Test
+	public void reverseWholeMove_demoteQueenToPawn() {
+		testObj.createEmptyBoard();
+		testObj.addWhitePawn(6);
 	}
 	
 	@Test

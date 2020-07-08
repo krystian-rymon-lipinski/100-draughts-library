@@ -67,7 +67,7 @@ public abstract class Queen extends Piece {
 	}
 	
 	public ArrayList<Capture> findCapturesInDirection
-		(MoveDirection moveDirection, Tile[][] board, ArrayList<ArrayList<Piece>> allPieces) 
+		(MoveDirection moveDirection, Tile[][] board, ArrayList<Piece> allPieces)
 	{
 		ArrayList<Capture> moves = new ArrayList<>();
 		int hopLength = 1;

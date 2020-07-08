@@ -28,7 +28,7 @@ public abstract class Piece {
 	
 	public abstract ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board);
 	
-	public abstract ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, ArrayList<ArrayList<Piece>> pieces);
+	public abstract ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, ArrayList<Piece> pieces);
 	
 	
 	
@@ -60,7 +60,7 @@ public abstract class Piece {
 			mainList.addAll(candidateList);
 	}
 			
-	public ArrayList<Capture> findCaptures(Tile[][] board, ArrayList<ArrayList<Piece>> pieces) {
+	public ArrayList<Capture> findCaptures(Tile[][] board, ArrayList<Piece> pieces) {
 		
 		ArrayList<Capture> moves = new ArrayList<>();
 		
@@ -93,28 +93,34 @@ public abstract class Piece {
 		return null;
 	}
 	
-	public Piece findPieceBeingTaken(Tile position, ArrayList<ArrayList<Piece>> allPieces) throws NoPieceFoundInRequestedTileException {
-		ArrayList<Piece> piecesOfColor;
-		if (this.isWhite()) piecesOfColor = allPieces.get(1);
-		else piecesOfColor = allPieces.get(0);
-		
-		for(Piece piece : piecesOfColor) {
+	public Piece findPieceBeingTaken(Tile position, ArrayList<Piece> allPieces) throws NoPieceFoundInRequestedTileException {
+		for(Piece piece : allPieces) {
 			if (piece.getPosition().equals(position)) return piece;
 		}
 		
 		throw new NoPieceFoundInRequestedTileException("No piece on seemingly taken tile");
 	}
-	
+
+	@Override
 	public boolean equals(Object o) {
-		Piece comparedPiece = (Piece) o;
-		if (this.position.equals(comparedPiece.position)) return true;
-		else return false;
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Piece piece = (Piece) o;
+		return position.equals(piece.position);
 	}
-	
+
+	@Override
 	public int hashCode() {
-		return Objects.hash(position, isWhite(), isQueen());
+		return Objects.hash(position);
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Piece{" +
+				"position=" + position +
+				'}';
+	}
+
 	public enum MoveDirection {
 		UP_LEFT,
 		UP_RIGHT,
