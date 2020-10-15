@@ -53,8 +53,7 @@ public class Move<T extends Hop> {
 	}
 	
 	public boolean isCapture() {
-		if(hops.get(0) instanceof Capture) return true;
-		else return false;
+		return hops.get(0) instanceof Capture;
 	}
 	
 	public Tile getMoveSource() {
