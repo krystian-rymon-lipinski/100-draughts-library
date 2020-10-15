@@ -3,9 +3,7 @@ package draughts.library.managers;
 import java.util.ArrayList;
 
 import draughts.library.boardmodel.Piece;
-import draughts.library.boardmodel.Tile;
 import draughts.library.exceptions.*;
-import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 
@@ -63,9 +61,7 @@ public class GameEngine {
 	}
 
 	public ArrayList<Move<? extends Hop>> prepareMove(boolean isWhiteToMove) {
-		ArrayList<Move<? extends Hop>> moves = moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
-		//checkGameState();
-		return moves;
+		return moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
 	}
 	
 	

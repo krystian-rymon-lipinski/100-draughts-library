@@ -14,14 +14,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
-import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
 import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
-import draughts.library.exceptions.WrongColorFoundInRequestedTileException;
-import draughts.library.exceptions.WrongMoveException;
 import draughts.library.managers.GameEngine.GameState;
 import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameEngineTest {
@@ -44,6 +45,35 @@ public class GameEngineTest {
 	public Tile getTile(int index) {
 		return boardManager.findTileByIndex(index);
 	}
+
+	public Move<Hop> createMove(int source, int destination) throws Exception {
+		Piece movingPiece = boardManager.findPieceByIndex(source);
+		Tile sourceTile = boardManager.findTileByIndex(source);
+		Tile destinationTile = boardManager.findTileByIndex(destination);
+
+		return new Move<>(movingPiece, new Hop(sourceTile, destinationTile));
+	}
+
+	public Move<Capture> createMoveWithCaptures(int source, ArrayList<Integer> jumpDestinations,
+												ArrayList<Integer> takenPawns) throws Exception {
+		Piece movingPiece = boardManager.findPieceByIndex(source);
+		Move<Capture> move = new Move<>(movingPiece);
+
+		Capture capture;
+		for (int i=0; i<jumpDestinations.size(); i++) {
+			Tile sourceTile;
+			if (i==0) sourceTile = boardManager.findTileByIndex(source);
+			else 	  sourceTile = boardManager.findTileByIndex(jumpDestinations.indexOf(i-1));
+
+			Tile destinationTile = boardManager.findTileByIndex(jumpDestinations.indexOf(i));
+			Piece takenPiece = boardManager.findPieceByIndex(takenPawns.indexOf(i));
+			capture = new Capture(sourceTile, destinationTile, takenPiece);
+			move.addHop(capture);
+		}
+
+		return move;
+	}
+
 	
 	@Test
 	public void startGame_test() {
@@ -61,17 +91,18 @@ public class GameEngineTest {
 		boardManager.createEmptyBoard();
 		boardManager.addWhitePawn(12);
 		boardManager.addBlackPawn(39);
-		Piece whitePiece = boardManager.findPieceByIndex(12);
-		Piece blackPiece = boardManager.findPieceByIndex(39);
-		
-		Move<? extends Hop> whiteMove = new Move<Hop>(whitePiece, new Hop(getTile(12), getTile(7)));
-		Move<? extends Hop> blackMove = new Move<Hop>(blackPiece, new Hop(getTile(39), getTile(44)));
-		
+
+		Move<? extends Hop> whiteMove = createMove(12, 7);
+		boardManager.makeWholeMove(whiteMove);
 		testObj.checkForPawnPromotion(whiteMove);
+
 		assertFalse(boardManager.getWhitePieces().get(0).isQueen());
 		assertFalse(whiteMove.getIsPromotion());
-		
+
+		Move<? extends Hop> blackMove = createMove(39, 44);
+		boardManager.makeWholeMove(blackMove);
 		testObj.checkForPawnPromotion(blackMove);
+
 		assertFalse(boardManager.getBlackPieces().get(0).isQueen());
 		assertFalse(blackMove.getIsPromotion());
 	}
@@ -81,16 +112,17 @@ public class GameEngineTest {
 		boardManager.createEmptyBoard();
 		boardManager.addWhitePawn(7);
 		boardManager.addBlackPawn(44);
-		Piece whitePiece = boardManager.findPieceByIndex(7);
-		Piece blackPiece = boardManager.findPieceByIndex(44);
 
-		Move<? extends Hop> whiteMove = new Move<Hop>(whitePiece, new Hop(getTile(7), getTile(1)));
-		Move<? extends Hop> blackMove = new Move<Hop>(blackPiece, new Hop(getTile(44), getTile(50)));
-		
+		Move<Hop> whiteMove = createMove(7, 3);
+		boardManager.makeWholeMove(whiteMove);
+
 		testObj.checkForPawnPromotion(whiteMove);
 		assertTrue(whiteMove.getMovingPiece().isQueen());
 		assertTrue(boardManager.getWhitePieces().get(0).isQueen());
 		assertTrue(whiteMove.getIsPromotion());
+
+		Move<Hop> blackMove = createMove(44, 49);
+		boardManager.makeWholeMove(blackMove);
 		
 		testObj.checkForPawnPromotion(blackMove);
 		assertTrue(blackMove.getMovingPiece().isQueen());
@@ -115,7 +147,9 @@ public class GameEngineTest {
 		boardManager.addWhitePawn(48);
 		boardManager.addBlackPawn(43);
 
-		makeMove(48, 39);
+		Move<Capture> whiteMove = createMoveWithCaptures(48, new ArrayList<>(Collections.singletonList(39)),
+																	new ArrayList<>(Collections.singletonList(43)));
+
 		
 		assertEquals(0, boardManager.getBlackPieces().size());
 		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));

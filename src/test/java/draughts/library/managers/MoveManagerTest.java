@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,9 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
-import draughts.library.managers.BoardManager;
-import draughts.library.managers.MoveManager;
-import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 
@@ -31,16 +29,6 @@ public class MoveManagerTest {
 		testObj = new MoveManager();
 		boardManager = new BoardManager();
 		boardManager.createEmptyBoard();
-	}
-	
-	public Tile getTile(int index) {
-		return boardManager.findTileByIndex(index);
-	}
-	
-	public Piece getPiece(int index) {
-		try {
-			return boardManager.findPieceByIndex(index);
-		} catch(Exception ex) { return null; }
 	}
 	
 	@Test
@@ -114,7 +102,7 @@ public class MoveManagerTest {
 		boardManager.addWhitePawn(29);
 		testObj.findAllCorrectMoves(boardManager, false);
 
-		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(23, 32, new ArrayList<>(Arrays.asList(29)));
+		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(23, 32, new ArrayList<>(Collections.singletonList(29)));
 		assertNull(correctMove);
 	}
 	
