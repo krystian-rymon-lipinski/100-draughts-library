@@ -269,7 +269,7 @@ public class BoardManagerTest {
 	}
 	
 	@Test
-	public void makeWholeMove_test() {
+	public void makeWholeMove_capture() {
 		testObj.createEmptyBoard();
 		testObj.addWhitePawn(33);
 		testObj.addBlackPawn(28);

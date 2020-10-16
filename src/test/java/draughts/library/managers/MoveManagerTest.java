@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,10 +14,6 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import draughts.library.boardmodel.Piece;
-import draughts.library.boardmodel.Tile;
-import draughts.library.managers.BoardManager;
-import draughts.library.managers.MoveManager;
-import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 
@@ -31,16 +28,6 @@ public class MoveManagerTest {
 		testObj = new MoveManager();
 		boardManager = new BoardManager();
 		boardManager.createEmptyBoard();
-	}
-	
-	public Tile getTile(int index) {
-		return boardManager.findTileByIndex(index);
-	}
-	
-	public Piece getPiece(int index) {
-		try {
-			return boardManager.findPieceByIndex(index);
-		} catch(Exception ex) { return null; }
 	}
 	
 	@Test
@@ -83,7 +70,7 @@ public class MoveManagerTest {
 		boardManager.addWhitePawn(26);
 		testObj.findAllCorrectMoves(boardManager, true);
 		
-		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(26, 21, new ArrayList<>());
+		Move<? extends Hop> correctMove = testObj.convertToMove(26, 21, new ArrayList<>());
 		assertNull(correctMove);
 	}
 	
@@ -93,7 +80,7 @@ public class MoveManagerTest {
 		boardManager.addBlackPawn(24);
 		testObj.findAllCorrectMoves(boardManager, false);
 
-		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(23, 24, new ArrayList<>());
+		Move<? extends Hop> correctMove = testObj.convertToMove(23, 24, new ArrayList<>());
 		assertNull(correctMove);
 	}
 	
@@ -103,7 +90,7 @@ public class MoveManagerTest {
 		boardManager.addBlackPawn(28);
 		testObj.findAllCorrectMoves(boardManager, true);
 		
-		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(33, 22, new ArrayList<>());
+		Move<? extends Hop> correctMove = testObj.convertToMove(33, 22, new ArrayList<>());
 		assertNull(correctMove);
 	}
 	
@@ -114,7 +101,7 @@ public class MoveManagerTest {
 		boardManager.addWhitePawn(29);
 		testObj.findAllCorrectMoves(boardManager, false);
 
-		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(23, 32, new ArrayList<>(Arrays.asList(29)));
+		Move<? extends Hop> correctMove = testObj.convertToMove(23, 32, new ArrayList<>(Collections.singletonList(29)));
 		assertNull(correctMove);
 	}
 	
@@ -123,7 +110,7 @@ public class MoveManagerTest {
 		boardManager.addWhitePawn(43);
 		testObj.findAllCorrectMoves(boardManager, true);
 		
-		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(43, 38, new ArrayList<>());
+		Move<? extends Hop> correctMove = testObj.convertToMove(43, 38, new ArrayList<>());
 		assertNotNull(correctMove);
 		assertEquals(43, correctMove.getMoveSource().getIndex());
 		assertEquals(38, correctMove.getMoveDestination().getIndex());
@@ -136,97 +123,9 @@ public class MoveManagerTest {
 		Piece whitePiece2 = boardManager.addWhitePawn(23);
 		testObj.findAllCorrectMoves(boardManager, false);
 
-		Move<? extends Hop> correctMove = testObj.isMadeMoveCorrect(9, 29, new ArrayList<>(Arrays.asList(13, 23)));
+		Move<? extends Hop> correctMove = testObj.convertToMove(9, 29, new ArrayList<>(Arrays.asList(13, 23)));
 		assertNotNull(correctMove);
 		assertEquals(whitePiece1, correctMove.getMoveTakenPawns().get(0));
 		assertEquals(whitePiece2, correctMove.getMoveTakenPawns().get(1));
 	}
-	
-	//tests for making moves hop by hop
-	
-	@Test 
-	public void findPossibleHops_noPossibleHops_test() {
-		Piece chosenPiece = boardManager.addWhitePawn(45);
-		boardManager.addWhitePawn(40);
-		testObj.findAllCorrectMoves(boardManager, true);
-		testObj.findPossibleHops(chosenPiece);
-		
-		assertEquals(0, testObj.getPossibleHops().size());
-	}
-	
-	@Test
-	public void findPossibleHops_possibleHops_test() {
-		Piece chosenPiece = boardManager.addBlackPawn(18);
-		testObj.findAllCorrectMoves(boardManager, false);
-		testObj.findPossibleHops(chosenPiece);
-		
-		assertEquals(2, testObj.getPossibleHops().size());
-	}
-	
-	@Test
-	public void findHopByDestination_wrongDestination_test() {
-		Piece chosenPiece = boardManager.addWhitePawn(33);
-		testObj.findAllCorrectMoves(boardManager, true);
-		testObj.findPossibleHops(chosenPiece);
-		Hop hop = testObj.findHopByDestination(getTile(22));
-		
-		assertNull(hop);
-	}
-	
-	@Test
-	public void findHopByDestination_rightDestination_test() {
-		Piece chosenPiece = boardManager.addBlackPawn(12);
-		testObj.findAllCorrectMoves(boardManager, false);
-		testObj.findPossibleHops(chosenPiece);
-		Hop hop = testObj.findHopByDestination(getTile(18));
-		
-		assertEquals(12, hop.getSource().getIndex());
-		assertEquals(18, hop.getDestination().getIndex());
-	}
-	
-	@Test
-	public void findHopByDestination_rightDestination_withCapture_test() {
-		Piece chosenPiece = boardManager.addWhitePawn(28);
-		Piece takenPiece = boardManager.addBlackPawn(23);
-		testObj.findAllCorrectMoves(boardManager, true);
-		testObj.findPossibleHops(chosenPiece);
-		Hop hop = testObj.findHopByDestination(getTile(19));
-		
-		Capture capture = (Capture) hop;
-		assertEquals(takenPiece, capture.getTakenPiece()); 
-	}
-	
-	@Test
-	public void updatePossibleMoves_afterHop_test() {
-		Piece chosenPiece = boardManager.addBlackPawn(27);
-		boardManager.addWhitePawn(13);
-		boardManager.addWhitePawn(22);
-		boardManager.addWhitePawn(32);
-		boardManager.addWhitePawn(43);
-		
-		testObj.findAllCorrectMoves(boardManager, false);
-		assertEquals(2, testObj.getPossibleMoves().size());
-		boardManager.makeCapture(chosenPiece, getTile(18), getPiece(22));
-		testObj.hopFinished();
-		
-		testObj.updatePossibleMoves(chosenPiece);
-		assertEquals(1, testObj.getHopsMadeInMove());
-		assertEquals(1, testObj.getPossibleMoves().size());
-		
-		testObj.findPossibleHops(chosenPiece);
-		assertEquals(1, testObj.getPossibleHops().size());
-	}
-	
-	@Test
-	public void findMoveMade_test() {
-		boardManager.addWhiteQueen(13);
-		boardManager.addWhitePawn(31);
-		
-		testObj.findAllCorrectMoves(boardManager, true);
-		Move<? extends Hop> move = testObj.findMoveMade(getTile(35));
-		assertEquals(13, move.getMoveSource().getIndex());
-		assertEquals(35, move.getMoveDestination().getIndex());
-	}
-	
-
 }

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
 
+import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,14 +15,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
-import draughts.library.exceptions.NoCorrectMovesForSelectedPieceException;
-import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
-import draughts.library.exceptions.WrongColorFoundInRequestedTileException;
-import draughts.library.exceptions.WrongMoveException;
 import draughts.library.managers.GameEngine.GameState;
 import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameEngineTest {
@@ -41,24 +41,59 @@ public class GameEngineTest {
 		boardManager = testObj.getBoardManager();
 	}
 	
-	public void makeMove(int source, int destination) {
-		try {
-			testObj.prepareMove(testObj.getIsWhiteToMove());
-			testObj.tileClicked(source);
-			testObj.tileClicked(destination);
-		} catch(Exception ex) {}	
-	}
-	
 	public Tile getTile(int index) {
 		return boardManager.findTileByIndex(index);
 	}
+
+	public Piece getPiece(int index) {
+		try {
+			return boardManager.findPieceByIndex(index);
+		} catch (NoPieceFoundInRequestedTileException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+
+	public Move<Hop> makeMove(int source, int destination) {
+		Piece movingPiece = getPiece(source);
+		Tile sourceTile = getTile(source);
+		Tile destinationTile = getTile(destination);
+
+		Move<Hop> move = new Move<>(movingPiece, new Hop(sourceTile, destinationTile));
+		boardManager.makeWholeMove(move);
+		testObj.finishMove(move);
+		return move;
+	}
+
+	public Move<Capture> makeCapture(int source, ArrayList<Integer> jumpDestinations,
+							ArrayList<Integer> takenPawns)  {
+
+		Piece movingPiece = getPiece(source);
+		Move<Capture> move = new Move<>(movingPiece);
+
+		Capture capture;
+		for (int i=0; i<jumpDestinations.size(); i++) {
+			Tile sourceTile;
+			if (i==0) sourceTile = getTile(source);
+			else 	  sourceTile = getTile(jumpDestinations.get(i-1));
+
+			Tile destinationTile = getTile(jumpDestinations.get(i));
+			Piece takenPiece = getPiece(takenPawns.get(i));
+			capture = new Capture(sourceTile, destinationTile, takenPiece);
+			move.addHop(capture);
+		}
+
+		boardManager.makeWholeMove(move);
+		testObj.finishMove(move);
+		return move;
+	}
+
 	
 	@Test
 	public void startGame_test() {
 		testObj.startGame();
 		
 		assertTrue(testObj.getIsWhiteToMove());
-		assertNull(testObj.getChosenPiece());
 		assertEquals(9, testObj.getMoveManager().getPossibleMoves().size());
 		assertEquals(GameState.RUNNING, testObj.getGameState());
 		assertEquals(50, testObj.getDrawArbiter().getDrawCounter());
@@ -70,38 +105,32 @@ public class GameEngineTest {
 		boardManager.createEmptyBoard();
 		boardManager.addWhitePawn(12);
 		boardManager.addBlackPawn(39);
-		Piece whitePiece = boardManager.findPieceByIndex(12);
-		Piece blackPiece = boardManager.findPieceByIndex(39);
-		
-		Move<? extends Hop> whiteMove = new Move<Hop>(whitePiece, new Hop(getTile(12), getTile(7)));
-		Move<? extends Hop> blackMove = new Move<Hop>(blackPiece, new Hop(getTile(39), getTile(44)));
-		
-		testObj.checkForPawnPromotion(whiteMove);
+
+		Move<Hop> whiteMove = makeMove(12, 7);
+
 		assertFalse(boardManager.getWhitePieces().get(0).isQueen());
 		assertFalse(whiteMove.getIsPromotion());
-		
-		testObj.checkForPawnPromotion(blackMove);
+
+		Move<? extends Hop> blackMove = makeMove(39, 44);
+
 		assertFalse(boardManager.getBlackPieces().get(0).isQueen());
 		assertFalse(blackMove.getIsPromotion());
 	}
 	
 	@Test
-	public void checkForPawnPromotion_promotion_test() throws Exception {
+	public void checkForPawnPromotion_promotion_test() {
 		boardManager.createEmptyBoard();
 		boardManager.addWhitePawn(7);
 		boardManager.addBlackPawn(44);
-		Piece whitePiece = boardManager.findPieceByIndex(7);
-		Piece blackPiece = boardManager.findPieceByIndex(44);
 
-		Move<? extends Hop> whiteMove = new Move<Hop>(whitePiece, new Hop(getTile(7), getTile(1)));
-		Move<? extends Hop> blackMove = new Move<Hop>(blackPiece, new Hop(getTile(44), getTile(50)));
-		
-		testObj.checkForPawnPromotion(whiteMove);
+		Move<Hop> whiteMove = makeMove(7, 3);
+
 		assertTrue(whiteMove.getMovingPiece().isQueen());
 		assertTrue(boardManager.getWhitePieces().get(0).isQueen());
 		assertTrue(whiteMove.getIsPromotion());
-		
-		testObj.checkForPawnPromotion(blackMove);
+
+		Move<Hop> blackMove = makeMove(44, 49);
+
 		assertTrue(blackMove.getMovingPiece().isQueen());
 		assertTrue(boardManager.getBlackPieces().get(0).isQueen());
 		assertTrue(blackMove.getIsPromotion());
@@ -115,38 +144,38 @@ public class GameEngineTest {
 		
 		testObj.endPlayerTurn();
 		
-		assertEquals(0, moveManager.getHopsMadeInMove());
 		assertFalse(testObj.getIsWhiteToMove());
 	}
 	
 	@Test
-	public void checkGameState_whiteWon_byCapturingAllBlackPieces() {
+	public void checkGameState_whiteWon_byCapturingAllBlackPieces() throws Exception {
 		boardManager.createEmptyBoard();
 		boardManager.addWhitePawn(48);
 		boardManager.addBlackPawn(43);
 
-		makeMove(48, 39);
-		
+		makeCapture(48, new ArrayList<>(Collections.singletonList(39)),
+																	new ArrayList<>(Collections.singletonList(43)));
+
 		assertEquals(0, boardManager.getBlackPieces().size());
-		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
+		assertFalse(testObj.getBoardManager().isAnyMovePossible(testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
 	}
-	
+
 	@Test
-	public void checkGameState_whiteWon_byBlockingAllBlackPieces() {	
+	public void checkGameState_whiteWon_byBlockingAllBlackPieces() throws Exception {
 		boardManager.createEmptyBoard();
 		boardManager.addBlackPawn(26);
 		boardManager.addWhitePawn(31);
 		boardManager.addWhitePawn(41);
 
 		makeMove(41, 37);
-		
+
 		assertEquals(1, boardManager.getBlackPieces().size());
-		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
+		assertFalse(testObj.getBoardManager().isAnyMovePossible(testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
 		
 	}
-	
+
 	@Test
 	public void checkGameState_blackWon_byCapturingAllWhitePieces() {		
 		boardManager.createEmptyBoard();
@@ -154,10 +183,10 @@ public class GameEngineTest {
 		boardManager.addWhitePawn(10);
 		
 		testObj.setIsWhiteToMove(false);
-		makeMove(5, 14);
-		
+		makeCapture(5, new ArrayList<>(Collections.singletonList(14)), new ArrayList<>(Collections.singletonList(10)));
+
 		assertEquals(0, boardManager.getWhitePieces().size());
-		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
+		assertFalse(testObj.getBoardManager().isAnyMovePossible(testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());
 	}
 	
@@ -170,9 +199,9 @@ public class GameEngineTest {
 		
 		testObj.setIsWhiteToMove(false);	
 		makeMove(10, 14);
-		
+
 		assertEquals(1, boardManager.getWhitePieces().size());
-		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
+		assertFalse(testObj.getBoardManager().isAnyMovePossible(testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());	
 	}
 	
@@ -211,7 +240,6 @@ public class GameEngineTest {
 		boardManager.addBlackQueen(5);
 		boardManager.addBlackPawn(3);
 		boardManager.addBlackPawn(26);
-		assertEquals(3, boardManager.getBlackPieces().size());
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
@@ -252,9 +280,7 @@ public class GameEngineTest {
 		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
 		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
 	}
-	
-	//tests for making move all hops at once
-	
+
 	@Test
 	public void updateBoard_noCapture_test() {
 		boardManager.createEmptyBoard();
@@ -288,178 +314,4 @@ public class GameEngineTest {
 		assertEquals(Tile.State.BLACK_QUEEN, chosenPiece.getPosition().getState());
 		assertEquals(0, boardManager.getWhitePieces().size());
 	}
-	
-	//tests for making move hop by hop
-	
-	@Test(expected = NoPieceFoundInRequestedTileException.class)
-	public void tileClicked_noPieceFound_test() throws NoPieceFoundInRequestedTileException, 
-	 												   WrongColorFoundInRequestedTileException,
-	 												   NoCorrectMovesForSelectedPieceException, 
-	 												   WrongMoveException {
-		testObj.startGame();
-		testObj.tileClicked(25);
-	}
-	
-	@Test(expected = WrongColorFoundInRequestedTileException.class)
-	public void tileClicked_wrongPieceFound_test() throws NoPieceFoundInRequestedTileException, 
-														  WrongColorFoundInRequestedTileException,
-														  NoCorrectMovesForSelectedPieceException, 
-														  WrongMoveException {
-		testObj.startGame();
-		testObj.tileClicked(12);
-	}
-	
-	@Test(expected = NoCorrectMovesForSelectedPieceException.class)
-	public void tileClicked_noMovesForPiece_test() throws NoPieceFoundInRequestedTileException, 
-														  WrongColorFoundInRequestedTileException,
-														  NoCorrectMovesForSelectedPieceException, 
-														  WrongMoveException {
-		testObj.startGame();
-		testObj.tileClicked(43);
-	}
-	
-	@Test
-	public void tileClicked_numberOfPossibleDestinations_test() throws NoPieceFoundInRequestedTileException, 
-																		WrongColorFoundInRequestedTileException, 
-																		NoCorrectMovesForSelectedPieceException, 
-																		WrongMoveException {
-		testObj.startGame();
-		testObj.tileClicked(33);
-
-		assertEquals(33, testObj.getChosenPiece().getPosition().getIndex());
-		assertEquals(2, moveManager.getPossibleHops().size());
-		assertTrue(moveManager.getPossibleHops().get(0).getDestination().getIndex() == 28 ||
-				   moveManager.getPossibleHops().get(0).getDestination().getIndex() == 29);
-		assertTrue(moveManager.getPossibleHops().get(1).getDestination().getIndex() == 28 ||
-				   moveManager.getPossibleHops().get(1).getDestination().getIndex() == 29);
-	}
-	
-	@Test(expected = WrongMoveException.class)
-	public void tileClicked_twice_wrongMoveMade_test() throws NoPieceFoundInRequestedTileException, 
-														  WrongColorFoundInRequestedTileException,
-														  NoCorrectMovesForSelectedPieceException, 
-														  WrongMoveException {
-		testObj.startGame();
-		testObj.tileClicked(33);
-		testObj.tileClicked(26);
-	}
-	
-	@Test
-	public void tileClicked_twice_changedMarkedPiece_forOneWithMoves_test() throws NoPieceFoundInRequestedTileException, 
-																	WrongColorFoundInRequestedTileException,
-																	NoCorrectMovesForSelectedPieceException, 
-																	WrongMoveException {
-		testObj.startGame();
-		testObj.tileClicked(33);
-		testObj.tileClicked(31);
-		
-		assertEquals(31, testObj.getChosenPiece().getPosition().getIndex());
-		assertEquals(2, moveManager.getPossibleHops().size());
-		assertTrue(moveManager.getPossibleHops().get(0).getDestination().getIndex() == 26 ||
-				   moveManager.getPossibleHops().get(0).getDestination().getIndex() == 27);
-		assertTrue(moveManager.getPossibleHops().get(1).getDestination().getIndex() == 26 ||
-				   moveManager.getPossibleHops().get(1).getDestination().getIndex() == 27);
-		
-	}
-	
-	@Test(expected = NoCorrectMovesForSelectedPieceException.class)
-	public void tileClicked_twice_changedMarkedPiece_forOneWithoutMoves_test() throws NoPieceFoundInRequestedTileException, 
-																	WrongColorFoundInRequestedTileException,
-																	NoCorrectMovesForSelectedPieceException, 
-																	WrongMoveException {
-		testObj.startGame();
-		testObj.tileClicked(33);
-		testObj.tileClicked(44);
-	}
-	
-	@Test
-	public void tileClicked_twice_properMoveMade_test() throws Exception {
-		testObj.startGame();
-		makeMove(33, 28);
-		
-		assertEquals(Tile.State.WHITE_PAWN, boardManager.findTileByIndex(28).getState());
-		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(33).getState());
-		assertEquals(28, boardManager.findPieceByIndex(28).getPosition().getIndex());
-	}
-	
-	@Test
-	public void tileClicked_twice_properCaptureMade_test() {		
-		boardManager.createEmptyBoard();
-		boardManager.addWhitePawn(33);
-		boardManager.addBlackPawn(28);
-
-		makeMove(33, 22);
-		
-		assertEquals(Tile.State.EMPTY, boardManager.findTileByIndex(28).getState());
-		assertEquals(0, boardManager.getBlackPieces().size());
-	}
-	
-	@Test 
-	public void tileClicked_consecutiveCaptures_ultimate_test() throws NoPieceFoundInRequestedTileException, 
-																	WrongColorFoundInRequestedTileException,
-																	NoCorrectMovesForSelectedPieceException, 
-																	WrongMoveException {
-		
-		boardManager.createEmptyBoard();
-		boardManager.addWhitePawn(48);
-		boardManager.addWhitePawn(44);
-		boardManager.addBlackPawn(20);
-		boardManager.addBlackPawn(30);
-		boardManager.addBlackPawn(40);
-		boardManager.addBlackPawn(21);
-		boardManager.addBlackPawn(31);
-		boardManager.addBlackPawn(32);
-		boardManager.addBlackPawn(33);
-		boardManager.addBlackPawn(42);
-		
-		testObj.prepareMove(testObj.getIsWhiteToMove());
-		
-		testObj.tileClicked(48);
-		try {
-			testObj.tileClicked(47);
-		} catch (WrongMoveException ex) {}
-		assertEquals(48, testObj.getChosenPiece().getPosition().getIndex());
-		
-		testObj.tileClicked(37);
-		
-		assertEquals(37, testObj.getChosenPiece().getPosition().getIndex());
-		assertEquals(1, moveManager.getHopsMadeInMove());
-		assertEquals(2, moveManager.getPossibleHops().size());
-		assertTrue(testObj.getIsWhiteToMove());
-		
-		try {
-			testObj.tileClicked(44);
-		} catch(NoCorrectMovesForSelectedPieceException ex) {}
-		
-		assertEquals(44, testObj.getChosenPiece().getPosition().getIndex());
-		
-		try {
-			testObj.tileClicked(28);
-		} catch(WrongMoveException ex) {}
-		
-		assertEquals(44, testObj.getChosenPiece().getPosition().getIndex());
-		
-		testObj.tileClicked(37);
-		
-		assertEquals(37, testObj.getChosenPiece().getPosition().getIndex());
-		assertEquals(2, moveManager.getPossibleHops().size());
-		
-		testObj.tileClicked(28);
-		
-		assertEquals(28, testObj.getChosenPiece().getPosition().getIndex());
-		assertEquals(1, moveManager.getPossibleHops().size());
-		assertEquals(2, testObj.getMoveManager().getHopsMadeInMove());
-		assertTrue(testObj.getIsWhiteToMove());
-		
-		testObj.tileClicked(39);
-		
-		assertNull(testObj.getChosenPiece());
-		assertEquals(0, moveManager.getHopsMadeInMove());
-		assertFalse(testObj.getIsWhiteToMove());
-		assertEquals(5, boardManager.getBlackPieces().size());
-		
-	}
-	
-	
-	
 }
