@@ -58,11 +58,6 @@ public class GameEngine {
 		isWhiteToMove = true;
 	}
 
-	public void updateBoard(Move<? extends Hop> move) {
-		boardManager.makeWholeMove(move);
-	}
-
-
 	public void finishMove(Move<? extends Hop> move) {
 		checkForPawnPromotion(move);
 		updateDrawArbiter(move);

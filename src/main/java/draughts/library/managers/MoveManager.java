@@ -37,7 +37,7 @@ public class MoveManager {
 			   		return move;
 		}
 		throw new WrongMoveException("Chosen move (" + source + " -> " + destination +
-				" { " + takenPawns + "} is not allowed!");
+									 takenPawns + "} is not allowed!");
 	}
 
 }
