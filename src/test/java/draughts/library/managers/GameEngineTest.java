@@ -281,38 +281,4 @@ public class GameEngineTest {
 		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
 		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
 	}
-
-	@Test
-	public void updateBoard_noCapture() {
-		boardManager.createEmptyBoard();
-		Piece chosenPiece = boardManager.addWhiteQueen(30);
-		Move<Hop> move = new Move<>(chosenPiece, 
-								new Hop(chosenPiece.getPosition(), getTile(13)));
-		testObj.updateBoard(move);
-		assertEquals(Tile.State.EMPTY, getTile(30).getState());
-		assertEquals(13, chosenPiece.getPosition().getIndex());
-		assertEquals(Tile.State.WHITE_QUEEN, chosenPiece.getPosition().getState());
-	}
-	
-	@Test
-	public void updateBoard_capture() {
-		boardManager.createEmptyBoard();
-		Piece chosenPiece = boardManager.addBlackQueen(25);
-		Piece whitePiece1 = boardManager.addWhitePawn(12);
-		Piece whitePiece2 = boardManager.addWhitePawn(14);
-		Piece whitePiece3 = boardManager.addWhitePawn(22);
-		Move<Capture> move = new Move<>(chosenPiece, 
-								new Capture(chosenPiece.getPosition(), getTile(3), whitePiece1));
-		move.addHop(new Capture(getTile(3), getTile(17), whitePiece2));
-		move.addHop(new Capture(getTile(17), getTile(50), whitePiece3));
-		
-		testObj.updateBoard(move);
-		assertEquals(Tile.State.EMPTY, getTile(25).getState());
-		assertEquals(Tile.State.EMPTY, getTile(14).getState());
-		assertEquals(Tile.State.EMPTY, getTile(12).getState());
-		assertEquals(Tile.State.EMPTY, getTile(22).getState());
-		assertEquals(50, chosenPiece.getPosition().getIndex());
-		assertEquals(Tile.State.BLACK_QUEEN, chosenPiece.getPosition().getState());
-		assertEquals(0, boardManager.getWhitePieces().size());
-	}
 }
