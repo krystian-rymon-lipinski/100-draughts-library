@@ -19,11 +19,10 @@ import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MoveManagerTest {
+public class MoveManagerTest extends BaseTest {
 	
 	MoveManager testObj;
-	BoardManager boardManager;
-	
+
 	@Before
 	public void setUp() {
 		testObj = new MoveManager();
