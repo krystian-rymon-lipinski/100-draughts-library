@@ -63,17 +63,6 @@ public class GameEngine {
 	public ArrayList<Move<? extends Hop>> prepareMove(boolean isWhiteToMove) {
 		return moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
 	}
-
-	public Move<? extends Hop> checkIfMoveIsCorrect(int source, int destination, ArrayList<Integer> taken) throws WrongMoveException, GameAlreadyEndedException {
-		if(gameState == GameState.RUNNING) {
-			Move<? extends Hop> correctMove = moveManager.convertToMove(source, destination, taken);
-			if (correctMove == null) {
-				throw new WrongMoveException("Chosen move is not allowed");
-			}
-			return correctMove;
-		}
-		else throw new GameAlreadyEndedException("Game already ended, you cannot search for moves!");
-	}
 	
 	public void updateBoard(Move<? extends Hop> move) {
 		boardManager.makeWholeMove(move);
