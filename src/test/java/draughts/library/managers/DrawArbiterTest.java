@@ -7,9 +7,6 @@ import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 import org.junit.Before;
 import org.junit.Test;
-
-import draughts.library.managers.GameEngine.GameState;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -112,7 +109,7 @@ public class DrawArbiterTest extends BaseTest {
 	}
 
 	@Test
-	public void changeDrawConditions_normalTo2v1_twoBlackPieces() {
+	public void changeDrGawConditions_normalTo2v1_twoBlackPieces() {
 		testObj.setDrawConditions(DrawArbiter.DrawConditions.NORMAL);
 
 		testObj.updateConditions(true, 1, 2);
@@ -196,8 +193,7 @@ public class DrawArbiterTest extends BaseTest {
 		assertEquals(30, testObj.getDrawCounter());
 		makeMove(42, 38); //pawn move - but counter doesn't reset in these conditions
 		assertEquals(29, testObj.getDrawCounter());
-
-		//TODO: add checking if capture resets counter - it should not; same for 2vs1 conditions
+		//no point in checking if capture does reset the counter - it changes conditions (encapsulated in other tests)
 	}
 	
 	@Test
@@ -211,10 +207,13 @@ public class DrawArbiterTest extends BaseTest {
 		testObj.setDrawConditions(DrawArbiter.DrawConditions.TWO_VS_ONE);
 		testObj.setDrawCounter(10);
 		
-		makeMove(23, 1);
+		makeMove(23, 5);
 		assertEquals(9, testObj.getDrawCounter());
-		makeMove(9, 14); //pawn move - but counter doesn't reset in these conditions
-		assertEquals(8, testObj.getDrawCounter());
+		makeMove(9, 14);
+		assertEquals(8, testObj.getDrawCounter()); //pawn move - but counter doesn't reset in these conditions
+		makeCapture(5, new ArrayList<>(Collections.singletonList(46)),
+				new ArrayList<>(Collections.singletonList(14)));
+		assertEquals(7, testObj.getDrawCounter()); //capture - but counter doesn't reset in these conditions
 		
 	}
 }
