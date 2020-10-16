@@ -268,12 +268,10 @@ public class BoardManager {
 	}
 	
 	public ArrayList<Move<Hop>> findMovesForAllPieces(boolean isWhiteToMove) {
-		ArrayList<Piece> pieces;
-		if (isWhiteToMove) pieces = whitePieces;
-		else pieces = blackPieces;
+		ArrayList<Piece> pieces = isWhiteToMove ? whitePieces : blackPieces;
 		
 		ArrayList<Move<Hop>> allMoves = new ArrayList<>();
-		ArrayList<Move<Hop>> pieceMoves = new ArrayList<>();
+		ArrayList<Move<Hop>> pieceMoves;
 		
 		for(Piece piece : pieces) {
 			pieceMoves = piece.findMoves(board);
@@ -294,8 +292,8 @@ public class BoardManager {
 			oppositePieces = whitePieces;
 		}
 
-		ArrayList<Move<Hop>> pieceMoves = new ArrayList<>();
-		ArrayList<Capture> pieceCaptures = new ArrayList<>();
+		ArrayList<Move<Hop>> pieceMoves;
+		ArrayList<Capture> pieceCaptures;
 		for(Piece piece : pieces) {
 			pieceCaptures = piece.findCaptures(board, oppositePieces);
 			if (pieceCaptures.size() > 0) return true;
@@ -309,12 +307,10 @@ public class BoardManager {
 	}
 	
 	public ArrayList<Move<Capture>> findCapturesForAllPieces(boolean isWhiteToMove) {
-		ArrayList<Piece> pieces;
-		if (isWhiteToMove) pieces = whitePieces;
-		else pieces = blackPieces;
-		
+		ArrayList<Piece> pieces = isWhiteToMove ? whitePieces : blackPieces;
+
 		ArrayList<Move<Capture>> allMoves = new ArrayList<>();
-		ArrayList<Move<Capture>> pieceMoves = new ArrayList<>();
+		ArrayList<Move<Capture>> pieceMoves;
 		int longestConsecutiveCapture = 1;
 		
 		for(Piece piece : pieces) {
@@ -333,11 +329,11 @@ public class BoardManager {
 	}
 	
 	public ArrayList<Move<Capture>> findLongestConsecutiveCaptures(Piece piece) {		
-		ArrayList<Capture> captures = new ArrayList<>();
+		ArrayList<Capture> captures;
 		ArrayList<Move<Capture>> moves = new ArrayList<>();
 		ArrayList<Move<Capture>> newMoves = new ArrayList<>();
 		
-		ArrayList<Piece> oppositePieces = new ArrayList<>();
+		ArrayList<Piece> oppositePieces;
 		if (piece.isWhite()) oppositePieces = blackPieces;
 		else 				 oppositePieces = whitePieces;
 		
@@ -348,7 +344,7 @@ public class BoardManager {
 				if(captures.size() == 0) break; //no captures available for piece
 				else {
 					for(Capture capture : captures) {
-						newMoves.add(new Move<Capture>(piece, capture));
+						newMoves.add(new Move<>(piece, capture));
 					}
 				}
 			}
@@ -362,7 +358,7 @@ public class BoardManager {
 					captures = piece.findCaptures(board, oppositePieces);
 					for(Capture capture: captures) {
 						if(!isPawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
-							newMoves.add(new Move<Capture>(moves.get(i)));
+							newMoves.add(new Move<>(moves.get(i)));
 							newMoves.get(newMoves.size()-1).addHop(capture);
 						}			
 					}
