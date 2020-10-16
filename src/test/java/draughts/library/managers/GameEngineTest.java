@@ -10,9 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import draughts.library.boardmodel.Piece;
-import draughts.library.boardmodel.Tile;
 import draughts.library.managers.GameEngine.GameState;
 import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
@@ -48,21 +45,7 @@ public class GameEngineTest extends BaseTest {
 	public Move<Capture> makeCapture(int source, ArrayList<Integer> jumpDestinations,
 							ArrayList<Integer> takenPawns)  {
 
-		Piece movingPiece = getPiece(source);
-		Move<Capture> move = new Move<>(movingPiece);
-
-		Capture capture;
-		for (int i=0; i<jumpDestinations.size(); i++) {
-			Tile sourceTile;
-			if (i==0) sourceTile = getTile(source);
-			else 	  sourceTile = getTile(jumpDestinations.get(i-1));
-
-			Tile destinationTile = getTile(jumpDestinations.get(i));
-			Piece takenPiece = getPiece(takenPawns.get(i));
-			capture = new Capture(sourceTile, destinationTile, takenPiece);
-			move.addHop(capture);
-		}
-
+		Move<Capture> move = generateMoveWithCaptures(source, jumpDestinations, takenPawns);
 		boardManager.makeWholeMove(move);
 		return move;
 	}
@@ -87,7 +70,7 @@ public class GameEngineTest extends BaseTest {
 		Move<Hop> whiteMove = makeMove(12, 7);
 		testObj.checkForPawnPromotion(whiteMove);
 
-		assertFalse(boardManager.getWhitePieces().get(0).isQueen());
+		assertFalse(boardManager.getWhitePieces().get(0).isQueen()); //TODO: po co ta linjka? wystarczy chyba sprawdzić czy ruch jest promocją, wszystkie pierodły związane z ruchem powinny być sprawdzane w testach BoardManagera!
 		assertFalse(whiteMove.getIsPromotion());
 
 		Move<Hop> blackMove = makeMove(39, 44);

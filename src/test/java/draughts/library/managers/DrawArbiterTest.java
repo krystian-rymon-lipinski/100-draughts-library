@@ -21,17 +21,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class DrawArbiterTest {
+public class DrawArbiterTest extends BaseTest {
 	
 	DrawArbiter testObj;
 	GameEngine gameEngine;
-	BoardManager boardManager;
 	MoveManager moveManager;
 	
 	@Before
 	public void setUp() {
 		gameEngine = new GameEngine();
-		gameEngine.setIsWhiteToMove(true);
 		gameEngine.setGameState(GameState.RUNNING);
 		testObj = gameEngine.getDrawArbiter();
 		boardManager = gameEngine.getBoardManager();
@@ -39,199 +37,127 @@ public class DrawArbiterTest {
 		boardManager.createEmptyBoard();
 	}
 
-	public Tile getTile(int index) {
-		return boardManager.findTileByIndex(index);
-	}
-
-	public Piece getPiece(int index) {
-		try {
-			return boardManager.findPieceByIndex(index);
-		} catch (NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
-
 	public Move<Hop> makeMove(int source, int destination) {
-		Piece movingPiece = getPiece(source);
-		Tile sourceTile = getTile(source);
-		Tile destinationTile = getTile(destination);
-
-		Move<Hop> move = new Move<>(movingPiece, new Hop(sourceTile, destinationTile));
+		Move<Hop> move = generateMove(source, destination);
 		boardManager.makeWholeMove(move);
-		gameEngine.finishMove(move);
+		testObj.updateCounter(move.isCapture(), move.getMovingPiece().isQueen());
 		return move;
 	}
 
 	public Move<Capture> makeCapture(int source, ArrayList<Integer> jumpDestinations,
-									 ArrayList<Integer> takenPawns)  {
-
-		Piece movingPiece = getPiece(source);
-		Move<Capture> move = new Move<>(movingPiece);
-
-		Capture capture;
-		for (int i=0; i<jumpDestinations.size(); i++) {
-			Tile sourceTile;
-			if (i==0) sourceTile = getTile(source);
-			else 	  sourceTile = getTile(jumpDestinations.get(i-1));
-
-			Tile destinationTile = getTile(jumpDestinations.get(i));
-			Piece takenPiece = getPiece(takenPawns.get(i));
-			capture = new Capture(sourceTile, destinationTile, takenPiece);
-			move.addHop(capture);
-		}
-
+									 ArrayList<Integer> takenPawns) {
+		Move<Capture> move = generateMoveWithCaptures(source, jumpDestinations, takenPawns);
 		boardManager.makeWholeMove(move);
-		gameEngine.finishMove(move);
+		testObj.updateCounter(move.isCapture(), move.getMovingPiece().isQueen());
 		return move;
 	}
 
-
 	@Test
-	public void changeDrawConditions_noneToNormal_test() {
-		boardManager.addWhitePawn(43);
-		boardManager.addWhitePawn(10);
-		boardManager.addWhitePawn(50);
-		boardManager.addBlackPawn(36);
-		boardManager.addBlackPawn(26);
-		boardManager.addBlackQueen(16);
-		boardManager.setIsBlackQueenOnBoard(true);
-
-		makeMove(10, 5);
+	public void changeDrawConditions_noneToNormal() {
+		testObj.updateConditions(true, 3, 3);
 		
 		assertEquals(DrawArbiter.DrawConditions.NORMAL, testObj.getDrawConditions());
 		assertEquals(50, testObj.getDrawCounter());
 	}
 	
 	@Test
-	public void changeDrawConditions_noneTo3v1_byCapture_test() {
-		boardManager.addWhiteQueen(33);
-		boardManager.addBlackPawn(11);
-		boardManager.addBlackPawn(12);
-		boardManager.addBlackPawn(3);
-		boardManager.addBlackQueen(10);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
-
-		makeCapture(33, new ArrayList<>(Collections.singletonList(6)),
-								new ArrayList<>(Collections.singletonList(11)));
+	public void changeDrawConditions_noneTo3v1_threeWhitePieces() {
+		testObj.updateConditions(true, 3, 1);
 		
+		assertEquals(DrawArbiter.DrawConditions.THREE_VS_ONE, testObj.getDrawConditions());
+		assertEquals(32, testObj.getDrawCounter());
+	}
+
+	@Test
+	public void changeDrawConditions_noneTo3v1_threeBlackPieces() {
+		testObj.updateConditions(true, 1, 3);
+
 		assertEquals(DrawArbiter.DrawConditions.THREE_VS_ONE, testObj.getDrawConditions());
 		assertEquals(32, testObj.getDrawCounter());
 	}
 	
 	@Test
-	public void changeDrawConditions_noneTo3v1_byPromotion_test() {
-		boardManager.addBlackPawn(42);
-		boardManager.addWhiteQueen(36);
-		boardManager.addWhiteQueen(40);
-		boardManager.addWhiteQueen(49);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		
-		gameEngine.setIsWhiteToMove(false);
-		makeMove(42, 47);
-		
-		assertEquals(DrawArbiter.DrawConditions.THREE_VS_ONE, testObj.getDrawConditions());
-		assertEquals(32, testObj.getDrawCounter());
-	}
-	
-	@Test
-	public void changeDrawConditions_noneTo2v1_byCapture_test() {
-		boardManager.addBlackPawn(34);
-		boardManager.addBlackPawn(9);
-		boardManager.addBlackQueen(37);
-		boardManager.addBlackQueen(22);
-		boardManager.addWhiteQueen(43);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
-
-		makeCapture(43, new ArrayList<>(Arrays.asList(25, 3)), new ArrayList<>(Arrays.asList(34, 9)));
+	public void changeDrawConditions_noneTo2v1_twoWhitePieces() {
+		testObj.updateConditions(true, 2, 1);
 		
 		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawConditions());
 		assertEquals(10, testObj.getDrawCounter());
 	}
-	
-	@Test
-	public void changeDrawConditions_noneTo2v1_byPromotion() {
-		boardManager.addBlackPawn(45);
-		boardManager.addWhiteQueen(2);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		
-		gameEngine.setIsWhiteToMove(false);
 
-		makeMove(45, 50);
-	
+	@Test
+	public void changeDrawConditions_noneTo2v1_twoBlackPieces() {
+		testObj.updateConditions(true, 1, 2);
+
 		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawConditions());
 		assertEquals(10, testObj.getDrawCounter());
 	}
-	
-	
-	@Test
-	public void changeDrawConditions_normalTo3v1_byCapture() {
-		boardManager.addWhitePawn(16);
-		boardManager.addWhiteQueen(26);
-		boardManager.addWhiteQueen(37);
-		boardManager.addBlackPawn(8);
-		boardManager.addBlackPawn(23);
-		boardManager.addBlackQueen(15);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
 
-		makeCapture(37, new ArrayList<>(Arrays.asList(19, 2)), new ArrayList<>(Arrays.asList(23, 8)));
+	@Test
+	public void changeDrawConditions_normalTo3v1_threeWhitePieces() {
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.NORMAL);
+
+		testObj.updateConditions(true, 3, 1);
 		
+		assertEquals(DrawArbiter.DrawConditions.THREE_VS_ONE, testObj.getDrawConditions());
+		assertEquals(32, testObj.getDrawCounter());
+	}
+
+	@Test
+	public void changeDrawConditions_normalTo3v1_threeBlackPieces() {
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.NORMAL);
+
+		testObj.updateConditions(true, 1, 3);
+
 		assertEquals(DrawArbiter.DrawConditions.THREE_VS_ONE, testObj.getDrawConditions());
 		assertEquals(32, testObj.getDrawCounter());
 	}
 	
 	@Test
-	public void changeDrawConditions_normalTo2v1_byCapture() {
-		boardManager.addWhiteQueen(46);
-		boardManager.addWhiteQueen(22);
-		boardManager.addWhiteQueen(38);
-		boardManager.addBlackQueen(4);
-		boardManager.addBlackPawn(25);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
-		
-		gameEngine.setIsWhiteToMove(false);
+	public void changeDrawConditions_normalTo2v1_twoWhitePieces() {
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.NORMAL);
 
-		makeCapture(4, new ArrayList<>(Arrays.asList(27, 49)), new ArrayList<>(Arrays.asList(22, 38)));
+		testObj.updateConditions(true, 2, 1);
 		
+		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawConditions());
+		assertEquals(10, testObj.getDrawCounter());
+	}
+
+	@Test
+	public void changeDrawConditions_normalTo2v1_twoBlackPieces() {
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.NORMAL);
+
+		testObj.updateConditions(true, 1, 2);
+
 		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawConditions());
 		assertEquals(10, testObj.getDrawCounter());
 	}
 	
 	@Test 
 	public void changeDrawConditions_normalToNone_byCapturingQueen() {
-		boardManager.addWhitePawn(38);
-		boardManager.addWhitePawn(39);
-		boardManager.addWhitePawn(43);
-		boardManager.addWhiteQueen(46);
-		boardManager.addBlackPawn(7);
-		boardManager.addBlackPawn(11);
-		boardManager.addBlackPawn(21);
-		boardManager.addBlackQueen(19);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.NORMAL);
 
-		makeCapture(46, new ArrayList<>(Collections.singletonList(14)), new ArrayList<>(Collections.singletonList(19)));
+		testObj.updateConditions(false, 2, 2);
 		
 		assertEquals(DrawArbiter.DrawConditions.NONE, testObj.getDrawConditions());
 		assertEquals(50, testObj.getDrawCounter());
 	}
 	
 	@Test
-	public void changeDrawConditions_3v1To2v1() {
-		boardManager.addWhitePawn(29);
-		boardManager.addWhiteQueen(26);
-		boardManager.addWhiteQueen(46);
-		boardManager.addBlackQueen(15);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
+	public void changeDrawConditions_3v1To2v1_twoWhitePieces() {
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.THREE_VS_ONE);
+
+		testObj.updateConditions(true, 2, 1);
 		
-		gameEngine.setIsWhiteToMove(false);
-		makeCapture(15, new ArrayList<>(Collections.singletonList(47)), new ArrayList<>(Collections.singletonList(29)));
-		
+		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawConditions());
+		assertEquals(10, testObj.getDrawCounter());
+	}
+
+	@Test
+	public void changeDrawConditions_3v1To2v1_twoBlackPieces() {
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.THREE_VS_ONE);
+
+		testObj.updateConditions(true, 1, 2);
+
 		assertEquals(DrawArbiter.DrawConditions.TWO_VS_ONE, testObj.getDrawConditions());
 		assertEquals(10, testObj.getDrawCounter());
 	}
@@ -244,10 +170,8 @@ public class DrawArbiterTest {
 		boardManager.addBlackPawn(2);
 		boardManager.addBlackPawn(3);
 		boardManager.addBlackQueen(4);
-		boardManager.setIsWhiteQueenOnBoard(true);
-		boardManager.setIsBlackQueenOnBoard(true);
 		
-		testObj.updateConditions(true, 3, 3);
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.NORMAL);
 
 		assertEquals(50, testObj.getDrawCounter());
 		
@@ -274,16 +198,17 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		testObj.updateConditions(true, 3, 1);
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.THREE_VS_ONE);
+		testObj.setDrawCounter(32);
 
-		assertEquals(32, testObj.getDrawCounter());
-		
 		makeMove(41, 36);
 		assertEquals(31, testObj.getDrawCounter());
 		makeMove(3, 25);
 		assertEquals(30, testObj.getDrawCounter());
 		makeMove(42, 38); //pawn move - but counter doesn't reset in these conditions
 		assertEquals(29, testObj.getDrawCounter());
+
+		//TODO: add checking if capture resets counter - it should not; same for 2vs1 conditions
 	}
 	
 	@Test
@@ -294,9 +219,8 @@ public class DrawArbiterTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 		
-		testObj.updateConditions(true, 2, 1);
-
-		assertEquals(10, testObj.getDrawCounter());
+		testObj.setDrawConditions(DrawArbiter.DrawConditions.TWO_VS_ONE);
+		testObj.setDrawCounter(10);
 		
 		makeMove(23, 1);
 		assertEquals(9, testObj.getDrawCounter());
