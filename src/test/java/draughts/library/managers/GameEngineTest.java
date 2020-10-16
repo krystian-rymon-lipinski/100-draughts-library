@@ -157,7 +157,7 @@ public class GameEngineTest {
 																	new ArrayList<>(Collections.singletonList(43)));
 
 		assertEquals(0, boardManager.getBlackPieces().size());
-		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
+		assertFalse(testObj.getBoardManager().isAnyMovePossible(testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
 	}
 
@@ -171,7 +171,7 @@ public class GameEngineTest {
 		makeMove(41, 37);
 
 		assertEquals(1, boardManager.getBlackPieces().size());
-		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
+		assertFalse(testObj.getBoardManager().isAnyMovePossible(testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_WHITE, testObj.getGameState());
 		
 	}
@@ -186,7 +186,7 @@ public class GameEngineTest {
 		makeCapture(5, new ArrayList<>(Collections.singletonList(14)), new ArrayList<>(Collections.singletonList(10)));
 
 		assertEquals(0, boardManager.getWhitePieces().size());
-		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
+		assertFalse(testObj.getBoardManager().isAnyMovePossible(testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());
 	}
 	
@@ -201,7 +201,7 @@ public class GameEngineTest {
 		makeMove(10, 14);
 
 		assertEquals(1, boardManager.getWhitePieces().size());
-		assertFalse(testObj.getMoveManager().isAnyMovePossible(boardManager, testObj.getIsWhiteToMove()));
+		assertFalse(testObj.getBoardManager().isAnyMovePossible(testObj.getIsWhiteToMove()));
 		assertEquals(GameState.WON_BY_BLACK, testObj.getGameState());	
 	}
 	

@@ -27,10 +27,6 @@ public class MoveManager {
 		return possibleMoves;
 	}
 
-	public boolean isAnyMovePossible(BoardManager boardManager, boolean isWhiteToMove) {
-		return boardManager.isAnyMovePossible(isWhiteToMove);
-	}
-
 	public Move<? extends Hop> isMadeMoveCorrect(int source, int destination, ArrayList<Integer> takenPawns) {
 		for(Move<? extends Hop> move : possibleMoves) {
 			if(move.doesSourceMatch(source) &&

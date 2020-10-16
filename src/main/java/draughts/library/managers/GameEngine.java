@@ -63,11 +63,7 @@ public class GameEngine {
 	public ArrayList<Move<? extends Hop>> prepareMove(boolean isWhiteToMove) {
 		return moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
 	}
-	
-	
-	
-	//methods for making move all hops at once
-	
+
 	public Move<? extends Hop> checkIfMoveIsCorrect(int source, int destination, ArrayList<Integer> taken) throws WrongMoveException, GameAlreadyEndedException {
 		if(gameState == GameState.RUNNING) {
 			Move<? extends Hop> correctMove = moveManager.isMadeMoveCorrect(source, destination, taken);
@@ -111,7 +107,7 @@ public class GameEngine {
 	}
 	
 	public void checkGameState() {
-		if (!moveManager.isAnyMovePossible(boardManager, isWhiteToMove)) {
+		if (!boardManager.isAnyMovePossible(isWhiteToMove)) {
 			if(isWhiteToMove) setGameState(GameState.WON_BY_BLACK);
 			else setGameState(GameState.WON_BY_WHITE);
 		}
