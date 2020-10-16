@@ -2,38 +2,27 @@ package draughts.library.managers;
 
 import static org.junit.Assert.assertEquals;
 
-import draughts.library.boardmodel.Piece;
-import draughts.library.boardmodel.Tile;
-import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 import org.junit.Before;
 import org.junit.Test;
 
-import draughts.library.managers.BoardManager;
-import draughts.library.managers.DrawArbiter;
-import draughts.library.managers.GameEngine;
-import draughts.library.managers.MoveManager;
 import draughts.library.managers.GameEngine.GameState;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class DrawArbiterTest extends BaseTest {
 	
 	DrawArbiter testObj;
 	GameEngine gameEngine;
-	MoveManager moveManager;
-	
+
 	@Before
 	public void setUp() {
 		gameEngine = new GameEngine();
-		gameEngine.setGameState(GameState.RUNNING);
 		testObj = gameEngine.getDrawArbiter();
 		boardManager = gameEngine.getBoardManager();
-		moveManager = gameEngine.getMoveManager();
 		boardManager.createEmptyBoard();
 	}
 
