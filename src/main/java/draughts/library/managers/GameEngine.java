@@ -56,14 +56,8 @@ public class GameEngine {
 		boardManager.createStartingPosition();
 		gameState = GameState.RUNNING;
 		isWhiteToMove = true;
-
-		prepareMove(true);
 	}
 
-	public ArrayList<Move<? extends Hop>> prepareMove(boolean isWhiteToMove) {
-		return moveManager.findAllCorrectMoves(boardManager, isWhiteToMove);
-	}
-	
 	public void updateBoard(Move<? extends Hop> move) {
 		boardManager.makeWholeMove(move);
 	}

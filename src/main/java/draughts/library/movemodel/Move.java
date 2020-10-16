@@ -28,6 +28,7 @@ public class Move<T extends Hop> {
 		for(int i=0; i<move.getNumberOfHops(); i++) {
 			this.hops.add(move.hops.get(i));
 		}
+		this.isPromotion = move.isPromotion;
 	}
 	
 	public ArrayList<T> getHops() {
