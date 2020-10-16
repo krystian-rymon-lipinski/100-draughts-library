@@ -109,7 +109,7 @@ public class DrawArbiterTest extends BaseTest {
 	}
 
 	@Test
-	public void changeDrGawConditions_normalTo2v1_twoBlackPieces() {
+	public void changeDrawConditions_normalTo2v1_twoBlackPieces() {
 		testObj.setDrawConditions(DrawArbiter.DrawConditions.NORMAL);
 
 		testObj.updateConditions(true, 1, 2);
