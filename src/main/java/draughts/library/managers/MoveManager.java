@@ -27,7 +27,7 @@ public class MoveManager {
 		return possibleMoves;
 	}
 
-	public Move<? extends Hop> isMadeMoveCorrect(int source, int destination, ArrayList<Integer> takenPawns) {
+	public Move<? extends Hop> convertToMove(int source, int destination, ArrayList<Integer> takenPawns) {
 		for(Move<? extends Hop> move : possibleMoves) {
 			if(move.doesSourceMatch(source) &&
 			   move.doesDestinationMatch(destination) &&

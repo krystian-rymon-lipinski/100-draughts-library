@@ -66,7 +66,7 @@ public class GameEngine {
 
 	public Move<? extends Hop> checkIfMoveIsCorrect(int source, int destination, ArrayList<Integer> taken) throws WrongMoveException, GameAlreadyEndedException {
 		if(gameState == GameState.RUNNING) {
-			Move<? extends Hop> correctMove = moveManager.isMadeMoveCorrect(source, destination, taken);
+			Move<? extends Hop> correctMove = moveManager.convertToMove(source, destination, taken);
 			if (correctMove == null) {
 				throw new WrongMoveException("Chosen move is not allowed");
 			}
