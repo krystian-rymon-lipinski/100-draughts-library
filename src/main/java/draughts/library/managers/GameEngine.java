@@ -61,8 +61,8 @@ public class GameEngine {
 	public void finishMove(Move<? extends Hop> move) {
 		checkForPawnPromotion(move);
 		updateDrawArbiter(move);
-		endPlayerTurn();
 		checkGameState();
+		endPlayerTurn();
 	}
 	
 	public void checkForPawnPromotion(Move<? extends Hop> move) {
@@ -85,9 +85,9 @@ public class GameEngine {
 	}
 	
 	public void checkGameState() {
-		if (!boardManager.isAnyMovePossible(isWhiteToMove)) {
-			if(isWhiteToMove) setGameState(GameState.WON_BY_BLACK);
-			else setGameState(GameState.WON_BY_WHITE);
+		if (!boardManager.isAnyMovePossible(!isWhiteToMove)) { //find a move for opponent
+			if(isWhiteToMove) setGameState(GameState.WON_BY_WHITE);
+			else setGameState(GameState.WON_BY_BLACK);
 		}
 		if(drawArbiter.isGameDrawn()) setGameState(GameState.DRAWN);
 	}
