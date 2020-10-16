@@ -2,11 +2,9 @@ package draughts.library.managers;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.spy;
 
-import draughts.library.exceptions.NoPieceFoundInRequestedTileException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,11 +43,6 @@ public class GameEngineTest extends BaseTest {
 		Move<Hop> move = generateMove(source, destination);
 		boardManager.makeWholeMove(move);
 		return move;
-	}
-
-	public void makeMoveAndFinishIt(int source, int destination) {
-		Move<Hop> move = makeMove(source, destination);
-		testObj.finishMove(move);
 	}
 
 	public Move<Capture> makeCapture(int source, ArrayList<Integer> jumpDestinations,
@@ -210,19 +203,13 @@ public class GameEngineTest extends BaseTest {
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
 
-		testObj.getDrawArbiter().updateConditions(true, 2, 2);
-		assertEquals(DrawArbiter.DrawConditions.NORMAL, testObj.getDrawArbiter().getDrawConditions());
+		testObj.getDrawArbiter().setDrawConditions(DrawArbiter.DrawConditions.NORMAL);
+		testObj.getDrawArbiter().setDrawCounter(1);
 
-		for(int i=0; i<12; i++) {
-			makeMoveAndFinishIt(34, 45);
-			makeMoveAndFinishIt(20, 3);
-			makeMoveAndFinishIt(45, 34);
-			makeMoveAndFinishIt(3, 20);
-		}
-		
-		makeMoveAndFinishIt(34, 45);
-		makeMoveAndFinishIt(20, 3);
-		
+		Move<Hop> move = makeMove(34, 45);
+		testObj.updateDrawArbiter(move);
+		testObj.checkGameState();
+
 		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
 		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
 	}
@@ -236,15 +223,13 @@ public class GameEngineTest extends BaseTest {
 		boardManager.addBlackPawn(26);
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
-		
-		testObj.getDrawArbiter().updateConditions(true, 1, 3);
-		
-		for(int i=0; i<8; i++) {
-			makeMoveAndFinishIt(16, 49);
-			makeMoveAndFinishIt(5, 46);
-			makeMoveAndFinishIt(49, 16);
-			makeMoveAndFinishIt(46, 5);
-		}
+
+		testObj.getDrawArbiter().setDrawConditions(DrawArbiter.DrawConditions.THREE_VS_ONE);
+		testObj.getDrawArbiter().setDrawCounter(1);
+
+		Move<Hop> move = makeMove(16, 49);
+		testObj.updateDrawArbiter(move);
+		testObj.checkGameState();
 		
 		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
 		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());	
@@ -258,18 +243,13 @@ public class GameEngineTest extends BaseTest {
 		boardManager.addBlackQueen(2);
 		boardManager.setIsWhiteQueenOnBoard(true);
 		boardManager.setIsBlackQueenOnBoard(true);
-		
-		testObj.getDrawArbiter().updateConditions(true, 1, 2);
-		
-		for(int i=0; i<2; i++) {
-			makeMoveAndFinishIt(33, 50);
-			makeMoveAndFinishIt(2, 35);
-			makeMoveAndFinishIt(50, 33);
-			makeMoveAndFinishIt(35, 2);
-		}
-		
-		makeMoveAndFinishIt(33, 50);
-		makeMoveAndFinishIt(2, 35);
+
+		testObj.getDrawArbiter().setDrawConditions(DrawArbiter.DrawConditions.TWO_VS_ONE);
+		testObj.getDrawArbiter().setDrawCounter(1);
+
+		Move<Hop> move = makeMove(33, 50);
+		testObj.updateDrawArbiter(move);
+		testObj.checkGameState();
 		
 		assertEquals(0, testObj.getDrawArbiter().getDrawCounter());
 		assertEquals(GameEngine.GameState.DRAWN, testObj.getGameState());
