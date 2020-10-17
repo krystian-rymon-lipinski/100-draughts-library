@@ -33,7 +33,10 @@ public class Move<T extends Hop> {
 
 	public void classify() {
 		if (hops.get(0) instanceof Capture) setCapture(true);
-		if (!movingPiece.isQueen() && (getMoveDestination().getIndex() > 45 || getMoveDestination().getIndex() < 6))
+		if (!movingPiece.isQueen() &&
+				  ( (!movingPiece.isWhite() && getMoveDestination().getIndex() > 45) || //black pawn promoted
+					(movingPiece.isWhite() && getMoveDestination().getIndex() < 6) )   //white pawn promoted
+		)
 			setPromotion(true);
 	}
 	
