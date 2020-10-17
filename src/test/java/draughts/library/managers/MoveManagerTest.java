@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import draughts.library.exceptions.WrongMoveException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,11 +19,10 @@ import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MoveManagerTest {
+public class MoveManagerTest extends BaseTest {
 	
 	MoveManager testObj;
-	BoardManager boardManager;
-	
+
 	@Before
 	public void setUp() {
 		testObj = new MoveManager();
@@ -31,7 +31,7 @@ public class MoveManagerTest {
 	}
 	
 	@Test
-	public void findAllCorrectMoves_whenCapturesAvailable_test() {	
+	public void findAllCorrectMoves_whenCapturesAvailable() {
 		boardManager.addWhitePawn(46);
 		boardManager.addWhitePawn(49);
 		boardManager.addWhitePawn(43);
@@ -47,7 +47,7 @@ public class MoveManagerTest {
 	}
 	
 	@Test
-	public void findAllCorrectMoves_whenNoCaptureAvailable_test() {
+	public void findAllCorrectMoves_whenNoCaptureAvailable() {
 		boardManager.addWhitePawn(46);
 		boardManager.addWhitePawn(49);
 		boardManager.addWhitePawn(43);
@@ -61,11 +61,9 @@ public class MoveManagerTest {
 		
 		assertEquals(12, testObj.getPossibleMoves().size());
 	}
-	
-	//tests for making move all hops at once
-	
-	@Test
-	public void isMadeMoveCorrect_wrongPieceMoved_test() {
+
+	@Test (expected = WrongMoveException.class)
+	public void convertToMove_wrongPieceMoved() throws WrongMoveException {
 		boardManager.addWhitePawn(21);
 		boardManager.addWhitePawn(26);
 		testObj.findAllCorrectMoves(boardManager, true);
@@ -74,8 +72,8 @@ public class MoveManagerTest {
 		assertNull(correctMove);
 	}
 	
-	@Test
-	public void isMadeMoveCorrect_wrongDestinationChosen_test() {
+	@Test (expected = WrongMoveException.class)
+	public void convertToMove_wrongDestinationChosen() throws WrongMoveException {
 		boardManager.addBlackPawn(23);
 		boardManager.addBlackPawn(24);
 		testObj.findAllCorrectMoves(boardManager, false);
@@ -84,8 +82,8 @@ public class MoveManagerTest {
 		assertNull(correctMove);
 	}
 	
-	@Test
-	public void isMadeMoveCorrect_noCapturedPiecesDuringCapture_test() {
+	@Test (expected = WrongMoveException.class)
+	public void convertToMove_noCapturedPiecesDuringCapture()  throws WrongMoveException{
 		boardManager.addWhitePawn(33);
 		boardManager.addBlackPawn(28);
 		testObj.findAllCorrectMoves(boardManager, true);
@@ -94,8 +92,8 @@ public class MoveManagerTest {
 		assertNull(correctMove);
 	}
 	
-	@Test
-	public void isMadeMoveCorrect_wrongPieceCapturedDuringCapture_test() {
+	@Test (expected = WrongMoveException.class)
+	public void convertToMove_wrongPieceCapturedDuringCapture() throws WrongMoveException {
 		boardManager.addBlackPawn(23);
 		boardManager.addWhitePawn(28);
 		boardManager.addWhitePawn(29);
@@ -106,7 +104,7 @@ public class MoveManagerTest {
 	}
 	
 	@Test
-	public void isMadeMoveCorrect_correctMove_withNoCapture_test() {
+	public void convertToMove_correctMove_withNoCapture() throws WrongMoveException{
 		boardManager.addWhitePawn(43);
 		testObj.findAllCorrectMoves(boardManager, true);
 		
@@ -117,7 +115,7 @@ public class MoveManagerTest {
 	}
 	
 	@Test
-	public void isMadeMoveCorrect_correctMove_withCapture_test() {
+	public void convertToMove_correctMove_withCapture() throws WrongMoveException {
 		boardManager.addBlackPawn(9);
 		Piece whitePiece1 = boardManager.addWhitePawn(13);
 		Piece whitePiece2 = boardManager.addWhitePawn(23);

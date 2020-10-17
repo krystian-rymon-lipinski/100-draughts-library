@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
+import draughts.library.exceptions.WrongMoveException;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 
@@ -27,14 +28,16 @@ public class MoveManager {
 		return possibleMoves;
 	}
 
-	public Move<? extends Hop> convertToMove(int source, int destination, ArrayList<Integer> takenPawns) {
+	public Move<? extends Hop> convertToMove(int source, int destination, ArrayList<Integer> takenPawns)
+	throws WrongMoveException {
 		for(Move<? extends Hop> move : possibleMoves) {
 			if(move.doesSourceMatch(source) &&
 			   move.doesDestinationMatch(destination) &&
 			   move.doesTakenPawnsMatch(takenPawns))
 			   		return move;
 		}
-		return null;
+		throw new WrongMoveException("Chosen move (" + source + " -> " + destination +
+									 " " + takenPawns + " is not allowed!");
 	}
 
 }
