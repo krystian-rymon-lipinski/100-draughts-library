@@ -31,7 +31,10 @@ public class BaseTest {
         Tile sourceTile = getTile(source);
         Tile destinationTile = getTile(destination);
 
-        return new Move<>(movingPiece, new Hop(sourceTile, destinationTile));
+        Move<Hop> move = new Move<>(movingPiece, new Hop(sourceTile, destinationTile));
+        move.classify();
+
+        return move;
     }
 
     public Move<Capture> generateMoveWithCaptures(int source, ArrayList<Integer> jumpDestinations,
@@ -52,6 +55,7 @@ public class BaseTest {
             move.addHop(capture);
         }
 
+        move.classify();
         return move;
     }
 

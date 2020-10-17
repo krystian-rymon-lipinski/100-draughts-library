@@ -198,7 +198,7 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
-	public void findPieceByIndex_NoPieceFound_test() {
+	public void findPieceByIndex_NoPieceFound() {
 		testObj.createStartingPosition();
 		
 		Piece piece = getPiece(23);
@@ -280,6 +280,18 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
+	public void makeWholeMove_withPawnPromotion() {
+		testObj.createEmptyBoard();
+		Piece pawn = testObj.addWhitePawn(9);
+
+		Move<Hop> move = generateMove(9, 4);
+		testObj.makeWholeMove(move);
+
+		assertNotEquals(move.getMovingPiece(), pawn);
+		assertTrue(move.getMovingPiece().isQueen());
+	}
+
+	@Test
 	public void reverseWholeMove_capture() {
 		testObj.createEmptyBoard();
 		testObj.addBlackPawn(5);
@@ -310,33 +322,66 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
-	public void reverseWholeMove_demoteQueen() {
+	public void reverseWholeMove_withQueenDemotion() {
 		testObj.createEmptyBoard();
-		testObj.addWhitePawn(6);
+		Piece pawn = testObj.addBlackPawn(45);
+
+		Move<Hop> move = generateMove(45, 50);
+
+		testObj.makeWholeMove(move);
+		testObj.reverseWholeMove(move);
+
+		assertNotEquals(pawn, move.getMovingPiece());
+		assertFalse(move.getMovingPiece().isQueen());
+
 	}
 
 	@Test
 	public void promotePawn() {
 		testObj.createEmptyBoard();
+		Piece whitePawn = testObj.addWhitePawn(5);
+		Piece blackPawn = testObj.addBlackPawn(50);
 
-		testObj.addWhitePawn(10);
-		testObj.addBlackPawn(45);
-
-		makeHop(10, 5);
-		testObj.promotePawn(testObj.getWhitePieces().get(0));
+		Piece whiteQueen = testObj.promotePawn(whitePawn);
 
 		assertEquals(Tile.State.WHITE_QUEEN, getTile(5).getState());
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertTrue(testObj.getWhitePieces().get(0).isQueen());
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
+		assertNotEquals(whitePawn, whiteQueen);
 
-		makeHop(45, 50);
-		testObj.promotePawn(testObj.getBlackPieces().get(0));
+		Piece blackQueen = testObj.promotePawn(blackPawn);
 
 		assertEquals(Tile.State.BLACK_QUEEN, getTile(50).getState());
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertTrue(testObj.getBlackPieces().get(0).isQueen());
 		assertTrue(testObj.getIsBlackQueenOnBoard());
+		assertNotEquals(blackPawn, blackQueen);
+	}
+
+	@Test
+	public void demoteQueen() {
+		testObj.createEmptyBoard();
+		Piece whiteQueen = testObj.addWhiteQueen(3);
+		Piece blackQueen = testObj.addBlackQueen(46);
+		testObj.setIsWhiteQueenOnBoard(true);
+		testObj.setIsBlackQueenOnBoard(true);
+
+		Piece whitePawn = testObj.demoteQueen(whiteQueen);
+
+		assertEquals(Tile.State.WHITE_PAWN, getTile(3).getState());
+		assertEquals(1, testObj.getWhitePieces().size());
+		assertFalse(testObj.getWhitePieces().get(0).isQueen());
+		assertFalse(testObj.getIsWhiteQueenOnBoard());
+		assertNotEquals(whiteQueen, whitePawn);
+
+		Piece blackPawn = testObj.demoteQueen(blackQueen);
+
+		assertEquals(Tile.State.BLACK_PAWN, getTile(46).getState());
+		assertEquals(1, testObj.getWhitePieces().size());
+		assertFalse(testObj.getBlackPieces().get(0).isQueen());
+		assertFalse(testObj.getIsBlackQueenOnBoard());
+		assertNotEquals(blackQueen, blackPawn);
 	}
 	
 	@Test

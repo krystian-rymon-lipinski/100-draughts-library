@@ -1,7 +1,5 @@
 package draughts.library.movemodel;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,9 +10,7 @@ import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.boardmodel.WhitePawn;
 import draughts.library.managers.BoardManager;
-import draughts.library.movemodel.Capture;
-import draughts.library.movemodel.Hop;
-import draughts.library.movemodel.Move;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MoveTest {
@@ -35,9 +31,9 @@ public class MoveTest {
 	
 	@Test
 	public void addHops_test() {
-		Piece whitePawn = new WhitePawn(new Tile(5, 0));
+		Piece whitePawn = new WhitePawn(getTile(31));
 		
-		testObj = new Move<Hop>(whitePawn, new Hop(getTile(31), getTile(26)));
+		testObj = new Move<>(whitePawn, new Hop(getTile(31), getTile(26)));
 		
 		assertEquals(1, testObj.getNumberOfHops());
 		assertEquals(whitePawn, testObj.getMovingPiece());
@@ -53,12 +49,13 @@ public class MoveTest {
 	
 	@Test
 	public void addCaptures_test() {
-		Piece blackPawn = new BlackPawn(new Tile(6, 9));
-		Piece whitePawn1 = new WhitePawn(new Tile(5, 8));
-		Piece whitePawn2 = new WhitePawn(new Tile(5, 6));
-		Piece whitePawn3 = new WhitePawn(new Tile(5, 4));
+		Piece blackPawn = new BlackPawn(getTile(35));
+		Piece whitePawn1 = new WhitePawn(getTile(30));
+		Piece whitePawn2 = new WhitePawn(getTile(29));
+		Piece whitePawn3 = new WhitePawn(getTile(28));
 		
-		testObj2 = new Move<Capture>(blackPawn, new Capture(getTile(35), getTile(24), whitePawn1));
+		testObj2 = new Move<>(blackPawn, new Capture(getTile(35), getTile(24), whitePawn1));
+		testObj2.classify();
 		
 		assertEquals(1, testObj2.getNumberOfHops());
 		assertEquals(blackPawn, testObj2.getMovingPiece());
@@ -84,6 +81,52 @@ public class MoveTest {
 		assertEquals(4, testObj2.getMoveDestination().getIndex());
 		assertEquals(3, testObj2.getMoveTakenPawns().size());
 		assertEquals(whitePawn3, testObj2.getMoveTakenPawns().get(2));
+	}
+
+	@Test
+	public void classify_noPromotion_noCapture() {
+		Piece whitePawn = new WhitePawn(getTile(20));
+
+		testObj = new Move<>(whitePawn, new Hop(getTile(20), getTile(15)));
+		testObj.classify();
+
+		assertFalse(testObj.isCapture());
+		assertFalse(testObj.isPromotion());
+	}
+
+	@Test
+	public void classify_noPromotion_capture() {
+		Piece blackPawn = new BlackPawn(getTile(33));
+		Piece whitePawn = new WhitePawn(getTile(28));
+
+		testObj2 = new Move<>(blackPawn, new Capture(getTile(33), getTile(22), whitePawn));
+		testObj2.classify();
+
+		assertFalse(testObj2.isPromotion());
+		assertTrue(testObj2.isCapture());
+	}
+
+	@Test
+	public void classify_promotion_noCapture() {
+		Piece whitePawn = new WhitePawn(getTile(9));
+
+		testObj = new Move<>(whitePawn, new Hop(getTile(9), getTile(3)));
+		testObj.classify();
+
+		assertTrue(testObj.isPromotion());
+		assertFalse(testObj.isCapture());
+	}
+
+	@Test
+	public void classify_promotion_capture() {
+		Piece blackPawn = new BlackPawn(getTile(37));
+		Piece whitePawn = new WhitePawn(getTile(42));
+
+		testObj2 = new Move<>(blackPawn, new Capture(getTile(37), getTile(48), whitePawn));
+		testObj2.classify();
+
+		assertTrue(testObj2.isPromotion());
+		assertTrue(testObj2.isCapture());
 	}
 
 }
