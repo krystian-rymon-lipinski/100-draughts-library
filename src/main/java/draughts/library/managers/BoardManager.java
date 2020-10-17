@@ -1,7 +1,6 @@
 package draughts.library.managers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import draughts.library.boardmodel.BlackPawn;
 import draughts.library.boardmodel.BlackQueen;
 import draughts.library.boardmodel.Board;
@@ -176,7 +175,7 @@ public class BoardManager {
 		else                     removeBlackPiece(takenPiece);
 	}
 
-	public void reverseCapture(Piece movingPiece, Capture capture) {
+	public void restoreCapturedPiece(Piece movingPiece, Capture capture) {
 		if (movingPiece.isWhite()) {
 			if (capture.getTakenPiece().isQueen()) {
 				capture.getTakenPiece().getPosition().setState(Tile.State.BLACK_QUEEN);
@@ -212,7 +211,7 @@ public class BoardManager {
 			makeHop(move.getMovingPiece(), move.getHop(i).getSource());
 			if (move.isCapture()) {
 				Capture capture = (Capture) move.getHop(i);
-				reverseCapture(move.getMovingPiece(), capture);
+				restoreCapturedPiece(move.getMovingPiece(), capture);
 			}
 		}
 	}

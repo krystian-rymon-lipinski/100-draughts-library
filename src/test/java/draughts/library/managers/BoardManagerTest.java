@@ -241,7 +241,7 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
-	public void reverseCapture() {
+	public void restoreCapturedPiece() {
 		testObj.createEmptyBoard();
 		Piece movingPiece = testObj.addWhitePawn(20);
 		Piece takenPiece = testObj.addBlackPawn(14);
@@ -252,7 +252,7 @@ public class BoardManagerTest extends BaseTest{
 
 		assertEquals(0, testObj.getBlackPieces().size());
 
-		testObj.reverseCapture(movingPiece, capture);
+		testObj.restoreCapturedPiece(movingPiece, capture);
 
 		assertEquals(1, testObj.getBlackPieces().size());
 		assertEquals(takenPiece, testObj.getBlackPieces().get(0));
@@ -310,7 +310,7 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
-	public void reverseWholeMove_demoteQueenToPawn() {
+	public void reverseWholeMove_demoteQueen() {
 		testObj.createEmptyBoard();
 		testObj.addWhitePawn(6);
 	}
