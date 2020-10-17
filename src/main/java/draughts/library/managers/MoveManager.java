@@ -25,6 +25,9 @@ public class MoveManager {
 		possibleMoves.addAll(boardManager.findCapturesForAllPieces(isWhiteToMove));
 		if(possibleMoves.size() == 0)
 			possibleMoves.addAll(boardManager.findMovesForAllPieces(isWhiteToMove));
+		for (Move<? extends Hop> move : possibleMoves) {
+			move.classify();
+		}
 		return possibleMoves;
 	}
 

@@ -59,6 +59,7 @@ public class MoveTest {
 		Piece whitePawn3 = new WhitePawn(new Tile(5, 4));
 		
 		testObj2 = new Move<Capture>(blackPawn, new Capture(getTile(35), getTile(24), whitePawn1));
+		testObj2.classify();
 		
 		assertEquals(1, testObj2.getNumberOfHops());
 		assertEquals(blackPawn, testObj2.getMovingPiece());
