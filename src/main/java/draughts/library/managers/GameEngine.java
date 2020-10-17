@@ -63,6 +63,7 @@ public class GameEngine {
 	
 	public void endPlayerTurn() {
 		isWhiteToMove = !isWhiteToMove;
+		moveManager.getPossibleMoves().clear();
 	}
 	
 	public void updateDrawArbiter(Move<? extends Hop> move) {
