@@ -241,7 +241,7 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
-	public void reverseCapture_test() {
+	public void reverseCapture() {
 		testObj.createEmptyBoard();
 		Piece movingPiece = testObj.addWhitePawn(20);
 		Piece takenPiece = testObj.addBlackPawn(14);
@@ -280,13 +280,13 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
-	public void reverseWholeMove() {
+	public void reverseWholeMove_capture() {
 		testObj.createEmptyBoard();
 		testObj.addBlackPawn(5);
-		Piece takenPiece1 = testObj.addWhitePawn(10);
+		Piece takenPiece1 = testObj.addWhiteQueen(10);
 		Piece takenPiece2 = testObj.addWhitePawn(19);
 		Piece takenPiece3 = testObj.addWhitePawn(28);
-		Piece takenPiece4 = testObj.addWhitePawn(38);
+		Piece takenPiece4 = testObj.addWhiteQueen(38);
 
 		Move<Capture> move = generateMoveWithCaptures(5, new ArrayList<>(Arrays.asList(14, 23, 32, 43)),
 				new ArrayList<>(Arrays.asList(10, 19, 28, 38)));
@@ -300,9 +300,13 @@ public class BoardManagerTest extends BaseTest{
 		assertEquals(getTile(5), testObj.getBlackPieces().get(0).getPosition());
 		assertEquals(Tile.State.EMPTY, getTile(43).getState());
 		assertEquals(takenPiece4, testObj.getWhitePieces().get(0));
+		assertEquals(Tile.State.WHITE_QUEEN, move.getHop(3).getTakenPiece().getPosition().getState());
 		assertEquals(takenPiece3, testObj.getWhitePieces().get(1));
+		assertEquals(Tile.State.WHITE_PAWN, move.getHop(2).getTakenPiece().getPosition().getState());
 		assertEquals(takenPiece2, testObj.getWhitePieces().get(2));
+		assertEquals(Tile.State.WHITE_PAWN, move.getHop(1).getTakenPiece().getPosition().getState());
 		assertEquals(takenPiece1, testObj.getWhitePieces().get(3));
+		assertEquals(Tile.State.WHITE_QUEEN, move.getHop(0).getTakenPiece().getPosition().getState());
 	}
 
 	@Test
