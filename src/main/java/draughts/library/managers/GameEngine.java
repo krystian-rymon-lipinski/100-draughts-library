@@ -56,19 +56,9 @@ public class GameEngine {
 	}
 
 	public void finishMove(Move<? extends Hop> move) {
-		checkForPawnPromotion(move);
 		updateDrawArbiter(move);
 		checkGameState();
 		endPlayerTurn();
-	}
-	
-	public void checkForPawnPromotion(Move<? extends Hop> move) {
-		if(!move.getMovingPiece().isQueen() && 
-				(move.getMoveDestination().getIndex() < 6 || move.getMoveDestination().getIndex() > 45)) {
-			move.setPromotion(true);
-			Piece newQueen = boardManager.promotePawn(move.getMovingPiece());
-			move.setMovingPiece(newQueen);
-		}
 	}
 	
 	public void endPlayerTurn() {

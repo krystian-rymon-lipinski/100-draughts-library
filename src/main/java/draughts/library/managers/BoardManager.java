@@ -203,6 +203,11 @@ public class BoardManager {
 		else {
 			makeHop(move.getMovingPiece(), move.getHop(0).getDestination());
 		}
+
+		if (move.isPromotion()) {
+			Piece queen = promotePawn(move.getMovingPiece());
+			move.setMovingPiece(queen);
+		}
 	}
 	
 	public void reverseWholeMove(Move<? extends Hop> move) {
@@ -213,6 +218,11 @@ public class BoardManager {
 				Capture capture = (Capture) move.getHop(i);
 				restoreCapturedPiece(move.getMovingPiece(), capture);
 			}
+		}
+
+		if (move.isPromotion()) {
+			Piece pawn = demoteQueen(move.getMovingPiece());
+			move.setMovingPiece(pawn);
 		}
 	}
 	

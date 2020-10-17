@@ -10,10 +10,6 @@ import draughts.library.boardmodel.Piece;
 import draughts.library.boardmodel.Tile;
 import draughts.library.boardmodel.WhitePawn;
 import draughts.library.managers.BoardManager;
-import draughts.library.movemodel.Capture;
-import draughts.library.movemodel.Hop;
-import draughts.library.movemodel.Move;
-
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,7 +33,7 @@ public class MoveTest {
 	public void addHops_test() {
 		Piece whitePawn = new WhitePawn(new Tile(5, 0));
 		
-		testObj = new Move<Hop>(whitePawn, new Hop(getTile(31), getTile(26)));
+		testObj = new Move<>(whitePawn, new Hop(getTile(31), getTile(26)));
 		
 		assertEquals(1, testObj.getNumberOfHops());
 		assertEquals(whitePawn, testObj.getMovingPiece());
@@ -58,7 +54,7 @@ public class MoveTest {
 		Piece whitePawn2 = new WhitePawn(new Tile(5, 6));
 		Piece whitePawn3 = new WhitePawn(new Tile(5, 4));
 		
-		testObj2 = new Move<Capture>(blackPawn, new Capture(getTile(35), getTile(24), whitePawn1));
+		testObj2 = new Move<>(blackPawn, new Capture(getTile(35), getTile(24), whitePawn1));
 		testObj2.classify();
 		
 		assertEquals(1, testObj2.getNumberOfHops());
