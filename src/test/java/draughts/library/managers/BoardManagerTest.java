@@ -280,6 +280,18 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
+	public void makeWholeMove_withPawnPromotion() {
+		testObj.createEmptyBoard();
+		Piece pawn = testObj.addWhitePawn(9);
+
+		Move<Hop> move = generateMove(9, 4);
+		testObj.makeWholeMove(move);
+
+		assertNotEquals(move.getMovingPiece(), pawn);
+		assertTrue(move.getMovingPiece().isQueen());
+	}
+
+	@Test
 	public void reverseWholeMove_capture() {
 		testObj.createEmptyBoard();
 		testObj.addBlackPawn(5);
@@ -310,9 +322,18 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
-	public void reverseWholeMove_demoteQueen() {
+	public void reverseWholeMove_withQueenDemotion() {
 		testObj.createEmptyBoard();
-		testObj.addWhitePawn(6);
+		Piece pawn = testObj.addBlackPawn(45);
+
+		Move<Hop> move = generateMove(45, 50);
+
+		testObj.makeWholeMove(move);
+		testObj.reverseWholeMove(move);
+
+		assertNotEquals(pawn, move.getMovingPiece());
+		assertFalse(move.getMovingPiece().isQueen());
+
 	}
 
 	@Test
