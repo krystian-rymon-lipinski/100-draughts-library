@@ -31,7 +31,7 @@ public class MoveTest {
 	
 	@Test
 	public void addHops_test() {
-		Piece whitePawn = new WhitePawn(new Tile(5, 0));
+		Piece whitePawn = new WhitePawn(getTile(31));
 		
 		testObj = new Move<>(whitePawn, new Hop(getTile(31), getTile(26)));
 		
@@ -49,10 +49,10 @@ public class MoveTest {
 	
 	@Test
 	public void addCaptures_test() {
-		Piece blackPawn = new BlackPawn(new Tile(6, 9));
-		Piece whitePawn1 = new WhitePawn(new Tile(5, 8));
-		Piece whitePawn2 = new WhitePawn(new Tile(5, 6));
-		Piece whitePawn3 = new WhitePawn(new Tile(5, 4));
+		Piece blackPawn = new BlackPawn(getTile(35));
+		Piece whitePawn1 = new WhitePawn(getTile(30));
+		Piece whitePawn2 = new WhitePawn(getTile(29));
+		Piece whitePawn3 = new WhitePawn(getTile(28));
 		
 		testObj2 = new Move<>(blackPawn, new Capture(getTile(35), getTile(24), whitePawn1));
 		testObj2.classify();
