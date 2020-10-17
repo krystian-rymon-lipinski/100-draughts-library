@@ -319,24 +319,26 @@ public class BoardManagerTest extends BaseTest{
 	public void promotePawn() {
 		testObj.createEmptyBoard();
 
-		testObj.addWhitePawn(10);
-		testObj.addBlackPawn(45);
+		Piece whitePawn = testObj.addWhitePawn(10);
+		Piece blackPawn = testObj.addBlackPawn(45);
 
 		makeHop(10, 5);
-		testObj.promotePawn(testObj.getWhitePieces().get(0));
+		Piece whiteQueen = testObj.promotePawn(whitePawn);
 
 		assertEquals(Tile.State.WHITE_QUEEN, getTile(5).getState());
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertTrue(testObj.getWhitePieces().get(0).isQueen());
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
+		assertNotEquals(whitePawn, whiteQueen);
 
 		makeHop(45, 50);
-		testObj.promotePawn(testObj.getBlackPieces().get(0));
+		Piece blackQueen = testObj.promotePawn(blackPawn);
 
 		assertEquals(Tile.State.BLACK_QUEEN, getTile(50).getState());
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertTrue(testObj.getBlackPieces().get(0).isQueen());
 		assertTrue(testObj.getIsBlackQueenOnBoard());
+		assertNotEquals(blackPawn, blackQueen);
 	}
 	
 	@Test
