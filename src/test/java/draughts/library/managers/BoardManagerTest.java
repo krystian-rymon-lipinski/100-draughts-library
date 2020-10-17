@@ -198,7 +198,7 @@ public class BoardManagerTest extends BaseTest{
 	}
 
 	@Test
-	public void findPieceByIndex_NoPieceFound_test() {
+	public void findPieceByIndex_NoPieceFound() {
 		testObj.createStartingPosition();
 		
 		Piece piece = getPiece(23);

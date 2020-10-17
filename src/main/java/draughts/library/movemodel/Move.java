@@ -10,12 +10,12 @@ public class Move<T extends Hop> {
 	
 	private Piece movingPiece;
 	private ArrayList<T> hops;
-	private boolean isPromotion;
+	private boolean promotion;
+	private boolean capture;
 	
 	public Move(Piece movingPiece) {
 		this.movingPiece = movingPiece;
 		hops = new ArrayList<>();
-		isPromotion = false;
 	}
 	
 	public Move(Piece movingPiece, T hop) {
@@ -28,7 +28,13 @@ public class Move<T extends Hop> {
 		for(int i=0; i<move.getNumberOfHops(); i++) {
 			this.hops.add(move.hops.get(i));
 		}
-		this.isPromotion = move.isPromotion;
+		this.promotion = move.promotion;
+	}
+
+	public void classify() {
+		if (hops.get(0) instanceof Capture) setCapture(true);
+		if (!movingPiece.isQueen() && (getMoveDestination().getIndex() > 45 || getMoveDestination().getIndex() < 6))
+			setPromotion(true);
 	}
 	
 	public ArrayList<T> getHops() {
@@ -54,8 +60,10 @@ public class Move<T extends Hop> {
 	}
 	
 	public boolean isCapture() {
-		return hops.get(0) instanceof Capture;
+		return capture;
 	}
+
+	public void setCapture(boolean capture) { this.capture = capture; }
 	
 	public Tile getMoveSource() {
 		return hops.get(0).getSource();
@@ -86,12 +94,12 @@ public class Move<T extends Hop> {
 		}
 	}
 
-	public boolean getIsPromotion() {
-		return isPromotion;
+	public boolean isPromotion() {
+		return promotion;
 	}
 
-	public void setIsPromotion(boolean isPromotion) {
-		this.isPromotion = isPromotion;
+	public void setPromotion(boolean isPromotion) {
+		this.promotion = isPromotion;
 	}
 
 	public boolean doesSourceMatch(int source) {
@@ -124,13 +132,13 @@ public class Move<T extends Hop> {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Move<?> move = (Move<?>) o;
-		return isPromotion == move.isPromotion &&
+		return promotion == move.promotion &&
 				movingPiece.equals(move.movingPiece) &&
 				hops.equals(move.hops);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(movingPiece, hops, isPromotion);
+		return Objects.hash(movingPiece, hops, promotion);
 	}
 }

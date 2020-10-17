@@ -71,13 +71,13 @@ public class GameEngineTest extends BaseTest {
 		testObj.checkForPawnPromotion(whiteMove);
 
 		assertFalse(boardManager.getWhitePieces().get(0).isQueen()); //TODO: po co ta linjka? wystarczy chyba sprawdzić czy ruch jest promocją, wszystkie pierodły związane z ruchem powinny być sprawdzane w testach BoardManagera!
-		assertFalse(whiteMove.getIsPromotion());
+		assertFalse(whiteMove.isPromotion());
 
 		Move<Hop> blackMove = makeMove(39, 44);
 		testObj.checkForPawnPromotion(blackMove);
 
 		assertFalse(boardManager.getBlackPieces().get(0).isQueen());
-		assertFalse(blackMove.getIsPromotion());
+		assertFalse(blackMove.isPromotion());
 	}
 	
 	@Test
@@ -91,14 +91,14 @@ public class GameEngineTest extends BaseTest {
 
 		assertTrue(whiteMove.getMovingPiece().isQueen());
 		assertTrue(boardManager.getWhitePieces().get(0).isQueen());
-		assertTrue(whiteMove.getIsPromotion());
+		assertTrue(whiteMove.isPromotion());
 
 		Move<Hop> blackMove = makeMove(44, 49);
 		testObj.checkForPawnPromotion(blackMove);
 
 		assertTrue(blackMove.getMovingPiece().isQueen());
 		assertTrue(boardManager.getBlackPieces().get(0).isQueen());
-		assertTrue(blackMove.getIsPromotion());
+		assertTrue(blackMove.isPromotion());
 	}
 	
 	@Test

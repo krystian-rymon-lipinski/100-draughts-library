@@ -1,9 +1,6 @@
 package draughts.library.managers;
 
-import java.util.ArrayList;
-
 import draughts.library.boardmodel.Piece;
-import draughts.library.exceptions.*;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
 
@@ -68,7 +65,7 @@ public class GameEngine {
 	public void checkForPawnPromotion(Move<? extends Hop> move) {
 		if(!move.getMovingPiece().isQueen() && 
 				(move.getMoveDestination().getIndex() < 6 || move.getMoveDestination().getIndex() > 45)) {
-			move.setIsPromotion(true);
+			move.setPromotion(true);
 			Piece newQueen = boardManager.promotePawn(move.getMovingPiece());
 			move.setMovingPiece(newQueen);
 		}
