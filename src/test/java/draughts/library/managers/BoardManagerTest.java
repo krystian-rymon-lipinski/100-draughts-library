@@ -287,8 +287,12 @@ public class BoardManagerTest extends BaseTest{
 		Move<Hop> move = generateMove(9, 4);
 		testObj.makeWholeMove(move);
 
+		assertEquals(1, testObj.getWhitePieces().size());
 		assertNotEquals(move.getMovingPiece(), pawn);
+		assertEquals(move.getOldMovingPiece(), pawn);
 		assertTrue(move.getMovingPiece().isQueen());
+		assertEquals(getTile(4), move.getMovingPiece().getPosition());
+		assertEquals(Tile.State.EMPTY, getTile(9).getState());
 	}
 
 	@Test
@@ -331,9 +335,12 @@ public class BoardManagerTest extends BaseTest{
 		testObj.makeWholeMove(move);
 		testObj.reverseWholeMove(move);
 
-		assertNotEquals(pawn, move.getMovingPiece());
+		assertEquals(1, boardManager.getBlackPieces().size());
+		assertEquals(pawn, move.getMovingPiece());
 		assertFalse(move.getMovingPiece().isQueen());
-
+		assertTrue(move.getOldMovingPiece().isQueen());
+		assertEquals(getTile(45), move.getMovingPiece().getPosition());
+		assertEquals(Tile.State.EMPTY, getTile(50).getState());
 	}
 
 	@Test
@@ -367,14 +374,17 @@ public class BoardManagerTest extends BaseTest{
 		testObj.setIsWhiteQueenOnBoard(true);
 		testObj.setIsBlackQueenOnBoard(true);
 
-		Piece whitePawn = testObj.demoteQueen(whiteQueen);
+		Piece whitePawn = new WhitePawn(getTile(8));
+		assertEquals(Tile.State.EMPTY, getTile(8).getState());
 
-		assertEquals(Tile.State.WHITE_PAWN, getTile(3).getState());
+		testObj.demoteQueen(whiteQueen, whitePawn);
+
+		assertEquals(Tile.State.WHITE_PAWN, getTile(8).getState());
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertFalse(testObj.getWhitePieces().get(0).isQueen());
 		assertFalse(testObj.getIsWhiteQueenOnBoard());
 		assertNotEquals(whiteQueen, whitePawn);
-
+/*
 		Piece blackPawn = testObj.demoteQueen(blackQueen);
 
 		assertEquals(Tile.State.BLACK_PAWN, getTile(46).getState());
@@ -382,8 +392,10 @@ public class BoardManagerTest extends BaseTest{
 		assertFalse(testObj.getBlackPieces().get(0).isQueen());
 		assertFalse(testObj.getIsBlackQueenOnBoard());
 		assertNotEquals(blackQueen, blackPawn);
+
+ */
 	}
-	
+
 	@Test
 	public void findLongestConsecutiveCapturesForPiece_twoLevels() {
 		testObj.createEmptyBoard();

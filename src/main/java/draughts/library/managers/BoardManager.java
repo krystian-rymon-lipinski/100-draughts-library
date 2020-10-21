@@ -124,14 +124,17 @@ public class BoardManager {
 		return blackQueen;
 	}
 	
-	public Piece addPiece(Piece piece) {
+	public void placePiece(Piece piece) {
+		Tile position = findTileByIndex(piece.getPosition().getIndex());
 		if (piece.isWhite()) {
-			if (piece.isQueen()) return addWhiteQueen(piece.getPosition().getIndex());
-			else 				 return addWhitePawn(piece.getPosition().getIndex());
+			whitePieces.add(piece);
+			if (piece.isQueen()) position.setState(Tile.State.WHITE_QUEEN);
+			else 				 position.setState(Tile.State.WHITE_PAWN);
 		}
 		else {
-			if (piece.isQueen()) return addBlackQueen(piece.getPosition().getIndex());
-			else 				 return addBlackPawn(piece.getPosition().getIndex());
+			blackPieces.add(piece);
+			if (piece.isQueen()) position.setState(Tile.State.BLACK_QUEEN);
+			else 				 position.setState(Tile.State.BLACK_PAWN);
 		}
 	}
 	
@@ -194,6 +197,26 @@ public class BoardManager {
 	}
 	
 	public void makeWholeMove(Move<? extends Hop> move) {
+		if (move.isPromotion()) {
+			Piece queen;
+			if (move.getOldMovingPiece() == null) { //making move for the first time
+				queen = promotePawn(move.getMovingPiece());
+			}
+			else { //making move that has already been discovered and made (and reversed)
+				queen = move.getOldMovingPiece();
+				if (move.getMovingPiece().isWhite()) {
+					removeWhitePiece(move.getMovingPiece());
+				}
+				else {
+					removeBlackPiece(move.getMovingPiece());
+				}
+				placePiece(queen);
+			}
+
+			move.setOldMovingPiece(move.getMovingPiece());
+			move.setMovingPiece(queen);
+		}
+
 		if(move.isCapture()) {
 			for (Hop hop : move.getHops()) {
 				Capture capture = (Capture) hop;
@@ -204,13 +227,15 @@ public class BoardManager {
 			makeHop(move.getMovingPiece(), move.getHop(0).getDestination());
 		}
 
-		if (move.isPromotion()) {
-			Piece queen = promotePawn(move.getMovingPiece());
-			move.setMovingPiece(queen);
-		}
 	}
 	
 	public void reverseWholeMove(Move<? extends Hop> move) {
+		if (move.isPromotion()) {
+			Piece queen = move.getMovingPiece();
+			move.setMovingPiece(move.getOldMovingPiece());
+			move.setOldMovingPiece(queen);
+			demoteQueen(queen, move.getMovingPiece());
+		}
 
 		for (int i=move.getNumberOfHops()-1; i>=0; i--) {
 			makeHop(move.getMovingPiece(), move.getHop(i).getSource());
@@ -218,11 +243,6 @@ public class BoardManager {
 				Capture capture = (Capture) move.getHop(i);
 				restoreCapturedPiece(move.getMovingPiece(), capture);
 			}
-		}
-
-		if (move.isPromotion()) {
-			Piece pawn = demoteQueen(move.getMovingPiece());
-			move.setMovingPiece(pawn);
 		}
 	}
 	
@@ -238,16 +258,13 @@ public class BoardManager {
 		return newQueen;
 	}
 
-	public Piece demoteQueen(Piece queenToDemote) {
-		Piece newPawn;
+	public void demoteQueen(Piece queenToDemote, Piece oldPawnToRestore) {
 		if (queenToDemote.isWhite()) {
 			removeWhitePiece(queenToDemote);
-			newPawn = addWhitePawn(queenToDemote.getPosition().getIndex());
 		} else {
 			removeBlackPiece(queenToDemote);
-			newPawn = addBlackPawn(queenToDemote.getPosition().getIndex());
 		}
-		return newPawn;
+		placePiece(oldPawnToRestore);
 	}
 	
 	public Tile findTileByIndex(int tileIndex) {
