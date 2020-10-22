@@ -137,33 +137,22 @@ public class BoardManager {
 			else 				 position.setState(Tile.State.BLACK_PAWN);
 		}
 	}
-	
-	public void removeWhitePiece(Piece piece) {
+
+
+	public void removePieceFromBoard(Piece piece) {
 		boolean wasQueen = piece.isQueen();
-		
-		piece.getPosition().setState(Tile.State.EMPTY);	
-		whitePieces.remove(piece);
-		
-		if(wasQueen) {
-			for(Piece whitePiece : whitePieces) {
-				if (whitePiece.isQueen()) return;
-			}
-			isWhiteQueenOnBoard = false;
-		}
-	}
-	
-	public void removeBlackPiece(Piece piece) {
-		boolean wasQueen = piece.isQueen();
-		
+		ArrayList<Piece> pieces = piece.isWhite() ? whitePieces : blackPieces;
+
 		piece.getPosition().setState(Tile.State.EMPTY);
-		blackPieces.remove(piece);
-		
+		pieces.remove(piece);
+
 		if(wasQueen) {
-			for(Piece blackPiece : blackPieces) {
-				if (blackPiece.isQueen()) return;
+			for(Piece somePiece : pieces) {
+				if (somePiece.isQueen()) return;
 			}
-			isBlackQueenOnBoard = false;
-		}		
+			if (piece.isWhite()) isWhiteQueenOnBoard = false;
+			else 				 isBlackQueenOnBoard = false;
+		}
 	}
 	
 	public void makeHop(Piece movedPiece, Tile destination) {
@@ -174,8 +163,8 @@ public class BoardManager {
 	
 	public void makeCapture(Piece movedPiece, Tile destination, Piece takenPiece) {
 		makeHop(movedPiece, destination);
-		if(takenPiece.isWhite()) removeWhitePiece(takenPiece);
-		else                     removeBlackPiece(takenPiece);
+		if(takenPiece.isWhite()) removePieceFromBoard(takenPiece);
+		else                     removePieceFromBoard(takenPiece);
 	}
 
 	public void restoreCapturedPiece(Piece movingPiece, Capture capture) {
@@ -204,12 +193,7 @@ public class BoardManager {
 			}
 			else { //making move that has already been discovered and made (and reversed)
 				queen = move.getOldMovingPiece();
-				if (move.getMovingPiece().isWhite()) {
-					removeWhitePiece(move.getMovingPiece());
-				}
-				else {
-					removeBlackPiece(move.getMovingPiece());
-				}
+				removePieceFromBoard(move.getMovingPiece());
 				placePiece(queen);
 			}
 
@@ -249,21 +233,17 @@ public class BoardManager {
 	public Piece promotePawn(Piece pawnToPromote) {
 		Piece newQueen;
 		if(pawnToPromote.isWhite()) {
-			removeWhitePiece(pawnToPromote);
+			removePieceFromBoard(pawnToPromote);
 			newQueen = addWhiteQueen(pawnToPromote.getPosition().getIndex());
 		} else {
-			removeBlackPiece(pawnToPromote);
+			removePieceFromBoard(pawnToPromote);
 			newQueen = addBlackQueen(pawnToPromote.getPosition().getIndex());
 		}
 		return newQueen;
 	}
 
 	public void demoteQueen(Piece queenToDemote, Piece oldPawnToRestore) {
-		if (queenToDemote.isWhite()) {
-			removeWhitePiece(queenToDemote);
-		} else {
-			removeBlackPiece(queenToDemote);
-		}
+		removePieceFromBoard(queenToDemote);
 		placePiece(oldPawnToRestore);
 	}
 	

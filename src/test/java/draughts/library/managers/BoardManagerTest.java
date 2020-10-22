@@ -118,54 +118,54 @@ public class BoardManagerTest extends BaseTest{
 		assertEquals(getTile(1), testObj.getBlackPieces().get(0).getPosition());
 		assertEquals(getTile(50), testObj.getBlackPieces().get(1).getPosition());
 	}
-	
+
 	@Test
-	public void removeWhitePieces() {
+	public void removePieceFromBoard_whitePiece() {
 		testObj.createEmptyBoard();
-		
+
 		Piece piece1 = testObj.addWhitePawn(30);
 		Piece piece2 = testObj.addWhiteQueen(45);
 		Piece piece3 = testObj.addWhiteQueen(50);
-	
+
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
-		
-		testObj.removeWhitePiece(piece1);
+
+		testObj.removePieceFromBoard(piece1);
 		assertEquals(2, testObj.getWhitePieces().size());
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(30).getState());
-		
-		testObj.removeWhitePiece(piece2);
+
+		testObj.removePieceFromBoard(piece2);
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(45).getState());
-		
-		testObj.removeWhitePiece(piece3);
+
+		testObj.removePieceFromBoard(piece3);
 		assertEquals(0, testObj.getWhitePieces().size());
 		assertFalse(testObj.getIsWhiteQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(50).getState());
 	}
-	
+
 	@Test
-	public void removeBlackPieces() {
+	public void removePieceFromBoard_blackPiece() {
 		testObj.createEmptyBoard();
-		
+
 		Piece piece1 = testObj.addBlackPawn(13);
 		Piece piece2 = testObj.addBlackQueen(24);
 		Piece piece3 = testObj.addBlackQueen(43);
-	
+
 		assertTrue(testObj.getIsBlackQueenOnBoard());
-		
-		testObj.removeBlackPiece(piece1);
+
+		testObj.removePieceFromBoard(piece1);
 		assertEquals(2, testObj.getBlackPieces().size());
 		assertTrue(testObj.getIsBlackQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(13).getState());
-		
-		testObj.removeBlackPiece(piece2);
+
+		testObj.removePieceFromBoard(piece2);
 		assertEquals(1, testObj.getBlackPieces().size());
 		assertTrue(testObj.getIsBlackQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(24).getState());
-		
-		testObj.removeBlackPiece(piece3);
+
+		testObj.removePieceFromBoard(piece3);
 		assertEquals(0, testObj.getBlackPieces().size());
 		assertFalse(testObj.getIsBlackQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(43).getState());
