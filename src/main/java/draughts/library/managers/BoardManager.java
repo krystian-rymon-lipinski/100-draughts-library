@@ -228,11 +228,10 @@ public class BoardManager {
 	
 	public Piece promotePawn(Piece pawnToPromote) {
 		Piece newQueen;
+		removePieceFromBoard(pawnToPromote);
 		if(pawnToPromote.isWhite()) {
-			removePieceFromBoard(pawnToPromote);
 			newQueen = addWhiteQueen(pawnToPromote.getPosition().getIndex());
 		} else {
-			removePieceFromBoard(pawnToPromote);
 			newQueen = addBlackQueen(pawnToPromote.getPosition().getIndex());
 		}
 		return newQueen;
