@@ -92,39 +92,35 @@ public class BoardManager {
 	
 	public WhitePawn addWhitePawn(int index) {
 		Tile position = findTileByIndex(index);
-		position.setState(Tile.State.WHITE_PAWN);
 		WhitePawn whitePawn = new WhitePawn(position);
-		whitePieces.add(whitePawn);
+		placePieceOnBoard(whitePawn);
 		return whitePawn;
 	}
 	
 	public BlackPawn addBlackPawn(int index) {
 		Tile position = findTileByIndex(index);
-		position.setState(Tile.State.BLACK_PAWN);
 		BlackPawn blackPawn = new BlackPawn(position);
-		blackPieces.add(blackPawn);
+		placePieceOnBoard(blackPawn);
 		return blackPawn;
 	}
 	
 	public WhiteQueen addWhiteQueen(int index) {
 		Tile position = findTileByIndex(index);
-		position.setState(Tile.State.WHITE_QUEEN);
 		WhiteQueen whiteQueen = new WhiteQueen(position);
-		whitePieces.add(whiteQueen);
 		isWhiteQueenOnBoard = true;
+		placePieceOnBoard(whiteQueen);
 		return whiteQueen;
 	}
 	
 	public BlackQueen addBlackQueen(int index) {
 		Tile position = findTileByIndex(index);
-		position.setState(Tile.State.BLACK_QUEEN);
 		BlackQueen blackQueen = new BlackQueen(position);
-		blackPieces.add(blackQueen);
 		isBlackQueenOnBoard = true;
+		placePieceOnBoard(blackQueen);
 		return blackQueen;
 	}
 	
-	public void placePiece(Piece piece) {
+	public void placePieceOnBoard(Piece piece) {
 		Tile position = findTileByIndex(piece.getPosition().getIndex());
 		if (piece.isWhite()) {
 			whitePieces.add(piece);
@@ -194,7 +190,7 @@ public class BoardManager {
 			else { //making move that has already been discovered and made (and reversed)
 				queen = move.getOldMovingPiece();
 				removePieceFromBoard(move.getMovingPiece());
-				placePiece(queen);
+				placePieceOnBoard(queen);
 			}
 
 			move.setOldMovingPiece(move.getMovingPiece());
@@ -244,7 +240,7 @@ public class BoardManager {
 
 	public void demoteQueen(Piece queenToDemote, Piece oldPawnToRestore) {
 		removePieceFromBoard(queenToDemote);
-		placePiece(oldPawnToRestore);
+		placePieceOnBoard(oldPawnToRestore);
 	}
 	
 	public Tile findTileByIndex(int tileIndex) {

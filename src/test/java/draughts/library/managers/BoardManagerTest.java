@@ -3,15 +3,12 @@ package draughts.library.managers;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import draughts.library.boardmodel.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import draughts.library.boardmodel.BlackPawn;
-import draughts.library.boardmodel.Piece;
-import draughts.library.boardmodel.Tile;
-import draughts.library.boardmodel.WhitePawn;
 import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
@@ -117,6 +114,48 @@ public class BoardManagerTest extends BaseTest{
 		assertEquals(2, testObj.getBlackPieces().size());
 		assertEquals(getTile(1), testObj.getBlackPieces().get(0).getPosition());
 		assertEquals(getTile(50), testObj.getBlackPieces().get(1).getPosition());
+	}
+
+	@Test
+	public void placePieceOnBoard_whitePiece() {
+		testObj.createEmptyBoard();
+
+		WhitePawn whitePawn = new WhitePawn(getTile(20));
+		WhiteQueen whiteQueen = new WhiteQueen(getTile(27));
+
+		assertEquals(0, testObj.getWhitePieces().size());
+		assertEquals(Tile.State.EMPTY, getTile(20).getState());
+		assertEquals(Tile.State.EMPTY, getTile(27).getState());
+
+		testObj.placePieceOnBoard(whitePawn);
+
+		assertEquals(1, testObj.getWhitePieces().size());
+		assertEquals(getTile(20), whitePawn.getPosition());
+
+		testObj.placePieceOnBoard(whiteQueen);
+		assertEquals(2, testObj.getWhitePieces().size());
+		assertEquals(getTile(27), whiteQueen.getPosition());
+	}
+
+	@Test
+	public void placePieceOnBoard_blackPiece() {
+		testObj.createEmptyBoard();
+
+		BlackPawn blackPawn = new BlackPawn(getTile(9));
+		BlackQueen blackQueen = new BlackQueen(getTile(34));
+
+		assertEquals(0, testObj.getBlackPieces().size());
+		assertEquals(Tile.State.EMPTY, getTile(9).getState());
+		assertEquals(Tile.State.EMPTY, getTile(34).getState());
+
+		testObj.placePieceOnBoard(blackPawn);
+
+		assertEquals(1, testObj.getBlackPieces().size());
+		assertEquals(getTile(9), blackPawn.getPosition());
+
+		testObj.placePieceOnBoard(blackQueen);
+		assertEquals(2, testObj.getBlackPieces().size());
+		assertEquals(getTile(34), blackQueen.getPosition());
 	}
 
 	@Test
