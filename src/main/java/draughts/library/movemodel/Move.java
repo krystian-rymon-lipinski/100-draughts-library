@@ -9,6 +9,7 @@ import draughts.library.boardmodel.Tile;
 public class Move<T extends Hop> {
 	
 	private Piece movingPiece;
+	private Piece oldMovingPiece; //for making and reversing promotion
 	private ArrayList<T> hops;
 	private boolean promotion;
 	private boolean capture;
@@ -49,7 +50,15 @@ public class Move<T extends Hop> {
 	}
 
 	public void setMovingPiece(Piece movingPiece) {this.movingPiece = movingPiece;}
-	
+
+	public Piece getOldMovingPiece() {
+		return oldMovingPiece;
+	}
+
+	public void setOldMovingPiece(Piece oldMovingPiece) {
+		this.oldMovingPiece = oldMovingPiece;
+	}
+
 	public T getHop(int numberOfHop) {
 		return hops.get(numberOfHop);
 	}

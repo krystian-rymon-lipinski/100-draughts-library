@@ -3,15 +3,12 @@ package draughts.library.managers;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import draughts.library.boardmodel.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import draughts.library.boardmodel.BlackPawn;
-import draughts.library.boardmodel.Piece;
-import draughts.library.boardmodel.Tile;
-import draughts.library.boardmodel.WhitePawn;
 import draughts.library.movemodel.Capture;
 import draughts.library.movemodel.Hop;
 import draughts.library.movemodel.Move;
@@ -118,54 +115,96 @@ public class BoardManagerTest extends BaseTest{
 		assertEquals(getTile(1), testObj.getBlackPieces().get(0).getPosition());
 		assertEquals(getTile(50), testObj.getBlackPieces().get(1).getPosition());
 	}
-	
+
 	@Test
-	public void removeWhitePieces() {
+	public void placePieceOnBoard_whitePiece() {
 		testObj.createEmptyBoard();
-		
+
+		WhitePawn whitePawn = new WhitePawn(getTile(20));
+		WhiteQueen whiteQueen = new WhiteQueen(getTile(27));
+
+		assertEquals(0, testObj.getWhitePieces().size());
+		assertEquals(Tile.State.EMPTY, getTile(20).getState());
+		assertEquals(Tile.State.EMPTY, getTile(27).getState());
+
+		testObj.placePieceOnBoard(whitePawn);
+
+		assertEquals(1, testObj.getWhitePieces().size());
+		assertEquals(getTile(20), whitePawn.getPosition());
+
+		testObj.placePieceOnBoard(whiteQueen);
+		assertEquals(2, testObj.getWhitePieces().size());
+		assertEquals(getTile(27), whiteQueen.getPosition());
+	}
+
+	@Test
+	public void placePieceOnBoard_blackPiece() {
+		testObj.createEmptyBoard();
+
+		BlackPawn blackPawn = new BlackPawn(getTile(9));
+		BlackQueen blackQueen = new BlackQueen(getTile(34));
+
+		assertEquals(0, testObj.getBlackPieces().size());
+		assertEquals(Tile.State.EMPTY, getTile(9).getState());
+		assertEquals(Tile.State.EMPTY, getTile(34).getState());
+
+		testObj.placePieceOnBoard(blackPawn);
+
+		assertEquals(1, testObj.getBlackPieces().size());
+		assertEquals(getTile(9), blackPawn.getPosition());
+
+		testObj.placePieceOnBoard(blackQueen);
+		assertEquals(2, testObj.getBlackPieces().size());
+		assertEquals(getTile(34), blackQueen.getPosition());
+	}
+
+	@Test
+	public void removePieceFromBoard_whitePiece() {
+		testObj.createEmptyBoard();
+
 		Piece piece1 = testObj.addWhitePawn(30);
 		Piece piece2 = testObj.addWhiteQueen(45);
 		Piece piece3 = testObj.addWhiteQueen(50);
-	
+
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
-		
-		testObj.removeWhitePiece(piece1);
+
+		testObj.removePieceFromBoard(piece1);
 		assertEquals(2, testObj.getWhitePieces().size());
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(30).getState());
-		
-		testObj.removeWhitePiece(piece2);
+
+		testObj.removePieceFromBoard(piece2);
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertTrue(testObj.getIsWhiteQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(45).getState());
-		
-		testObj.removeWhitePiece(piece3);
+
+		testObj.removePieceFromBoard(piece3);
 		assertEquals(0, testObj.getWhitePieces().size());
 		assertFalse(testObj.getIsWhiteQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(50).getState());
 	}
-	
+
 	@Test
-	public void removeBlackPieces() {
+	public void removePieceFromBoard_blackPiece() {
 		testObj.createEmptyBoard();
-		
+
 		Piece piece1 = testObj.addBlackPawn(13);
 		Piece piece2 = testObj.addBlackQueen(24);
 		Piece piece3 = testObj.addBlackQueen(43);
-	
+
 		assertTrue(testObj.getIsBlackQueenOnBoard());
-		
-		testObj.removeBlackPiece(piece1);
+
+		testObj.removePieceFromBoard(piece1);
 		assertEquals(2, testObj.getBlackPieces().size());
 		assertTrue(testObj.getIsBlackQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(13).getState());
-		
-		testObj.removeBlackPiece(piece2);
+
+		testObj.removePieceFromBoard(piece2);
 		assertEquals(1, testObj.getBlackPieces().size());
 		assertTrue(testObj.getIsBlackQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(24).getState());
-		
-		testObj.removeBlackPiece(piece3);
+
+		testObj.removePieceFromBoard(piece3);
 		assertEquals(0, testObj.getBlackPieces().size());
 		assertFalse(testObj.getIsBlackQueenOnBoard());
 		assertEquals(Tile.State.EMPTY, getTile(43).getState());
@@ -287,8 +326,12 @@ public class BoardManagerTest extends BaseTest{
 		Move<Hop> move = generateMove(9, 4);
 		testObj.makeWholeMove(move);
 
+		assertEquals(1, testObj.getWhitePieces().size());
 		assertNotEquals(move.getMovingPiece(), pawn);
+		assertEquals(move.getOldMovingPiece(), pawn);
 		assertTrue(move.getMovingPiece().isQueen());
+		assertEquals(getTile(4), move.getMovingPiece().getPosition());
+		assertEquals(Tile.State.EMPTY, getTile(9).getState());
 	}
 
 	@Test
@@ -331,9 +374,12 @@ public class BoardManagerTest extends BaseTest{
 		testObj.makeWholeMove(move);
 		testObj.reverseWholeMove(move);
 
-		assertNotEquals(pawn, move.getMovingPiece());
+		assertEquals(1, boardManager.getBlackPieces().size());
+		assertEquals(pawn, move.getMovingPiece());
 		assertFalse(move.getMovingPiece().isQueen());
-
+		assertTrue(move.getOldMovingPiece().isQueen());
+		assertEquals(getTile(45), move.getMovingPiece().getPosition());
+		assertEquals(Tile.State.EMPTY, getTile(50).getState());
 	}
 
 	@Test
@@ -367,14 +413,17 @@ public class BoardManagerTest extends BaseTest{
 		testObj.setIsWhiteQueenOnBoard(true);
 		testObj.setIsBlackQueenOnBoard(true);
 
-		Piece whitePawn = testObj.demoteQueen(whiteQueen);
+		Piece whitePawn = new WhitePawn(getTile(8));
+		assertEquals(Tile.State.EMPTY, getTile(8).getState());
 
-		assertEquals(Tile.State.WHITE_PAWN, getTile(3).getState());
+		testObj.demoteQueen(whiteQueen, whitePawn);
+
+		assertEquals(Tile.State.WHITE_PAWN, getTile(8).getState());
 		assertEquals(1, testObj.getWhitePieces().size());
 		assertFalse(testObj.getWhitePieces().get(0).isQueen());
 		assertFalse(testObj.getIsWhiteQueenOnBoard());
 		assertNotEquals(whiteQueen, whitePawn);
-
+/*
 		Piece blackPawn = testObj.demoteQueen(blackQueen);
 
 		assertEquals(Tile.State.BLACK_PAWN, getTile(46).getState());
@@ -382,8 +431,10 @@ public class BoardManagerTest extends BaseTest{
 		assertFalse(testObj.getBlackPieces().get(0).isQueen());
 		assertFalse(testObj.getIsBlackQueenOnBoard());
 		assertNotEquals(blackQueen, blackPawn);
+
+ */
 	}
-	
+
 	@Test
 	public void findLongestConsecutiveCapturesForPiece_twoLevels() {
 		testObj.createEmptyBoard();
