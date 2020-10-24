@@ -98,7 +98,7 @@ public abstract class Piece {
 			if (piece.getPosition().equals(position)) return piece;
 		}
 		
-		throw new NoPieceFoundInRequestedTileException("No piece on seemingly taken tile");
+		throw new NoPieceFoundInRequestedTileException("No piece on seemingly taken tile: " + position.getIndex());
 	}
 
 	@Override
