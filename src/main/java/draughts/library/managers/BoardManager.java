@@ -386,4 +386,28 @@ public class BoardManager {
 		return false;
 	}
 
+	public void printBoard() {
+		for (int i=0; i<board.length; i++) {
+			for (int j=0; j<board[i].length; j++) {
+				System.out.print("|");
+				switch (board[i][j].getState()) {
+					case WHITE_PAWN: System.out.print("o");
+					break;
+					case BLACK_PAWN: System.out.print("x");
+					break;
+					case WHITE_QUEEN: System.out.print("O");
+					break;
+					case BLACK_QUEEN: System.out.println("X");
+					break;
+					default: System.out.print(" ");
+				}
+			}
+			System.out.print("|");
+			System.out.print("\n");
+		}
+
+		System.out.println("White pieces: " + whitePieces);
+		System.out.println("Black pieces: " + blackPieces);
+	}
+
 }
