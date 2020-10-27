@@ -124,13 +124,23 @@ public class BoardManager {
 		Tile position = findTileByIndex(piece.getPosition().getIndex());
 		if (piece.isWhite()) {
 			whitePieces.add(piece);
-			if (piece.isQueen()) position.setState(Tile.State.WHITE_QUEEN);
-			else 				 position.setState(Tile.State.WHITE_PAWN);
+			if (piece.isQueen()) {
+				position.setState(Tile.State.WHITE_QUEEN);
+				isWhiteQueenOnBoard = true;
+			}
+			else {
+				position.setState(Tile.State.WHITE_PAWN);
+			}
 		}
 		else {
 			blackPieces.add(piece);
-			if (piece.isQueen()) position.setState(Tile.State.BLACK_QUEEN);
-			else 				 position.setState(Tile.State.BLACK_PAWN);
+			if (piece.isQueen()) {
+				position.setState(Tile.State.BLACK_QUEEN);
+				isBlackQueenOnBoard = true;
+			}
+			else {
+				position.setState(Tile.State.BLACK_PAWN);
+			}
 		}
 	}
 
@@ -164,21 +174,7 @@ public class BoardManager {
 	}
 
 	public void restoreCapturedPiece(Piece movingPiece, Capture capture) {
-		if (movingPiece.isWhite()) {
-			if (capture.getTakenPiece().isQueen()) {
-				capture.getTakenPiece().getPosition().setState(Tile.State.BLACK_QUEEN);
-			} else {
-				capture.getTakenPiece().getPosition().setState(Tile.State.BLACK_PAWN);
-			}
-			blackPieces.add(capture.getTakenPiece());
-		} else {
-			if (capture.getTakenPiece().isQueen()) {
-				capture.getTakenPiece().getPosition().setState(Tile.State.WHITE_QUEEN);
-			} else {
-				capture.getTakenPiece().getPosition().setState(Tile.State.WHITE_PAWN);
-			}
-			whitePieces.add(capture.getTakenPiece());
-		}
+		placePieceOnBoard(capture.getTakenPiece());
 	}
 	
 	public void makeWholeMove(Move<? extends Hop> move) {
