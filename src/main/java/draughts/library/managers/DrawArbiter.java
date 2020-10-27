@@ -37,13 +37,17 @@ public class DrawArbiter {
 					break;
 				}
 				else {
-					if(numberOfWhitePieces == 3 || numberOfBlackPieces == 3) {
+					if (numberOfWhitePieces > 3 || numberOfBlackPieces > 3) {
+						drawConditions = DrawConditions.NORMAL;
+						drawCounter = 50;
+					}
+					else if(numberOfWhitePieces == 3 || numberOfBlackPieces == 3) {
 						drawConditions = DrawConditions.THREE_VS_ONE;
 						drawCounter = 32;
 						break;
 					}
-					else if(numberOfWhitePieces <= 2 || numberOfBlackPieces <= 2) {
-						drawConditions = DrawConditions.TWO_VS_ONE;
+					else {
+						drawConditions = DrawConditions.TWO_VS_ONE; // 1 queen vs 1 queen is also 2_VS_1 conditions
 						drawCounter = 10;
 						break;
 					}
@@ -63,8 +67,8 @@ public class DrawArbiter {
 						drawCounter = 32;
 						break;
 					}
-					else if(numberOfWhitePieces <= 2 || numberOfBlackPieces <= 2) {
-						drawConditions = DrawConditions.TWO_VS_ONE;
+					else {
+						drawConditions = DrawConditions.TWO_VS_ONE; // 1 queen vs 1 queen is also 2_VS_1 conditions
 						drawCounter = 10;
 					}
 				}
@@ -73,12 +77,9 @@ public class DrawArbiter {
 			if(numberOfWhitePieces <= 2 && numberOfBlackPieces <= 2) {
 				drawConditions = DrawConditions.TWO_VS_ONE;
 				drawCounter = 10;
-				break;
 			}
-			else break;
-			
-		case TWO_VS_ONE:
 			break;
+		case TWO_VS_ONE:
 		default:
 			break;
 		}		
