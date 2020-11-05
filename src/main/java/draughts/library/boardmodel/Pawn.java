@@ -12,17 +12,12 @@ public abstract class Pawn extends Piece {
 	public Pawn(Tile position) {
 		super(position);
 	}
-	
+
 	public boolean isQueen() {
 		return false;
 	}
-	
-	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board) {
-		
-		ArrayList<Move<Hop>> moves = new ArrayList<>();
-		addMoveIfNotNull(moves, findMoveInDirection(moveDirection, board));
-		return moves;
-	}
+
+	public abstract Move<Hop> findMove(MoveDirection moveDirection, Tile[][] board);
 
 	public Move<Hop> findMoveInDirection(MoveDirection moveDirection, Tile[][] board) {
 		Tile target = findTarget(moveDirection, board, 1);

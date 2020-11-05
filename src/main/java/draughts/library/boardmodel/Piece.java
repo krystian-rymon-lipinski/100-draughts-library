@@ -25,13 +25,9 @@ public abstract class Piece {
 	public abstract boolean isTileOccupiedByOppositeColor(Tile tile);
 	
 	public abstract ArrayList<Move<Hop>> findAllMoves(Tile[][] board);
-	
-	public abstract ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board);
-	
+
 	public abstract ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, ArrayList<Piece> pieces);
-	
-	
-	
+
 
 	public Tile getPosition() {
 		return position;

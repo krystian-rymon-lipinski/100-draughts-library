@@ -138,7 +138,7 @@ public class QueenTest extends PieceTest {
 	
 	@Test
 	public void findMoves_downRight() {
-		Piece movingPiece = boardManager.addWhiteQueen(6);
+		BlackQueen movingPiece = boardManager.addBlackQueen(6);
 		boardManager.addBlackQueen(50);
 
 		ArrayList<Move<Hop>> downRightMoves = movingPiece.findMovesInDirection(DOWN_RIGHT, boardManager.getBoard());
