@@ -20,10 +20,7 @@ public abstract class Pawn extends Piece {
 	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
-		Tile target = findTarget(moveDirection, board, 1);
-		
-		if(target.getState() == Tile.State.EMPTY)
-			moves.add(new Move<>(this, new Hop(position, target)));
+		addMoveIfNotNull(moves, findMoveInDirection(moveDirection, board));
 		return moves;
 	}
 
