@@ -145,7 +145,7 @@ public class Move<T extends Hop> {
 		if (o == null || getClass() != o.getClass()) return false;
 		Move<?> move = (Move<?>) o;
 		return promotion == move.promotion &&
-				movingPiece.equals(move.movingPiece) &&
+				capture == move.capture &&
 				hops.equals(move.hops);
 	}
 

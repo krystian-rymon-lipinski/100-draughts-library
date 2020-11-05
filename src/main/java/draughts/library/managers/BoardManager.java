@@ -124,13 +124,23 @@ public class BoardManager {
 		Tile position = findTileByIndex(piece.getPosition().getIndex());
 		if (piece.isWhite()) {
 			whitePieces.add(piece);
-			if (piece.isQueen()) position.setState(Tile.State.WHITE_QUEEN);
-			else 				 position.setState(Tile.State.WHITE_PAWN);
+			if (piece.isQueen()) {
+				position.setState(Tile.State.WHITE_QUEEN);
+				isWhiteQueenOnBoard = true;
+			}
+			else {
+				position.setState(Tile.State.WHITE_PAWN);
+			}
 		}
 		else {
 			blackPieces.add(piece);
-			if (piece.isQueen()) position.setState(Tile.State.BLACK_QUEEN);
-			else 				 position.setState(Tile.State.BLACK_PAWN);
+			if (piece.isQueen()) {
+				position.setState(Tile.State.BLACK_QUEEN);
+				isBlackQueenOnBoard = true;
+			}
+			else {
+				position.setState(Tile.State.BLACK_PAWN);
+			}
 		}
 	}
 
@@ -164,21 +174,7 @@ public class BoardManager {
 	}
 
 	public void restoreCapturedPiece(Piece movingPiece, Capture capture) {
-		if (movingPiece.isWhite()) {
-			if (capture.getTakenPiece().isQueen()) {
-				capture.getTakenPiece().getPosition().setState(Tile.State.BLACK_QUEEN);
-			} else {
-				capture.getTakenPiece().getPosition().setState(Tile.State.BLACK_PAWN);
-			}
-			blackPieces.add(capture.getTakenPiece());
-		} else {
-			if (capture.getTakenPiece().isQueen()) {
-				capture.getTakenPiece().getPosition().setState(Tile.State.WHITE_QUEEN);
-			} else {
-				capture.getTakenPiece().getPosition().setState(Tile.State.WHITE_PAWN);
-			}
-			whitePieces.add(capture.getTakenPiece());
-		}
+		placePieceOnBoard(capture.getTakenPiece());
 	}
 	
 	public void makeWholeMove(Move<? extends Hop> move) {
@@ -384,6 +380,30 @@ public class BoardManager {
 				return true;
 		}
 		return false;
+	}
+
+	public void printBoard() {
+		for (int i=0; i<board.length; i++) {
+			for (int j=0; j<board[i].length; j++) {
+				System.out.print("|");
+				switch (board[i][j].getState()) {
+					case WHITE_PAWN: System.out.print("o");
+					break;
+					case BLACK_PAWN: System.out.print("x");
+					break;
+					case WHITE_QUEEN: System.out.print("O");
+					break;
+					case BLACK_QUEEN: System.out.println("X");
+					break;
+					default: System.out.print(" ");
+				}
+			}
+			System.out.print("|");
+			System.out.print("\n");
+		}
+
+		System.out.println("White pieces: " + whitePieces);
+		System.out.println("Black pieces: " + blackPieces);
 	}
 
 }
