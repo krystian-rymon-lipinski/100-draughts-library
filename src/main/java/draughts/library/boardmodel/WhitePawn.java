@@ -24,21 +24,34 @@ public class WhitePawn extends Pawn {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
-		if(position.getRow()>1 && position.getColumn()>1) 
+		if (position.getColumn()>1)
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board));
-		if(position.getRow()>1 && position.getColumn()<10) 
+		if (position.getColumn()<10)
 			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board));
 		return moves;
 	}
-	
+
+	public Move<Hop> findMove(MoveDirection moveDirection, Tile[][] board) {
+		switch (moveDirection) {
+			case UP_LEFT:
+				if (position.getColumn() > 1) return findMoveInDirection(MoveDirection.UP_LEFT, board);
+				else 					      return null;
+			case UP_RIGHT:
+				if (position.getColumn() < 10) return findMoveInDirection(MoveDirection.UP_RIGHT, board);
+				else 						   return null;
+			default:
+				return null;
+		}
+	}
+
 	public boolean isTileOccupiedBySameColor(Tile tile) {
 		return (tile.getState() == Tile.State.WHITE_PAWN || 
-				tile.getState() == Tile.State.WHITE_QUEEN ? true : false);
+				tile.getState() == Tile.State.WHITE_QUEEN);
 	}
 	
 	public boolean isTileOccupiedByOppositeColor(Tile tile) {
 		return (tile.getState() == Tile.State.BLACK_PAWN || 
-				tile.getState() == Tile.State.BLACK_QUEEN ? true : false);
+				tile.getState() == Tile.State.BLACK_QUEEN);
 	}
 
 	

@@ -46,4 +46,8 @@ public class PieceTest {
 		else 					return boardManager.getWhitePieces();
 	}
 
+	public Tile getTile(int index) {
+		return boardManager.findTileByIndex(index);
+	}
+
 }

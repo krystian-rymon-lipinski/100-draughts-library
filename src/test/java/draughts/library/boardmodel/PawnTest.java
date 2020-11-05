@@ -1,7 +1,7 @@
 package draughts.library.boardmodel;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static draughts.library.boardmodel.Piece.MoveDirection.*;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
@@ -20,6 +20,51 @@ public class PawnTest extends PieceTest {
 	@Before
 	public void setUp() {
 		super.setUp();
+	}
+
+	@Test
+	public void findMove_whitePawn_inDirection_upLeft() {
+		WhitePawn whitePawn = boardManager.addWhitePawn(18);
+
+		Move<Hop> upLeftMove = whitePawn.findMove(UP_LEFT, boardManager.getBoard());
+
+		assertEquals(getTile(18), upLeftMove.getMoveSource());
+		assertEquals(getTile(12), upLeftMove.getMoveDestination());
+		assertEquals(whitePawn, upLeftMove.getMovingPiece());
+
+		WhitePawn whitePawn2 = boardManager.addWhitePawn(26);
+
+		Move<Hop> upLeftMove2 = whitePawn2.findMove(UP_LEFT, boardManager.getBoard());
+
+		assertNull(upLeftMove2);
+	}
+
+	@Test
+	public void findMove_whitePawn_inDirection_upRight() {
+		WhitePawn whitePawn = boardManager.addWhitePawn(33);
+
+		Move<Hop> upRightMove = whitePawn.findMove(UP_RIGHT, boardManager.getBoard());
+
+		assertEquals(getTile(33), upRightMove.getMoveSource());
+		assertEquals(getTile(29), upRightMove.getMoveDestination());
+		assertEquals(whitePawn, upRightMove.getMovingPiece());
+
+		WhitePawn whitePawn2 = boardManager.addWhitePawn(35);
+
+		Move<Hop> upRightMove2 = whitePawn2.findMove(UP_RIGHT, boardManager.getBoard());
+
+		assertNull(upRightMove2);
+	}
+
+	@Test
+	public void findMove_whitePawn_wrongDirections() {
+		WhitePawn whitePawn = boardManager.addWhitePawn(38);
+
+		Move<Hop> downLeftMove = whitePawn.findMove(DOWN_LEFT, boardManager.getBoard());
+		Move<Hop> downRightMove = whitePawn.findMove(DOWN_RIGHT, boardManager.getBoard());
+
+		assertNull(downLeftMove);
+		assertNull(downRightMove);
 	}
 	
 	@Test
