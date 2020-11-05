@@ -21,32 +21,23 @@ public abstract class Queen extends Piece {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
-		if(position.getRow()>1 && position.getColumn()>1) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board));
-		if(position.getRow()>1 && position.getColumn()<10) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board));
-		if(position.getRow()<10 && position.getColumn()>1) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board));
-		if(position.getRow()<10 && position.getColumn()<10)
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board));
+		addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board));
+		addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board));
+		addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board));
+		addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board));
 
 		return moves;
 	}
 	
 	public ArrayList<Move<Hop>> findMovesInDirection(MoveDirection moveDirection, Tile[][] board) {
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
+		Move<Hop> move;
 		int hopLength = 1;
 		
-		while(isMovePossible(moveDirection, hopLength)) {
-			Tile target = findTarget(moveDirection, board, hopLength);
-
-			if(target.getState() == Tile.State.EMPTY) {
-				moves.add(new Move<>(this, new Hop(position, target)));
-				hopLength++;
-			} else break;
-			
+		while( (move = findMove(moveDirection, hopLength, board)) != null) {
+			moves.add(move);
+			hopLength++;
 		}
-		
 		return moves;
 	}
 
