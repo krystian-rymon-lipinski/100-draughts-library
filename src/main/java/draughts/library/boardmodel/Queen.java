@@ -41,7 +41,7 @@ public abstract class Queen extends Piece {
 			Tile target = findTarget(moveDirection, board, hopLength);
 
 			if(target.getState() == Tile.State.EMPTY) {
-				moves.add(new Move<Hop>(this, new Hop(position, target)));
+				moves.add(new Move<>(this, new Hop(position, target)));
 				hopLength++;
 			} else break;
 			
@@ -49,21 +49,34 @@ public abstract class Queen extends Piece {
 		
 		return moves;
 	}
-	
+
+	public Move<Hop> findMove(MoveDirection moveDirection, int hopLength, Tile[][] board) {
+		if (isMovePossible(moveDirection, hopLength)) {
+			Tile target = findTarget(moveDirection, board, hopLength);
+			if (target.getState() == Tile.State.EMPTY) {
+				return new Move<>(this, new Hop(position, target));
+			} else {
+				return null;
+			}
+		}
+		else {
+			return null;
+		}
+	}
+
 	public boolean isMovePossible(MoveDirection moveDirection, int hopLength) {
 		switch(moveDirection) {
-		case UP_LEFT:
-			return (position.getRow()-hopLength > 0 && position.getColumn()-hopLength > 0);
-		case UP_RIGHT:
-			return (position.getRow()-hopLength > 0 && position.getColumn()+hopLength < 11);
-		case DOWN_LEFT:
-			return (position.getRow()+hopLength < 11 && position.getColumn()-hopLength > 0);
-		case DOWN_RIGHT:
-			return (position.getRow()+hopLength < 11 && position.getColumn()+hopLength < 11);
-		default:
-			break;
+			case UP_LEFT:
+				return (position.getRow()-hopLength > 0 && position.getColumn()-hopLength > 0);
+			case UP_RIGHT:
+				return (position.getRow()-hopLength > 0 && position.getColumn()+hopLength < 11);
+			case DOWN_LEFT:
+				return (position.getRow()+hopLength < 11 && position.getColumn()-hopLength > 0);
+			case DOWN_RIGHT:
+				return (position.getRow()+hopLength < 11 && position.getColumn()+hopLength < 11);
+			default:
+				return false;
 		}
-		return false;
 	}
 	
 	public ArrayList<Capture> findCapturesInDirection

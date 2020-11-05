@@ -113,7 +113,7 @@ public class PawnTest extends PieceTest {
 	}
 	
 	@Test
-	public void findMoves_forWhitePawn_test() {
+	public void findAllMoves_forWhitePawn() {
 		Piece piece = boardManager.addWhitePawn(33);
 
 		ArrayList<Move<Hop>> moves = piece.findAllMoves(boardManager.getBoard());
@@ -122,7 +122,7 @@ public class PawnTest extends PieceTest {
 	}
 	
 	@Test
-	public void findMoves_forBlackPawn_test() {
+	public void findAllMoves_forBlackPawn() {
 		Piece piece = boardManager.addBlackPawn(18);
 
 		ArrayList<Move<Hop>> moves = piece.findAllMoves(boardManager.getBoard());

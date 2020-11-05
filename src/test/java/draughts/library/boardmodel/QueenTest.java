@@ -1,6 +1,7 @@
 package draughts.library.boardmodel;
 
 import static org.junit.Assert.assertEquals;
+import static draughts.library.boardmodel.Piece.MoveDirection.*;
 
 import java.util.ArrayList;
 
@@ -20,11 +21,95 @@ public class QueenTest extends PieceTest {
 	public void setUp() {
 		super.setUp();
 	}
+
+	@Test
+	public void findMove_upLeft() {
+		WhiteQueen piece = boardManager.addWhiteQueen(32);
+
+		Move<Hop> upLeftMove1 = piece.findMove(UP_LEFT, 1, boardManager.getBoard());
+		Move<Hop> upLeftMove2 = piece.findMove(UP_LEFT, 2, boardManager.getBoard());
+		Move<Hop> upLeftMove3 = piece.findMove(UP_LEFT, 3, boardManager.getBoard());
+
+		assertEquals(getTile(32), upLeftMove1.getMoveSource());
+		assertEquals(getTile(27), upLeftMove1.getMoveDestination());
+		assertEquals(piece, upLeftMove1.getMovingPiece());
+
+		assertEquals(getTile(32), upLeftMove2.getMoveSource());
+		assertEquals(getTile(21), upLeftMove2.getMoveDestination());
+		assertEquals(piece, upLeftMove2.getMovingPiece());
+
+		assertEquals(getTile(32), upLeftMove3.getMoveSource());
+		assertEquals(getTile(16), upLeftMove3.getMoveDestination());
+		assertEquals(piece, upLeftMove3.getMovingPiece());
+	}
+
+	@Test
+	public void findMove_upRight() {
+		BlackQueen piece = boardManager.addBlackQueen(18);
+
+		Move<Hop> upRightMove1 = piece.findMove(UP_RIGHT, 1, boardManager.getBoard());
+		Move<Hop> upRightMove2 = piece.findMove(UP_RIGHT, 2, boardManager.getBoard());
+		Move<Hop> upRightMove3 = piece.findMove(UP_RIGHT, 3, boardManager.getBoard());
+
+		assertEquals(getTile(18), upRightMove1.getMoveSource());
+		assertEquals(getTile(13), upRightMove1.getMoveDestination());
+		assertEquals(piece, upRightMove1.getMovingPiece());
+
+		assertEquals(getTile(18), upRightMove2.getMoveSource());
+		assertEquals(getTile(9), upRightMove2.getMoveDestination());
+		assertEquals(piece, upRightMove2.getMovingPiece());
+
+		assertEquals(getTile(18), upRightMove3.getMoveSource());
+		assertEquals(getTile(4), upRightMove3.getMoveDestination());
+		assertEquals(piece, upRightMove3.getMovingPiece());
+	}
+
+	@Test
+	public void findMove_downLeft() {
+		WhiteQueen piece = boardManager.addWhiteQueen(22);
+
+		Move<Hop> downLeftMove1 = piece.findMove(DOWN_LEFT, 1, boardManager.getBoard());
+		Move<Hop> downLeftMove2 = piece.findMove(DOWN_LEFT, 2, boardManager.getBoard());
+		Move<Hop> downLeftMove3 = piece.findMove(DOWN_LEFT, 3, boardManager.getBoard());
+
+		assertEquals(getTile(22), downLeftMove1.getMoveSource());
+		assertEquals(getTile(27), downLeftMove1.getMoveDestination());
+		assertEquals(piece, downLeftMove1.getMovingPiece());
+
+		assertEquals(getTile(22), downLeftMove2.getMoveSource());
+		assertEquals(getTile(31), downLeftMove2.getMoveDestination());
+		assertEquals(piece, downLeftMove2.getMovingPiece());
+
+		assertEquals(getTile(22), downLeftMove3.getMoveSource());
+		assertEquals(getTile(36), downLeftMove3.getMoveDestination());
+		assertEquals(piece, downLeftMove3.getMovingPiece());
+	}
+
+	@Test
+	public void findMove_downRight() {
+		BlackQueen piece = boardManager.addBlackQueen(29);
+
+		Move<Hop> downRightMove1 = piece.findMove(DOWN_RIGHT, 1, boardManager.getBoard());
+		Move<Hop> downRightMove2 = piece.findMove(DOWN_RIGHT, 2, boardManager.getBoard());
+		Move<Hop> downRightMove3 = piece.findMove(DOWN_RIGHT, 3, boardManager.getBoard());
+
+		assertEquals(getTile(29), downRightMove1.getMoveSource());
+		assertEquals(getTile(34), downRightMove1.getMoveDestination());
+		assertEquals(piece, downRightMove1.getMovingPiece());
+
+		assertEquals(getTile(29), downRightMove2.getMoveSource());
+		assertEquals(getTile(40), downRightMove2.getMoveDestination());
+		assertEquals(piece, downRightMove2.getMovingPiece());
+
+		assertEquals(getTile(29), downRightMove3.getMoveSource());
+		assertEquals(getTile(45), downRightMove3.getMoveDestination());
+		assertEquals(piece, downRightMove3.getMovingPiece());
+	}
 	
 	@Test
-	public void findMoves_upLeft_test() {
+	public void findAllMoves_upLeft_test() {
 		Piece movingPiece = boardManager.addWhiteQueen(32);
-		boardManager.addWhitePawn(28);
+		boardManager.addWhitePawn(28); //limit queen possibilities
 		boardManager.addWhitePawn(38);
 		boardManager.addWhitePawn(37);
 		ArrayList<Move<Hop>> whiteMoves = findMovesForPiece(32);
