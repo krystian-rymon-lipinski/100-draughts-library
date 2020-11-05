@@ -20,7 +20,7 @@ public class BlackPawn extends Pawn {
 		dst.setState(Tile.State.BLACK_PAWN);
 	}
 
-	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
+	public ArrayList<Move<Hop>> findAllMoves(Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 

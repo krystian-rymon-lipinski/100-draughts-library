@@ -21,7 +21,7 @@ public class PieceTest {
 		Piece piece;
 		try {
 			piece = boardManager.findPieceByIndex(piecePosition);
-			return piece.findMoves(boardManager.getBoard());
+			return piece.findAllMoves(boardManager.getBoard());
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
 		}

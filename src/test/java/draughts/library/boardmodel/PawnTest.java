@@ -116,7 +116,7 @@ public class PawnTest extends PieceTest {
 	public void findMoves_forWhitePawn_test() {
 		Piece piece = boardManager.addWhitePawn(33);
 
-		ArrayList<Move<Hop>> moves = piece.findMoves(boardManager.getBoard());
+		ArrayList<Move<Hop>> moves = piece.findAllMoves(boardManager.getBoard());
 
 		assertEquals(2, moves.size());
 	}
@@ -125,7 +125,7 @@ public class PawnTest extends PieceTest {
 	public void findMoves_forBlackPawn_test() {
 		Piece piece = boardManager.addBlackPawn(18);
 
-		ArrayList<Move<Hop>> moves = piece.findMoves(boardManager.getBoard());
+		ArrayList<Move<Hop>> moves = piece.findAllMoves(boardManager.getBoard());
 		
 		assertEquals(2, moves.size());
 	}

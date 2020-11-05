@@ -269,7 +269,7 @@ public class BoardManager {
 		ArrayList<Move<Hop>> pieceMoves;
 		
 		for(Piece piece : pieces) {
-			pieceMoves = piece.findMoves(board);
+			pieceMoves = piece.findAllMoves(board);
 			if(pieceMoves.size() > 0) allMoves.addAll(pieceMoves);
 		}
 		return allMoves;
@@ -293,7 +293,7 @@ public class BoardManager {
 			pieceCaptures = piece.findCaptures(board, oppositePieces);
 			if (pieceCaptures.size() > 0) return true;
 			else {
-				pieceMoves = piece.findMoves(board);
+				pieceMoves = piece.findAllMoves(board);
 				if (pieceMoves.size() > 0) return true;
 			}
 		}

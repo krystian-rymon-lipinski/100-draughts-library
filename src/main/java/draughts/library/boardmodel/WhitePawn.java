@@ -20,7 +20,7 @@ public class WhitePawn extends Pawn {
 		dst.setState(Tile.State.WHITE_PAWN);
 	}
 	
-	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
+	public ArrayList<Move<Hop>> findAllMoves(Tile[][] board) {
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 		addMoveIfNotNull(moves, findMove(MoveDirection.UP_LEFT, board));
 		addMoveIfNotNull(moves, findMove(MoveDirection.UP_RIGHT, board));

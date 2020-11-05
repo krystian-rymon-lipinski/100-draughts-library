@@ -17,7 +17,7 @@ public abstract class Queen extends Piece {
 		return true;
 	}
 	
-	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
+	public ArrayList<Move<Hop>> findAllMoves(Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
 				
