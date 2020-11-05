@@ -114,61 +114,20 @@ public class PawnTest extends PieceTest {
 	
 	@Test
 	public void findMoves_forWhitePawn_test() {
-		Piece movingPiece = boardManager.addWhitePawn(33);
-		ArrayList<Move<Hop>> moves = findMovesForPiece(33);
-		
+		Piece piece = boardManager.addWhitePawn(33);
+
+		ArrayList<Move<Hop>> moves = piece.findMoves(boardManager.getBoard());
+
 		assertEquals(2, moves.size());
-		for (Move<Hop> move : moves) {
-			assertEquals(33, move.getMoveSource().getIndex());
-			assertEquals(movingPiece, move.getMovingPiece());
-			assertEquals(1, move.getNumberOfHops());
-		}
-		assertTrue(moves.get(0).getMoveDestination().getIndex() == 28 || 
-				   moves.get(0).getMoveDestination().getIndex() == 29);
-		assertTrue(moves.get(1).getMoveDestination().getIndex() == 28 || 
-				   moves.get(1).getMoveDestination().getIndex() == 29);
-		
 	}
 	
 	@Test
 	public void findMoves_forBlackPawn_test() {
-		Piece movingPiece = boardManager.addBlackPawn(18);
-		ArrayList<Move<Hop>> moves = findMovesForPiece(18);
+		Piece piece = boardManager.addBlackPawn(18);
+
+		ArrayList<Move<Hop>> moves = piece.findMoves(boardManager.getBoard());
 		
 		assertEquals(2, moves.size());
-		for (Move<Hop> move : moves) {
-			assertEquals(18, move.getMoveSource().getIndex());
-			assertEquals(movingPiece, move.getMovingPiece());
-			assertEquals(1, move.getNumberOfHops());
-		}
-		assertTrue(moves.get(0).getHop(0).getDestination().getIndex() == 22 || 
-				   moves.get(0).getHop(0).getDestination().getIndex() == 22);
-		assertTrue(moves.get(1).getHop(0).getDestination().getIndex() == 23 || 
-				   moves.get(1).getHop(0).getDestination().getIndex() == 23);
-	}
-	
-	@Test
-	public void findMoves_forMostLeftBlackPawn_test() {
-		Piece movingPiece = boardManager.addBlackPawn(16);
-		ArrayList<Move<Hop>> moves = findMovesForPiece(16);
-		
-		assertEquals(1, moves.size());
-		assertEquals(16, moves.get(0).getMoveSource().getIndex());
-		assertEquals(21, moves.get(0).getMoveDestination().getIndex());
-		assertEquals(movingPiece, moves.get(0).getMovingPiece());
-		assertEquals(1, moves.get(0).getNumberOfHops());
-	}
-	
-	@Test
-	public void findMoves_forMostRightWhitePawn_test() {
-		Piece movingPiece = boardManager.addWhitePawn(35);
-		ArrayList<Move<Hop>> moves = findMovesForPiece(35);
-		
-		assertEquals(1, moves.size());
-		assertEquals(35, moves.get(0).getMoveSource().getIndex());
-		assertEquals(30, moves.get(0).getMoveDestination().getIndex());
-		assertEquals(movingPiece, moves.get(0).getMovingPiece());
-		assertEquals(1, moves.get(0).getNumberOfHops());
 	}
 	
 	@Test

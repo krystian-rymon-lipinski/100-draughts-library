@@ -21,13 +21,9 @@ public class WhitePawn extends Pawn {
 	}
 	
 	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
-		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
-				
-		if (position.getColumn()>1)
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_LEFT, board));
-		if (position.getColumn()<10)
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.UP_RIGHT, board));
+		addMoveIfNotNull(moves, findMove(MoveDirection.UP_LEFT, board));
+		addMoveIfNotNull(moves, findMove(MoveDirection.UP_RIGHT, board));
 		return moves;
 	}
 

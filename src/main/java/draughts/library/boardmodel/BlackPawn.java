@@ -23,11 +23,10 @@ public class BlackPawn extends Pawn {
 	public ArrayList<Move<Hop>> findMoves(Tile[][] board) {
 		
 		ArrayList<Move<Hop>> moves = new ArrayList<>();
-				
-		if(position.getRow()<10 && position.getColumn()>1) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_LEFT, board));
-		if(position.getRow()<10 && position.getColumn()<10) 
-			addMovesIfAny(moves, findMovesInDirection(MoveDirection.DOWN_RIGHT, board));
+
+		addMoveIfNotNull(moves, findMove(MoveDirection.DOWN_LEFT, board));
+		addMoveIfNotNull(moves, findMove(MoveDirection.DOWN_RIGHT, board));
+
 		return moves;
 	}
 
