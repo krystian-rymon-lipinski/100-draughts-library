@@ -66,6 +66,51 @@ public class PawnTest extends PieceTest {
 		assertNull(downLeftMove);
 		assertNull(downRightMove);
 	}
+
+	@Test
+	public void findMove_blackPawn_inDirection_downLeft() {
+		BlackPawn blackPawn = boardManager.addBlackPawn(19);
+
+		Move<Hop> downLeftMove = blackPawn.findMove(DOWN_LEFT, boardManager.getBoard());
+
+		assertEquals(getTile(19), downLeftMove.getMoveSource());
+		assertEquals(getTile(23), downLeftMove.getMoveDestination());
+		assertEquals(blackPawn, downLeftMove.getMovingPiece());
+
+		BlackPawn blackPawn2 = boardManager.addBlackPawn(36);
+
+		Move<Hop> downLeftMove2 = blackPawn2.findMove(DOWN_LEFT, boardManager.getBoard());
+
+		assertNull(downLeftMove2);
+	}
+
+	@Test
+	public void findMove_blackPawn_inDirection_downRight() {
+		BlackPawn blackPawn = boardManager.addBlackPawn(12);
+
+		Move<Hop> downLeftMove = blackPawn.findMove(DOWN_RIGHT, boardManager.getBoard());
+
+		assertEquals(getTile(12), downLeftMove.getMoveSource());
+		assertEquals(getTile(18), downLeftMove.getMoveDestination());
+		assertEquals(blackPawn, downLeftMove.getMovingPiece());
+
+		BlackPawn blackPawn2 = boardManager.addBlackPawn(45);
+
+		Move<Hop> downLeftMove2 = blackPawn2.findMove(DOWN_RIGHT, boardManager.getBoard());
+
+		assertNull(downLeftMove2);
+	}
+
+	@Test
+	public void findMove_blackPawn_wrongDirections() {
+		BlackPawn blackPawn = boardManager.addBlackPawn(12);
+
+		Move<Hop> upLeftMove = blackPawn.findMove(UP_LEFT, boardManager.getBoard());
+		Move<Hop> upRightMove = blackPawn.findMove(UP_RIGHT, boardManager.getBoard());
+
+		assertNull(upLeftMove);
+		assertNull(upRightMove);
+	}
 	
 	@Test
 	public void findMoves_forWhitePawn_test() {
