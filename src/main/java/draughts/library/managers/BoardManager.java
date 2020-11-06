@@ -290,7 +290,7 @@ public class BoardManager {
 		ArrayList<Move<Hop>> pieceMoves;
 		ArrayList<Capture> pieceCaptures;
 		for(Piece piece : pieces) {
-			pieceCaptures = piece.findCaptures(board, oppositePieces);
+			pieceCaptures = piece.findAllCaptures(board, oppositePieces);
 			if (pieceCaptures.size() > 0) return true;
 			else {
 				pieceMoves = piece.findAllMoves(board);
@@ -335,7 +335,7 @@ public class BoardManager {
 		do  {
 						
 			if(moves.size() == 0) { //first capture 
-				captures = piece.findCaptures(board, oppositePieces);
+				captures = piece.findAllCaptures(board, oppositePieces);
 				if(captures.size() == 0) break; //no captures available for piece
 				else {
 					for(Capture capture : captures) {
@@ -350,7 +350,7 @@ public class BoardManager {
 					for(int j=0; j<moves.get(i).getNumberOfHops(); j++) {
 						makeHop(piece, moves.get(i).getHop(j).getDestination());
 					}
-					captures = piece.findCaptures(board, oppositePieces);
+					captures = piece.findAllCaptures(board, oppositePieces);
 					for(Capture capture: captures) {
 						if(!isPawnAlreadyTaken(moves.get(i), capture)) { //cannot take the same pawn twice
 							newMoves.add(new Move<>(moves.get(i)));

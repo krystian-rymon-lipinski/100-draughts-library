@@ -34,7 +34,7 @@ public class PieceTest {
 		try {
 			piece = boardManager.findPieceByIndex(piecePosition);
 			ArrayList<Piece> oppositePieces = returnOppositePieces(piece.isWhite());
-			return piece.findCaptures(boardManager.getBoard(), oppositePieces);
+			return piece.findAllCaptures(boardManager.getBoard(), oppositePieces);
 		} catch(NoPieceFoundInRequestedTileException ex) {
 			ex.printStackTrace();
 		}

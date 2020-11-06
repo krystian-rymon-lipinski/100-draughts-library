@@ -58,25 +58,6 @@ public abstract class Pawn extends Piece {
 		return captures;
 	}
 	
-	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, ArrayList<Piece> allPieces) {
-		
-		ArrayList<Capture> hops = new ArrayList<>();
-		
-		Tile target = findTarget(moveDirection, board, 2);
-		Tile possibleTake = findTarget(moveDirection, board, 1);
-		
-		if(isTakePossible(target, possibleTake)) {
-			try {
-				Piece takenPiece = findPieceBeingTaken(possibleTake, allPieces);
-				hops.add(new Capture(position, target, takenPiece));
-			} catch(NoPieceFoundInRequestedTileException ex) {
-				ex.printStackTrace();
-			}
-
-		}
-		return hops;
-	}
-	
 	public boolean isTakePossible(Tile target, Tile possibleTake) {
 		return isTileOccupiedByOppositeColor(possibleTake) && 
 				   target.getState() == Tile.State.EMPTY;

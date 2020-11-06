@@ -26,7 +26,7 @@ public abstract class Piece {
 	
 	public abstract ArrayList<Move<Hop>> findAllMoves(Tile[][] board);
 
-	public abstract ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, ArrayList<Piece> pieces);
+	public abstract ArrayList<Capture> findAllCaptures(Tile[][] board, ArrayList<Piece> oppositePieces);
 
 
 	public Tile getPosition() {
@@ -73,22 +73,6 @@ public abstract class Piece {
 			default:
 				return false;
 		}
-	}
-			
-	public ArrayList<Capture> findCaptures(Tile[][] board, ArrayList<Piece> pieces) {
-		
-		ArrayList<Capture> moves = new ArrayList<>();
-		
-		if(position.getColumn() > 2 && position.getRow() > 2) 
-			addCapturesIfAny(moves, findCapturesInDirection(MoveDirection.UP_LEFT, board, pieces));
-		if(position.getColumn() < 9 && position.getRow() > 2) 
-			addCapturesIfAny(moves, findCapturesInDirection(MoveDirection.UP_RIGHT, board, pieces));
-		if(position.getColumn() > 2 && position.getRow() < 9) 
-			addCapturesIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_LEFT, board, pieces));
-		if(position.getColumn() < 9 && position.getRow() < 9) 
-			addCapturesIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_RIGHT, board, pieces));
-		
-		return moves;
 	}
 	
 	public Tile findTarget(MoveDirection moveDirection, Tile[][] board, int hopLength) {
