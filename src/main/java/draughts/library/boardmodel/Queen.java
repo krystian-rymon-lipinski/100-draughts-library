@@ -69,6 +69,17 @@ public abstract class Queen extends Piece {
 				return false;
 		}
 	}
+
+	public ArrayList<Capture> findAllCaptures(Tile[][] board, ArrayList<Piece> oppositePieces) {
+		ArrayList<Capture> captures = new ArrayList<>();
+
+		addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.UP_LEFT, board, oppositePieces));
+		addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.UP_RIGHT, board, oppositePieces));
+		addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.DOWN_LEFT, board, oppositePieces));
+		addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.DOWN_RIGHT, board, oppositePieces));
+
+		return captures;
+	}
 	
 	public ArrayList<Capture> findCapturesInDirection
 		(MoveDirection moveDirection, Tile[][] board, ArrayList<Piece> allPieces)
@@ -81,12 +92,10 @@ public abstract class Queen extends Piece {
 			Tile target = findTarget(moveDirection, board, hopLength);
 			
 			if(target.getState() == Tile.State.EMPTY) {
-				if(foundPawnToTake == null) 
-					hopLength++; 
-				else {
+				if(foundPawnToTake != null) {
 					moves.add(new Capture(position, target, foundPawnToTake));
-					hopLength++;
-				}			
+				}
+				hopLength++;
 			} 
 			else if(isTileOccupiedBySameColor(target)) {
 				break;

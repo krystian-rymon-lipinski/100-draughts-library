@@ -51,7 +51,7 @@ public abstract class Piece {
 			mainList.add(candidateMove);
 	}
 	
-	public void addHopsIfAny(ArrayList<Capture> mainList, ArrayList<Capture> candidateList) {
+	public void addCapturesIfAny(ArrayList<Capture> mainList, ArrayList<Capture> candidateList) {
 		if(candidateList != null && candidateList.size() > 0)
 			mainList.addAll(candidateList);
 	}
@@ -80,13 +80,13 @@ public abstract class Piece {
 		ArrayList<Capture> moves = new ArrayList<>();
 		
 		if(position.getColumn() > 2 && position.getRow() > 2) 
-			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.UP_LEFT, board, pieces));
+			addCapturesIfAny(moves, findCapturesInDirection(MoveDirection.UP_LEFT, board, pieces));
 		if(position.getColumn() < 9 && position.getRow() > 2) 
-			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.UP_RIGHT, board, pieces));
+			addCapturesIfAny(moves, findCapturesInDirection(MoveDirection.UP_RIGHT, board, pieces));
 		if(position.getColumn() > 2 && position.getRow() < 9) 
-			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_LEFT, board, pieces));
+			addCapturesIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_LEFT, board, pieces));
 		if(position.getColumn() < 9 && position.getRow() < 9) 
-			addHopsIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_RIGHT, board, pieces));		
+			addCapturesIfAny(moves, findCapturesInDirection(MoveDirection.DOWN_RIGHT, board, pieces));
 		
 		return moves;
 	}

@@ -293,26 +293,26 @@ public class QueenTest extends PieceTest {
 	}
 	
 	@Test
-	public void findSingleCaptures_inAllDirections_test() {
-		boardManager.addWhiteQueen(19);
+	public void findAllCaptures() {
+		WhiteQueen whiteQueen = boardManager.addWhiteQueen(19);
 		boardManager.addBlackPawn(5);
 		boardManager.addBlackQueen(8);
 		boardManager.addBlackQueen(24);
 		boardManager.addBlackPawn(37);
 		
-		ArrayList<Capture> whiteMoves = findTakesForPiece(19);
+		ArrayList<Capture> whiteCaptures = whiteQueen.findAllCaptures(boardManager.getBoard(), boardManager.getBlackPieces());
 		
-		assertEquals(5, whiteMoves.size());
+		assertEquals(5, whiteCaptures.size());
 	
-		boardManager.addBlackQueen(27);
+		BlackQueen blackQueen = boardManager.addBlackQueen(27);
 		boardManager.addWhitePawn(18);
 		boardManager.addWhitePawn(21);
 		boardManager.addWhiteQueen(36);
 		boardManager.addWhiteQueen(43);
 		
-		ArrayList<Capture> blackMoves = findTakesForPiece(27);
+		ArrayList<Capture> blackCaptures = blackQueen.findAllCaptures(boardManager.getBoard(), boardManager.getWhitePieces());
 		
-		assertEquals(5, blackMoves.size());
+		assertEquals(5, blackCaptures.size());
 	}
 
 }
