@@ -56,6 +56,10 @@ public abstract class Piece {
 			mainList.addAll(candidateList);
 	}
 
+	public void addCaptureIfNotNull(ArrayList<Capture> mainList, Capture candidate) {
+		if (candidate != null) mainList.add(candidate);
+	}
+
 	public boolean isCapturePossible(MoveDirection direction) {
 		switch (direction) {
 			case UP_LEFT:

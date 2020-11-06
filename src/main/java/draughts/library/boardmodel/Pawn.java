@@ -46,6 +46,17 @@ public abstract class Pawn extends Piece {
 		}
 		else return null;
 	}
+
+	public ArrayList<Capture> findAllCaptures(Tile[][] board, ArrayList<Piece> oppositePieces) {
+		ArrayList<Capture> captures = new ArrayList<>();
+
+		addCaptureIfNotNull(captures, findCapture(MoveDirection.UP_LEFT, board, oppositePieces));
+		addCaptureIfNotNull(captures, findCapture(MoveDirection.UP_RIGHT, board, oppositePieces));
+		addCaptureIfNotNull(captures, findCapture(MoveDirection.DOWN_LEFT, board, oppositePieces));
+		addCaptureIfNotNull(captures, findCapture(MoveDirection.DOWN_RIGHT, board, oppositePieces));
+
+		return captures;
+	}
 	
 	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, ArrayList<Piece> allPieces) {
 		

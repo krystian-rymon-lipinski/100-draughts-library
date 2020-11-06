@@ -216,26 +216,26 @@ public class PawnTest extends PieceTest {
 	
 	
 	@Test
-	public void findSingleCaptures_inAllDirections_test() {
-		boardManager.addWhitePawn(14);
+	public void findAllCaptures() {
+		WhitePawn whitePawn = boardManager.addWhitePawn(14);
 		boardManager.addBlackPawn(9);
 		boardManager.addBlackQueen(10);
 		boardManager.addBlackQueen(19);
 		boardManager.addBlackPawn(20);
 		
-		ArrayList<Capture> whiteMoves = findTakesForPiece(14);
+		ArrayList<Capture> whiteCaptures = whitePawn.findAllCaptures(boardManager.getBoard(), boardManager.getBlackPieces());
 		
-		assertEquals(4, whiteMoves.size());
+		assertEquals(4, whiteCaptures.size());
 	
-		boardManager.addBlackPawn(17);
+		BlackPawn blackPawn = boardManager.addBlackPawn(17);
 		boardManager.addWhitePawn(11);
 		boardManager.addWhitePawn(12);
 		boardManager.addWhiteQueen(21);
 		boardManager.addWhiteQueen(22);
 		
-		ArrayList<Capture> blackMoves = findTakesForPiece(17);
+		ArrayList<Capture> blackCaptures = blackPawn.findAllCaptures(boardManager.getBoard(), boardManager.getWhitePieces());
 		
-		assertEquals(4, blackMoves.size());
+		assertEquals(4, blackCaptures.size());
 	}	
 
 }
