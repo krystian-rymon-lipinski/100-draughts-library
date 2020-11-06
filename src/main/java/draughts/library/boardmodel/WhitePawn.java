@@ -28,15 +28,20 @@ public class WhitePawn extends Pawn {
 	}
 
 	public Move<Hop> findMove(MoveDirection moveDirection, Tile[][] board) {
-		switch (moveDirection) {
+		if (isMovePossible(moveDirection)) {
+			return findMoveInDirection(moveDirection, board);
+		}
+		else return null;
+	}
+
+	public boolean isMovePossible(MoveDirection direction) {
+		switch (direction) {
 			case UP_LEFT:
-				if (position.getColumn() > 1) return findMoveInDirection(MoveDirection.UP_LEFT, board);
-				else 					      return null;
+				return position.getColumn() > 1;
 			case UP_RIGHT:
-				if (position.getColumn() < 10) return findMoveInDirection(MoveDirection.UP_RIGHT, board);
-				else 						   return null;
+				return position.getColumn() < 10;
 			default:
-				return null;
+				return false;
 		}
 	}
 

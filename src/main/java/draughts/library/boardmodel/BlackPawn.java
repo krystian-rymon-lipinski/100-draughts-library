@@ -31,15 +31,21 @@ public class BlackPawn extends Pawn {
 	}
 
 	public Move<Hop> findMove(MoveDirection moveDirection, Tile[][] board) {
-		switch (moveDirection) {
+		if (isMovePossible(moveDirection)) {
+			return findMoveInDirection(moveDirection, board);
+		}
+		else return null;
+
+	}
+
+	public boolean isMovePossible(MoveDirection direction) {
+		switch (direction) {
 			case DOWN_LEFT:
-				if (position.getColumn() > 1) return findMoveInDirection(MoveDirection.DOWN_LEFT, board);
-				else 						  return null;
+				return position.getColumn() > 1;
 			case DOWN_RIGHT:
-				if (position.getColumn() < 10) return findMoveInDirection(MoveDirection.DOWN_RIGHT, board);
-				else 						   return null;
+				return position.getColumn() < 10;
 			default:
-				return null;
+				return false;
 		}
 	}
 	
