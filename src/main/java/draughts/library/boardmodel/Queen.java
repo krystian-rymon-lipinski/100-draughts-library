@@ -73,11 +73,18 @@ public abstract class Queen extends Piece {
 	public ArrayList<Capture> findAllCaptures(Tile[][] board, ArrayList<Piece> oppositePieces) {
 		ArrayList<Capture> captures = new ArrayList<>();
 
-		addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.UP_LEFT, board, oppositePieces));
-		addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.UP_RIGHT, board, oppositePieces));
-		addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.DOWN_LEFT, board, oppositePieces));
-		addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.DOWN_RIGHT, board, oppositePieces));
-
+		if (isCapturePossible(MoveDirection.UP_LEFT)) {
+			addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.UP_LEFT, board, oppositePieces));
+		}
+		if (isCapturePossible(MoveDirection.UP_RIGHT)) {
+			addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.UP_RIGHT, board, oppositePieces));
+		}
+		if (isCapturePossible(MoveDirection.DOWN_LEFT)) {
+			addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.DOWN_LEFT, board, oppositePieces));
+		}
+		if (isCapturePossible(MoveDirection.DOWN_RIGHT)) {
+			addCapturesIfAny(captures, findCapturesInDirection(MoveDirection.DOWN_RIGHT, board, oppositePieces));
+		}
 		return captures;
 	}
 	
@@ -86,14 +93,14 @@ public abstract class Queen extends Piece {
 	{
 		ArrayList<Capture> moves = new ArrayList<>();
 		int hopLength = 1;
-		Piece foundPawnToTake = null;
+		Piece foundPieceToTake = null;
 		
 		while(isMovePossible(moveDirection, hopLength)) {
 			Tile target = findTarget(moveDirection, board, hopLength);
 			
 			if(target.getState() == Tile.State.EMPTY) {
-				if(foundPawnToTake != null) {
-					moves.add(new Capture(position, target, foundPawnToTake));
+				if(foundPieceToTake != null) {
+					moves.add(new Capture(position, target, foundPieceToTake));
 				}
 				hopLength++;
 			} 
@@ -101,9 +108,9 @@ public abstract class Queen extends Piece {
 				break;
 			}
 			else if(isTileOccupiedByOppositeColor(target)){
-				if(foundPawnToTake == null) {
+				if(foundPieceToTake == null) {
 					try {
-						foundPawnToTake = findPieceBeingTaken(target, allPieces);
+						foundPieceToTake = findPieceBeingTaken(target, allPieces);
 					} catch(NoPieceFoundInRequestedTileException ex) {
 						ex.printStackTrace();
 					} finally {
@@ -113,8 +120,7 @@ public abstract class Queen extends Piece {
 				else break;
 			}
 		}
-		
 		return moves;
 	}
-	
+
 }
