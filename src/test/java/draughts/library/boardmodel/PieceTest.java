@@ -16,35 +16,6 @@ public class PieceTest {
 		boardManager = new BoardManager();
 		boardManager.createEmptyBoard();
 	}
-	
-	public ArrayList<Move<Hop>> findMovesForPiece(int piecePosition) {
-		Piece piece;
-		try {
-			piece = boardManager.findPieceByIndex(piecePosition);
-			return piece.findAllMoves(boardManager.getBoard());
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
-		}
-		return null;
-		
-	}
-	
-	public ArrayList<Capture> findTakesForPiece(int piecePosition) {
-		Piece piece;
-		try {
-			piece = boardManager.findPieceByIndex(piecePosition);
-			ArrayList<Piece> oppositePieces = returnOppositePieces(piece.isWhite());
-			return piece.findAllCaptures(boardManager.getBoard(), oppositePieces);
-		} catch(NoPieceFoundInRequestedTileException ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
-
-	public ArrayList<Piece> returnOppositePieces(boolean isMovingPieceWhite) {
-		if (isMovingPieceWhite) return boardManager.getBlackPieces();
-		else 					return boardManager.getWhitePieces();
-	}
 
 	public Tile getTile(int index) {
 		return boardManager.findTileByIndex(index);
