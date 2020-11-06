@@ -27,6 +27,25 @@ public abstract class Pawn extends Piece {
 			return null;
 		}
 	}
+
+	public Capture findCapture(MoveDirection direction, Tile[][] board, ArrayList<Piece> oppositePieces) {
+		if (isCapturePossible(direction)) {
+			Tile target = findTarget(direction, board, 2);
+			Tile possibleTake = findTarget(direction, board, 1);
+
+			if (isTakePossible(target, possibleTake)) {
+				try {
+					Piece pieceToTake = findPieceBeingTaken(possibleTake, oppositePieces);
+					return new Capture(position, target, pieceToTake);
+				} catch (NoPieceFoundInRequestedTileException ex) {
+					ex.printStackTrace();
+					return null;
+				}
+			}
+			else return null;
+		}
+		else return null;
+	}
 	
 	public ArrayList<Capture> findCapturesInDirection(MoveDirection moveDirection, Tile[][] board, ArrayList<Piece> allPieces) {
 		

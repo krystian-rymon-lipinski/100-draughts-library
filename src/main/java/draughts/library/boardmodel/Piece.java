@@ -55,6 +55,21 @@ public abstract class Piece {
 		if(candidateList != null && candidateList.size() > 0)
 			mainList.addAll(candidateList);
 	}
+
+	public boolean isCapturePossible(MoveDirection direction) {
+		switch (direction) {
+			case UP_LEFT:
+				return position.getColumn() > 2 && position.getRow() > 2;
+			case UP_RIGHT:
+				return position.getColumn() < 9 && position.getRow() > 2;
+			case DOWN_LEFT:
+				return position.getColumn() > 2 && position.getRow() < 9;
+			case DOWN_RIGHT:
+				return position.getColumn() < 9 && position.getRow() < 9;
+			default:
+				return false;
+		}
+	}
 			
 	public ArrayList<Capture> findCaptures(Tile[][] board, ArrayList<Piece> pieces) {
 		
