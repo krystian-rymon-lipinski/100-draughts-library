@@ -16,7 +16,7 @@ public class Move<T extends Hop> {
 	
 	public Move(Piece movingPiece) {
 		this.movingPiece = movingPiece;
-		hops = new ArrayList<>();
+		hops = new ArrayList<>(5); //move without capture is always 1 hop long; captures longer than 5 are rare
 	}
 	
 	public Move(Piece movingPiece, T hop) {
