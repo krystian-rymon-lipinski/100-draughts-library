@@ -1,12 +1,16 @@
 package draughts.library.managers;
 
 public class DrawArbiter {
-	
+
+	private final static int DRAW_COUNTER_NORMAL_CONDITIONS = 50;
+	private final static int DRAW_COUNTER_3V1_CONDITIONS = 32;
+	private final static int DRAW_COUNTER_2V1_CONDITIONS = 10;
+
 	private int drawCounter;
 	private DrawConditions drawConditions;
 	
 	public DrawArbiter() {
-		this.drawCounter = 50; //25 moves for each player
+		this.drawCounter = DRAW_COUNTER_NORMAL_CONDITIONS; //25 moves for each player
 		this.drawConditions = DrawConditions.NONE;
 	}
 	
@@ -33,22 +37,22 @@ public class DrawArbiter {
 			else {
 				if(numberOfWhitePieces > 1 && numberOfBlackPieces > 1) {
 					drawConditions = DrawConditions.NORMAL;
-					drawCounter = 50;
+					drawCounter = DRAW_COUNTER_NORMAL_CONDITIONS;
 					break;
 				}
 				else {
 					if (numberOfWhitePieces > 3 || numberOfBlackPieces > 3) {
 						drawConditions = DrawConditions.NORMAL;
-						drawCounter = 50;
+						drawCounter = DRAW_COUNTER_NORMAL_CONDITIONS;
 					}
 					else if(numberOfWhitePieces == 3 || numberOfBlackPieces == 3) {
 						drawConditions = DrawConditions.THREE_VS_ONE;
-						drawCounter = 32;
+						drawCounter = DRAW_COUNTER_3V1_CONDITIONS;
 						break;
 					}
 					else {
 						drawConditions = DrawConditions.TWO_VS_ONE; // 1 queen vs 1 queen is also 2_VS_1 conditions
-						drawCounter = 10;
+						drawCounter = DRAW_COUNTER_2V1_CONDITIONS;
 						break;
 					}
 				}
@@ -56,7 +60,7 @@ public class DrawArbiter {
 		case NORMAL:
 			if(!bothColorsHaveQueen) {
 				drawConditions = DrawConditions.NONE;
-				drawCounter = 50;
+				drawCounter = DRAW_COUNTER_NORMAL_CONDITIONS;
 				break;
 			}
 			else {
@@ -64,19 +68,19 @@ public class DrawArbiter {
 				else {
 					if(numberOfWhitePieces == 3 || numberOfBlackPieces == 3) {
 						drawConditions = DrawConditions.THREE_VS_ONE;
-						drawCounter = 32;
+						drawCounter = DRAW_COUNTER_3V1_CONDITIONS;
 						break;
 					}
 					else {
 						drawConditions = DrawConditions.TWO_VS_ONE; // 1 queen vs 1 queen is also 2_VS_1 conditions
-						drawCounter = 10;
+						drawCounter = DRAW_COUNTER_2V1_CONDITIONS;
 					}
 				}
 			}		
 		case THREE_VS_ONE:
 			if(numberOfWhitePieces <= 2 && numberOfBlackPieces <= 2) {
 				drawConditions = DrawConditions.TWO_VS_ONE;
-				drawCounter = 10;
+				drawCounter = DRAW_COUNTER_2V1_CONDITIONS;
 			}
 			break;
 		case TWO_VS_ONE:
