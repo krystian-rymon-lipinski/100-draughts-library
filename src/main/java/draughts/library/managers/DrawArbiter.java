@@ -95,7 +95,7 @@ public class DrawArbiter {
 				break;
 				
 			case NORMAL:
-				if(isMoveCapture || !isMoveMadeByQueen) drawCounter = 50;
+				if(isMoveCapture || !isMoveMadeByQueen) drawCounter = DRAW_COUNTER_NORMAL_CONDITIONS;
 				else drawCounter--;
 				break;
 				
