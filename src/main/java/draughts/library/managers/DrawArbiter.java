@@ -33,12 +33,10 @@ public class DrawArbiter {
 	public void updateConditions(boolean bothColorsHaveQueen, int numberOfWhitePieces, int numberOfBlackPieces) {
 		switch(drawConditions) {
 		case NONE: 
-			if(!bothColorsHaveQueen) break;
-			else {
+			if(bothColorsHaveQueen) {
 				if(numberOfWhitePieces > 1 && numberOfBlackPieces > 1) {
 					drawConditions = DrawConditions.NORMAL;
 					drawCounter = DRAW_COUNTER_NORMAL_CONDITIONS;
-					break;
 				}
 				else {
 					if (numberOfWhitePieces > 3 || numberOfBlackPieces > 3) {
@@ -48,35 +46,35 @@ public class DrawArbiter {
 					else if(numberOfWhitePieces == 3 || numberOfBlackPieces == 3) {
 						drawConditions = DrawConditions.THREE_VS_ONE;
 						drawCounter = DRAW_COUNTER_3V1_CONDITIONS;
-						break;
 					}
 					else {
 						drawConditions = DrawConditions.TWO_VS_ONE; // 1 queen vs 1 queen is also 2_VS_1 conditions
 						drawCounter = DRAW_COUNTER_2V1_CONDITIONS;
-						break;
 					}
 				}
 			}
+			break;
 		case NORMAL:
 			if(!bothColorsHaveQueen) {
 				drawConditions = DrawConditions.NONE;
 				drawCounter = DRAW_COUNTER_NORMAL_CONDITIONS;
-				break;
 			}
 			else {
-				if(numberOfWhitePieces > 1 && numberOfBlackPieces > 1) break;
-				else {
+				if(numberOfWhitePieces == 1 || numberOfBlackPieces == 1) {
+					if (numberOfWhitePieces > 3 || numberOfBlackPieces > 3) {
+						break;
+					}
 					if(numberOfWhitePieces == 3 || numberOfBlackPieces == 3) {
 						drawConditions = DrawConditions.THREE_VS_ONE;
 						drawCounter = DRAW_COUNTER_3V1_CONDITIONS;
-						break;
 					}
 					else {
 						drawConditions = DrawConditions.TWO_VS_ONE; // 1 queen vs 1 queen is also 2_VS_1 conditions
 						drawCounter = DRAW_COUNTER_2V1_CONDITIONS;
 					}
 				}
-			}		
+			}
+			break;
 		case THREE_VS_ONE:
 			if(numberOfWhitePieces <= 2 && numberOfBlackPieces <= 2) {
 				drawConditions = DrawConditions.TWO_VS_ONE;
